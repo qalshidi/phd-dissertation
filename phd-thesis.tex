@@ -1,0 +1,91 @@
+\documentclass{umlthesis}
+\usepackage{lipsum}
+
+\title{A Fascinating Thesis}
+\author{Stew Dent}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+  This example document will utilize some of the features of \texttt{umlthesis.cls}.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{acknowledgments}
+An acknowledgments page is optional.
+\end{acknowledgments}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\listoffigures
+\listoftables
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples}
+This chapter will show as much of the document class\footnote{This is a short footnote.} as possible. The footnotes\footnote{You'll find that this footnote is overly verbose and won't fit on a single line. If I have written the document class correctly, then the indentation will match the specification in the UML Thesis Guide.} are required to be indented in a particular way, for example.
+
+\begin{quote}
+  This is a paragraph quoted from somewhere else. It must be single-spaced and indented on both sides.
+\end{quote}
+
+In Table~\ref{tab:fruits} you can see what a table will look like. Refer to Figure~\ref{fig:square} to see a figure.
+
+\begin{table}[h]
+  \centering
+  \caption[Comparison of fruits]{Only fruits of the same type may be compared safely.}
+  \label{tab:fruits}
+  \begin{tabular}{l|cc}
+    & Apples & Oranges \\
+    \hline
+    Apples & yes & no \\
+    Oranges & no & yes \\
+  \end{tabular}
+\end{table}
+
+\lipsum[1]
+
+\begin{figure}
+  \centering
+  \rule{2in}{2in}
+  \caption{A black square.}
+  \label{fig:square}
+\end{figure}
+
+\section{A Section}
+This is what a main section heading looks like.
+
+\lipsum[1]
+
+\subsection{A Subsection}
+Sub sections look like this.
+
+\lipsum[1]
+
+\subsubsection{A Sub-subsection (Don't go this deep!)}
+Don't use sub-subsections.
+
+\lipsum[1]
+
+\section{Another Section}
+This proves that the section numbering works.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Requirements}
+
+\newcommand{\pkg}[1]{\textsf{#1}}
+
+This document class requires \pkg{natbib},  \pkg{setspace}, and \pkg{tocloft}, which are probably already a part of your \LaTeX\ distribution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\nocite{*}
+\bibliographystyle{plainnat}
+\bibliography{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\chapter{Appendix Chapter}
+\lipsum[2]
+
+\end{document}
