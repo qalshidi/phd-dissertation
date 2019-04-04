@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
+\usepackage{amsmath}
 
 % use fancyhdr, to enable page style stuff (below)
 \usepackage{fancyhdr}
@@ -214,7 +215,7 @@ The above equation is a general euler equation demonstrating a conservation law 
 
 In codes designed to solve differential equations numerically we must decide on the discretization. Since we are using a finite-volume-method we are discretizing the domain by cells with density quantities in them. The code is discretized in cells existing in cartesian coordinates (rectangular cells) so we are tasked to find the values of the variables at the cell faces in order to conserve the volume.
 
-We would also like a total-variation-diminishing (TVD) scheme, this is because spatial derivatives are approximated on a computer. If we take a taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ we see that there are many higher order terms missing. Taking the fourier analysis of these terms show that any high-frequency errors may compound. This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
+We would also like a total-variation-diminishing (TVD) scheme, this is because spatial derivatives are approximated on a computer. If we take a taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ we see that there are many higher order terms missing. Taking the fourier analysis of these terms show that any high-frequency errors may compound (sometimes referred to as spurious oscillations). This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
 
 \begin{equation}\label{eq:tvd}
 	\frac{dTV}{dt} = \frac{d}{dt} \int \lvert \frac{\partial u}{\partial x} dx \leq 1
@@ -222,40 +223,124 @@ We would also like a total-variation-diminishing (TVD) scheme, this is because s
 
 Therefore, for the the purpose of our code, we will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
 
-\subsection{TVD-MUSCL}
+\subsection{Flux limiters}
 
+To conserve the cell's quantities we must be able to approximate the quantities on the cell edges. At the same time we must perserve monotonicity to avoid the oscillations. This can be achieved through flux limiters. The utility of the flux limiters is to turn the scheme into a first-order upwind scheme in sharp discontinuities and a high-resolution scheme when the solution is smooth.
 
-
-\begin{equation}
-	u^l_{j-1/2} = u_{j-1} + \frac{1}{2} \phi(r_{j-1}) (u_j - u_{j-1})
-\end{equation}
-\begin{equation}
-	u^l_{j+1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_j - u_{j-1})
-\end{equation}
-\begin{equation}
-	u^r_{j-1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_{j+1} - u_{j})
-\end{equation}
-\begin{equation}
-	u^r_{j+1/2} = u_{j+1} + \frac{1}{2} \phi(r_{j+1}) (u_{j+1} - u_{j})
+\begin{equation}\label{eq:fluxlimiter}
+	u_{j+1/2} = u_j + \frac{1}{2} \phi(r_j) (u_{j+1} - u_j)
 \end{equation}
 \begin{equation}
 	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j}
 \end{equation}
-\begin{equation}\label{minmod}
-	\phi(r) = \max(0, \min(1, r)), \lim_{r \to \infty} \phi(r) = 1
+
+Subscript $j$ is the discretized cell location with quantity $u$. The ratio of successive gradients $r$ determines how strongly the flux limiter acts to find the extrapolated cell edge variable. The flux limiter $\phi$ includes the cells around edge more readily the smoother the solution is ($r>0$), or sharp it is ($r<0$) in which case the flux limiter is zero ($\phi=0$). These are the properties flux limiters must abide in order to turn the scheme upwind in sharp gradients or high-resolution in smoother gradients. The above equation is a linear reconstruction of a cell edge. Other reconstructions exist but are more diffusive and avoids the shock-capturing goal of the code.
+
+We have some freedom in choosing how to set the flux limiter. Many flux limiters have been made and studied in the past. The simplest flux-limiter is the minmod.
+
+\begin{equation}\label{eq:minmod}
+	\phi_{minmod}(r) = \max(0, \min(1, r)), \lim_{r \to \infty} \phi(r) = 1
 \end{equation}
 
+The CoMFi code provides several flux limiters and finding the best one is a matter of trial and error. The limiter used by default is the van Albada limiter.
+
+\begin{equation}\label{eq:vanalbada}
+	\phi_{va}(r) = \frac{r^2 + r}{r^2 + 1}, \lim_{r \to \infty} \phi(r) = 1
+\end{equation}
+
+Implementing these on a computer however is not a trivial task. Many initial conditions require the entirety of the domain be the same number for instance. In that case we get an $r = \frac{0}{0}$ and this causes a computer to return NaN (not a number). Setting to $r=0$ is approriate but requires extra coding. A work around is to add a small number $\epsilon$ to the denominator known as the machine epsilon to avoid these cases.
+
 \begin{equation}
-	F^*_{j-1/2} = \frac{1}{2} ([F(u^r_{j-1/2})+F(u^l_{j-1/2})] - \lambda_{j-1/2}[u^r_{j-1/2}-u^l_{j-1/2}])
+	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j + \epsilon(u_{j+1} - u_j + 1)}
+\end{equation}
+
+\subsection{TVD-MUSCL}
+
+The TVD-MUSCL scheme reconstructs `left' ($L$) and `right' ($R$) states of the cell edge variables. 
+
+\begin{equation}
+	u^L_{j-1/2} = u_{j-1} + \frac{1}{2} \phi(r_{j-1}) (u_j - u_{j-1})
+\end{equation}
+\begin{equation}
+	u^L_{j+1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_j - u_{j-1})
+\end{equation}
+\begin{equation}
+	u^R_{j-1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_{j+1} - u_{j})
+\end{equation}
+\begin{equation}
+	u^R_{j+1/2} = u_{j+1} + \frac{1}{2} \phi(r_{j+1}) (u_{j+1} - u_{j})
+\end{equation}
+
+With the left and right extrapolated variables we may construct a flux.
+
+\begin{equation}
+	F^*_{j-1/2} = \frac{1}{2} ([F(u^R_{j-1/2})+F(u^L_{j-1/2})] - \lambda_{j-1/2}[u^R_{j-1/2}-u^L_{j-1/2}])
 \end{equation}
 \begin{equation}
 	F^*_{j+1/2} = \frac{1}{2} ([F(u^r_{j+1/2})+F(u^l_{j+1/2})] - \lambda_{j+1/2}[u^r_{j+1/2}-u^l_{j+1/2}])
 \end{equation}
 
+Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical terms means the largest wave speeds of the system. Typically for the ion plasma it is the fast-mode speed and for the neutrals it is the sound speed. It's important to note in conservative MHD this is only the wave speed ($c_{fast}$) and not the same as the fastest speed of information propagation ($v+c_{fast}$). The diffusive terms proportional to $\lambda$ are meant to avoid the oscillations and if they are larger than they need to be the solution will be more diffusive.
+
+\section{Time Integration}
+
 \section{Structure}
 
+\subsection{Data Structure}
 
-\section{Linearize}
+When using the semi-implicit method a linear system $Ab^{n+1}=b$ must be solved. We must think of an approriate ordering of our vector in terms of the where the unknowns must be in the elements of the vector. For GPU programming in order to take advantage of its matrix operations speeds due to its many cores we must also be easily able to change back and forth between matrix and vector form between the implicit and explicit portions of the solution. A good ordering for a two-dimensional domain looks like this:
+
+\begin{equation}
+	b =
+\begin{bmatrix}
+	u_{0,00} \\
+	\vdots \\
+	u_{0,i0} \\
+	\vdots \\
+	u_{0,ij} \\
+	\vdots \\
+	u_{w,ij} \\
+\end{bmatrix}
+\end{equation}
+
+The subscripts $i$ and $j$ describe the location of the cell in the $x$ and $y$ axis respectively and $w$ are the scalar unknowns.
+
+\begin{equation}
+	u_w = 
+	\begin{bmatrix}
+		B_x \\
+		B_{\perp} \\
+		B_z \\
+		n_i \\
+		n_n \\
+		n_i V_x \\
+		n_i V_{\perp} \\
+		n_i V_z \\
+		n_n U_x \\
+		n_n U_{\perp} \\
+		n_n U_z \\
+		T_i \\
+		T_n \\
+		\Phi
+	\end{bmatrix}
+\end{equation}
+
+This can be easily resized into a matrix of the form:
+
+\begin{equation}
+	B =
+	\begin{bmatrix}
+		u_{0,00} & \cdots  & u_{w,00} \\
+		\vdots   & \ddots & \vdots \\
+		u_{0,i0} & \cdots & u_{w,i0} \\
+		\vdots   & \ddots & \vdots \\
+		u_{0,ij} & \cdots  & u_{w,ij}
+	\end{bmatrix}
+\end{equation}
+
+This has the benefits of making good use of GPU programming by using the parallelism found in matrix operations. This also means you can share boundary conditions by taking or providing rows for this matrix in chunks. You can do operations on specific unknowns by taking the approriate column.
+
+\subsection{Normalization}
 
 \chapter{Case: Chromosphere}\label{chap:chromosphere} 
 
