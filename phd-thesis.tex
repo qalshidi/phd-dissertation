@@ -94,13 +94,13 @@ Magnetohydrodynamics (MHD) is a fluid approximation of plasma popular amongst ma
 We start by assuming an ensemble phase space of particles $f(\textbf{x}, \textbf{v}, t)$ called the distribution function. $\textbf{x}$ is the location of the particle distribution in space, $\textbf{v}$ is the velocity distribution and $t$ is the time. To study the distribution function's evolution through time we take the full derivative with respect to time $\frac{df}{dt}$ which by the product rule turns out to be:
 
 \begin{equation}
-	\frac{\partial f}{\partial t} + \frac{\partial \textbf{x}}{\partial t} \cdot \nabla_{\textbf{x}} f + \frac{\partial \textbf{v}}{\partial t} \cdot \nabla_{\textbf{v}} f = {(\frac{\partial f}{\partial t})}_{collisions}
+	\frac{\partial f}{\partial t} + \frac{\partial \textbf{x}}{\partial t} \cdot \nabla_{\textbf{x}} f + \frac{\partial \textbf{v}}{\partial t} \cdot \nabla_{\textbf{v}} f = {(\frac{\delta f}{\delta t})}_{collisions}
 \end{equation}
 
 This is called the Boltzmann equation. The term on the right hand side exists due to collisions changed the distribution function in its own way, this also include collisional ionization and other collisional effects that would change the distribution of particles. Simplifying the equation further by substituting how we expect the bulk particles to interact with fields we can get:
 
 \begin{equation}
-	\frac{\partial f}{\partial t} + \textbf{v} \cdot \nabla_{\textbf{x}} f + \frac{q}{m} (\textbf{E} + \textbf{v} \times \textbf{B}) \cdot \nabla_{\textbf{v}} f = {(\frac{\partial f}{\partial t})}_{collisions}
+	\frac{\partial f}{\partial t} + \textbf{v} \cdot \nabla_{\textbf{x}} f + \frac{q}{m} (\textbf{E} + \textbf{v} \times \textbf{B}) \cdot \nabla_{\textbf{v}} f = {(\frac{\delta f}{\delta t})}_{collisions}
 \end{equation}
 
 Where $q$ is the charge of the particle, $m$ is the mass of the particle, $\textbf{E}$ is the electric field and $\textbf{B}$ is the magnetic field.
@@ -134,7 +134,7 @@ Each species, $s$, of fluid has its own continuity equations but may be related 
 The first order moment will give us the momentum equations:
 
 \begin{equation}\label{eq:momentumequation}
-	\frac{\partial n_s \textbf{v}_s}{\partial t} + \nabla \cdot (n_s \textbf{v}_s \textbf{v}_s + \textbf{P}_s ) -n_s \frac{q}{m_s}(\textbf{E} + \textbf{v}_s \times \textbf{B}) = {(\frac{\delta n_s \textbf{v}_s}{\delta t})}_{source}
+	\frac{\partial n_s \textbf{v}_s}{\partial t} + \nabla \cdot (n_s \textbf{v}_s \textbf{v}_s + \frac{\textbf{P}_s}{m_s} ) -n_s \frac{q}{m_s}(\textbf{E} + \textbf{v}_s \times \textbf{B}) = {(\frac{\delta n_s \textbf{v}_s}{\delta t})}_{source}
 \end{equation}
 
 Where $\textbf{P}_s$ is the kinetic pressure tensor and can be simplified to the ideal gas law $P_s\textbf{I} = n_s k_B T_s \textbf{I}$ if applicable. The source terms due to the zeroth order also exists here as well as frictional terms that may appear in multifluid cases. It is apparent that this equation is fluid-like, a form of the Navier-Stokes equation and hence the naming of these equations as hydrodynamic.
@@ -184,22 +184,70 @@ The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequatio
 \end{equation}
 
 \begin{equation}\label{eq:imomentum}
-	\frac{\partial n_i \textbf{v}_i}{\partial t} + \nabla \cdot (n_i \textbf{v}_i \textbf{v}_i + \textbf{P}_i ) - n_i \frac{q_i}{m_i}(\textbf{E} + \textbf{v}_i \times \textbf{B}) = - \sum_{i \neq s} [n_i \nu_{is}(\textbf{v}_i - \textbf{v}_s)] + \frac{1}{m_i} (S m_n \textbf{v}_n- L m_i \textbf{v}_i)
+	\frac{\partial n_i \textbf{v}_i}{\partial t} + \nabla \cdot (n_i \textbf{v}_i \textbf{v}_i + \frac{\textbf{P}_i}{m_i} ) - n_i \frac{q_i}{m_i}(\textbf{E} + \textbf{v}_i \times \textbf{B}) = - \sum_{i \neq s} [n_i \nu_{is}(\textbf{v}_i - \textbf{v}_s)] + \frac{1}{m_i} (S m_n \textbf{v}_n - S m_e \textbf{v}_e -L m_i \textbf{v}_i)
 \end{equation}
 
 \begin{equation}\label{eq:emomentum}
-	\frac{\partial n_e \textbf{v}_e}{\partial t} + \nabla \cdot (n_e \textbf{v}_e \textbf{v}_e + \textbf{P}_e ) - n_e \frac{q_e}{m_e}(\textbf{E} + \textbf{v}_e \times \textbf{B}) = - \sum_{e \neq s} [n_e \nu_{es}(\textbf{v}_e - \textbf{v}_s)] + \frac{1}{m_e} (S m_n \textbf{v}_n - L m_e \textbf{v}_e)
+	\frac{\partial n_e \textbf{v}_e}{\partial t} + \nabla \cdot (n_e \textbf{v}_e \textbf{v}_e + \frac{\textbf{P}_e}{m_e} ) - n_e \frac{q_e}{m_e}(\textbf{E} + \textbf{v}_e \times \textbf{B}) = - \sum_{e \neq s} [n_e \nu_{es}(\textbf{v}_e - \textbf{v}_s)] + \frac{1}{m_e} (S m_n \textbf{v}_n - S m_i \textbf{v}_i - L m_e \textbf{v}_e)
 \end{equation}
 
 \begin{equation}\label{eq:nmomentum}
-	\frac{\partial n_n \textbf{v}_n}{\partial t} + \nabla \cdot (n_n \textbf{v}_n \textbf{v}_n + \textbf{P}_n ) = - \sum_{n \neq s} [n_n \nu_{es}(\textbf{v}_n - \textbf{v}_n)] + \frac{1}{m_n} (L(m_i\textbf{v}_i+m_e\textbf{v}_e) -S m_n \textbf{v}_n)
+	\frac{\partial n_n \textbf{v}_n}{\partial t} + \nabla \cdot (n_n \textbf{v}_n \textbf{v}_n + \frac{\textbf{P}_n}{m_n} ) = - \sum_{n \neq s} [n_n \nu_{es}(\textbf{v}_n - \textbf{v}_n)] + \frac{1}{m_n} (L(m_i\textbf{v}_i+m_e\textbf{v}_e) -S m_n \textbf{v}_n)
 \end{equation}
+
+$S$ and $L$ are source and loss terms respectively due to chemistry processes like ionization and recombination. These are three-fluid MHD equations if the only ion considered is the hydrogen ion.
+
+\subsection{Two-fluid MHD}\label{sec:2fluidmhd}
+
+The ion and electron fluid can be simplified further to be one plasma that tracks the center of momentum between the two. Plasmas are typically quasi-neutral, it has as many positive charges as negative ones. Any imbalance in the charge will create a strong electric field within the plasma and strongly attract outside sources of charges until it is quasi-neutral again. In single hydrogen ion case that means:
+
+
+\begin{equation}\label{eq:quasineutrality}
+	n_i = n_e
+\end{equation}
+
+This can simplify the current density equation as well:
+
+\begin{equation}\label{eq:currentdensity}
+	\textbf{J} = n_i \textbf{v}_i - n_e \textbf{v}_e = n_i (\textbf{v}_i - \textbf{v}_e)
+\end{equation}
+
+To simplify the three MHD equations (Equations~\ref{eq:imomentum}-\ref{eq:nmomentum}) we can take the multiple of their masses and add Equation~\ref{eq:imomentum} and~\ref{eq:emomentum}.
+
+\begin{equation}\label{eq:singlemomentum}
+	\begin{aligned}
+		& \frac{\partial \rho_i \textbf{v}_i + \rho_e \textbf{v}_e}{\partial t} + \nabla \cdot (\rho_e \textbf{v}_e \textbf{v}_e + \rho_i \textbf{v}_i \textbf{v}_i + \textbf{P}_i + \textbf{P}_e) - \textbf{J} \times \textbf{B} \\
+		& = - \rho_i \nu_{in}(\textbf{v}_i - \textbf{v}_n) - \rho_e \nu_{en} (\textbf{v}_e - \textbf{v}_n)+ (S m_n \textbf{v}_n - L m_i \textbf{v}_i - L m_e \textbf{v}_e)
+\end{aligned}
+\end{equation}
+
+The $\rho$ here is the mass density of the fluid. Using the induction equation Maxwell's equations we can simplify $\textbf{J} \times \textbf{B}$ further.
+
+\begin{equation}
+	\textbf{J} \times \textbf{B} = \frac{1}{\mu_0} (\nabla \times \textbf{B}) \times \textbf{B} = -\nabla \cdot (\frac{B^2}{2\mu_0}\textbf{I} - \textbf{BB})
+\end{equation}
+
+Finaly by dividing by $m_i+m_e$ to Equation~\ref{eq:singlemomentum} we can find the center of momentum velocity and simplify the equation one last time:
+
+\begin{equation}
+	\textbf{V} = \frac{m_i \textbf{v}_i + m_e \textbf{v}_e}{m_i+m_e}
+\end{equation}
+\begin{equation}\label{eq:momentumcom}
+\begin{aligned}
+	&\frac{\partial \rho \textbf{V}}{\partial t} + \nabla \cdot (\textbf{K} + \frac{B^2}{2\mu_0}\textbf{I} - \textbf{BB}) \\
+	&= - (\rho_i \nu_{in} + \rho_e \nu_{en})(\textbf{v}_i - \textbf{v}_n) + \frac{m_e}{q}(\nu_{en}-\nu_{in}) \textbf{J}  + (S m_n \textbf{v}_n - L m_i \textbf{v}_i - L m_e \textbf{v}_e)
+\end{aligned}
+\end{equation}
+
+\section{Generalized Ohm's Law}\label{sec:ohmslaw}
+
+
 
 \chapter{Implementation}\label{chap:implementation}
 
 Computational fluid dynamics is a well studied field in computer science, numerics and engineering. Many of its principles can be appled to MHD due to the fluid nature of its equations. We will be focusing on only the ones implementedd in the code my for this dissertation, the Collisional Multi-Fluid ion (CoMFi) code made for the chromosphere case which will be explored in more detail in the upcoming chapter (Chapter~\ref{chap:chromosphere}). The code is an ever-evolving code that uses Graphical Processing Units (GPUs) instead of the common CPUs you see for MHD codes. This is to implement MHD that makes use of the frontiers of computer technology. GPUs were made for graphical operations in video games. This means they are specifically designed to be very fast at matrix rotations, translations and other linear algebra. In this chapter we will explore proper general purpose GPU programming techniques for solving differential equations and the schemes used alongside it. CoMFi is written in C++ using ViennaCL for GPU linear algebra template programming and Armadillo for setting up the matrices on the CPU (the reason for this will be discussed in).
 
-\section{Schemes}
+\section{Schemes}\label{sec:schemes}
 
 CoMFi uses the conservative MHD equations therefore conservative schemes are of interest. This makes use of the conservative variables unknowns as opposed to the primitive variables ($n v$ as opposed to $v$). This way we can use a finite-volume-method and conserve these quantities to the machine rounding error. Conservative schemes are also known to do well at capturing shocks and the chromosphere is a region where we expect such shocks to exist.
 
@@ -223,7 +271,7 @@ We would also like a total-variation-diminishing (TVD) scheme, this is because s
 
 Therefore, for the the purpose of our code, we will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
 
-\subsection{Flux limiters}
+\subsection{Flux limiters}\label{sec:fluxlimiters}
 
 To conserve the cell's quantities we must be able to approximate the quantities on the cell edges. At the same time we must perserve monotonicity to avoid the oscillations. This can be achieved through flux limiters. The utility of the flux limiters is to turn the scheme into a first-order upwind scheme in sharp discontinuities and a high-resolution scheme when the solution is smooth.
 
@@ -254,7 +302,7 @@ Implementing these on a computer however is not a trivial task. Many initial con
 	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j + \epsilon(u_{j+1} - u_j + 1)}
 \end{equation}
 
-\subsection{TVD-MUSCL}
+\subsection{TVD-MUSCL}\label{sec:tvd-muscl}
 
 The TVD-MUSCL scheme reconstructs `left' ($L$) and `right' ($R$) states of the cell edge variables. 
 
@@ -282,11 +330,11 @@ With the left and right extrapolated variables we may construct a flux.
 
 Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical terms means the largest wave speeds of the system. Typically for the ion plasma it is the fast-mode speed and for the neutrals it is the sound speed. It's important to note in conservative MHD this is only the wave speed ($c_{fast}$) and not the same as the fastest speed of information propagation ($v+c_{fast}$). The diffusive terms proportional to $\lambda$ are meant to avoid the oscillations and if they are larger than they need to be the solution will be more diffusive.
 
-\section{Time Integration}
+\section{Time Integration}\label{sec:timeintegration}
 
-\section{Structure}
+\section{Architecture}\label{sec:architecture}
 
-\subsection{Data Structure}
+\subsection{Data Structure}\label{sec:datastructure}
 
 When using the semi-implicit method a linear system $Ab^{n+1}=b$ must be solved. We must think of an approriate ordering of our vector in terms of the where the unknowns must be in the elements of the vector. For GPU programming in order to take advantage of its matrix operations speeds due to its many cores we must also be easily able to change back and forth between matrix and vector form between the implicit and explicit portions of the solution. A good ordering for a two-dimensional domain looks like this:
 
@@ -340,9 +388,9 @@ This can be easily resized into a matrix of the form:
 
 This has the benefits of making good use of GPU programming by using the parallelism found in matrix operations. This also means you can share boundary conditions by taking or providing rows for this matrix in chunks. You can do operations on specific unknowns by taking the approriate column.
 
-\subsection{Normalization}
+\subsection{Normalization}\label{sec:normalization}
 
-\chapter{Case: Chromosphere}\label{chap:chromosphere} 
+\chapter{Chromosphere Dynamics}\label{chap:chromosphere} 
 
 \chapter{Conclusion}\label{chap:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
