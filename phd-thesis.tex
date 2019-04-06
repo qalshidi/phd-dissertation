@@ -5,6 +5,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{booktabs}
 
 % use fancyhdr, to enable page style stuff (below)
 \usepackage{fancyhdr}
@@ -167,7 +168,7 @@ Where subscript $n$ is the neutral species and $\nu$ is the collision rate. We c
 	\nu_n = n_n \sigma_n <v>
 \end{equation}
 
-The thermal speed is a function of temperature and under the Maxwellian velocity distribution assumption, $sigma$ is the collisional cross-section which can be found in the literature through experiments. The collisional cross-section between ion and electrons include Coloumb effects as well.
+The thermal speed is a function of temperature and under the Maxwellian velocity distribution assumption, $\sigma$ is the collisional cross-section which can be found in the literature through experiments. The collisional cross-section between ion and electrons include Coloumb effects as well.
 
 The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequation}) for the three species will look like this:
 
@@ -192,7 +193,7 @@ The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequatio
 \end{equation}
 
 \begin{equation}\label{eq:nmomentum}
-	\frac{\partial n_n \textbf{v}_n}{\partial t} + \nabla \cdot (n_n \textbf{v}_n \textbf{v}_n + \frac{\textbf{P}_n}{m_n} ) = - \sum_{n \neq s} [n_n \nu_{es}(\textbf{v}_n - \textbf{v}_n)] + \frac{1}{m_n} (L(m_i\textbf{v}_i+m_e\textbf{v}_e) -S m_n \textbf{v}_n)
+	\frac{\partial n_n \textbf{v}_n}{\partial t} + \nabla \cdot (n_n \textbf{v}_n \textbf{v}_n + \frac{\textbf{P}_n}{m_n} ) = - \sum_{n \neq s} [n_n \nu_{es}(\textbf{v}_n - \textbf{v}_s)] + \frac{1}{m_n} (L(m_i\textbf{v}_i+m_e\textbf{v}_e) -S m_n \textbf{v}_n)
 \end{equation}
 
 $S$ and $L$ are source and loss terms respectively due to chemistry processes like ionization and recombination. These are three-fluid MHD equations if the only ion considered is the hydrogen ion.
@@ -227,20 +228,31 @@ The $\rho$ here is the mass density of the fluid. Using the induction equation M
 	\textbf{J} \times \textbf{B} = \frac{1}{\mu_0} (\nabla \times \textbf{B}) \times \textbf{B} = -\nabla \cdot (\frac{B^2}{2\mu_0}\textbf{I} - \textbf{BB})
 \end{equation}
 
-Finaly by dividing by $m_i+m_e$ to Equation~\ref{eq:singlemomentum} we can find the center of momentum velocity and simplify the equation one last time:
+This way we can have a magnetic flux and make use of our conservative scheme in Section~\ref{sec:tvd-muscl}. Finaly by dividing by $m_i+m_e$ to Equation~\ref{eq:singlemomentum} we can find the center of momentum velocity and simplify the equation one last time:
 
 \begin{equation}
-	\textbf{V} = \frac{m_i \textbf{v}_i + m_e \textbf{v}_e}{m_i+m_e}
+	\textbf{V} = \frac{\rho_i \textbf{v}_i + \rho_e \textbf{v}_e}{\rho_i+\rho_e}
 \end{equation}
+
+\begin{equation}
+	\textbf{v}_i = \textbf{V} + \frac{\rho_e}{\rho_i+\rho_e} \frac{1}{n e} \textbf{J} \sim \textbf{V} + \frac{m_e}{m_i} \frac{\textbf{J}}{n e} 
+\end{equation}
+
+\begin{equation}
+	\textbf{v}_e = \textbf{V} - \frac{\rho_i}{\rho_i+\rho_e} \frac{1}{n e} \textbf{J} \sim \textbf{V} -\frac{\textbf{J} }{n e}
+\end{equation}
+
 \begin{equation}\label{eq:momentumcom}
 \begin{aligned}
 	&\frac{\partial \rho \textbf{V}}{\partial t} + \nabla \cdot (\textbf{K} + \frac{B^2}{2\mu_0}\textbf{I} - \textbf{BB}) \\
-	&= - (\rho_i \nu_{in} + \rho_e \nu_{en})(\textbf{v}_i - \textbf{v}_n) + \frac{m_e}{q}(\nu_{en}-\nu_{in}) \textbf{J}  + (S m_n \textbf{v}_n - L m_i \textbf{v}_i - L m_e \textbf{v}_e)
+	&= - (\rho_i \nu_{in} + \rho_e \nu_{en})(\textbf{V} + \frac{m_e}{m_i} \frac{\textbf{J}}{n e} - \textbf{v}_n) + \frac{m_e}{e}(\nu_{en}-\nu_{in}) \textbf{J} \\
+	& + [S m_n \textbf{U} - L m_i (\textbf{V} + \frac{m_e}{m_i} \frac{\textbf{J}}{n e})- L m_e (\textbf{V} -\frac{\textbf{J}}{n e})]
 \end{aligned}
 \end{equation}
 
-\section{Generalized Ohm's Law}\label{sec:ohmslaw}
+The dynamic pressure and thermal pressures have been combined into one kinetic tensor term $\textbf{K}$. The elementary charge is $e$. $\textbf{U}$ is the neutral velocity.
 
+\section{Generalized Ohm's Law}\label{sec:ohmslaw}
 
 
 \chapter{Implementation}\label{chap:implementation}
@@ -334,6 +346,12 @@ Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical te
 
 \section{Architecture}\label{sec:architecture}
 
+It is important in scientific computing not to reinvent the wheel. There are many libraries, particularly C++ libraries, that use template programming to make it easier to write linear algebra in code. It is always easier to add an entire vector with one + sign than looping through each element of the two vectors and adding each. For this reason we can avoid low-level programming like Fortran for CPUs or OpenCL and CUDA for GPUs because the Basic Linear Algebra Subroutines (BLAS) have already been written and abstracted by someone else. C++ is a language that is all about abstraction and speed. There is a pervasive myth that if you want to do scientific computing you must use Fortran or CUDA but this is not true and is usually reinforced by scientists' lack of understanding of computer science and/or bad code.
+
+The code uses to template expression libraries in C++. Template expression is how C++ abstracts operators such as +, - and / to deal with one variable and the next and call the low level BLAS functions. The libraries used are Armadillo for CPU\@. This is a code typically used for Machine Learning applications so speed and big data is its focus. For GPU programming ViennaCL is used, it's a library used by PETSc for its GPU portion. However, at the time of this writing, PETSc's GPU code is not fully developed so ViennaCL is used directly. Luckily, ViennaCL interfaces with Armadillo well and there exists copy constructors to go from shared memory to GPU memory.
+
+Matrices {\it must\/} be built on the CPU\@. Accessing GPU elements individually is a slow process that is limited by the PCI-e speed and when the machine code (running on cpu) is asked to go back and forth, we get slow code. Best practice is to first build a matrix on the CPU then copy to the GPU\@.
+
 \subsection{Data Structure}\label{sec:datastructure}
 
 When using the semi-implicit method a linear system $Ab^{n+1}=b$ must be solved. We must think of an approriate ordering of our vector in terms of the where the unknowns must be in the elements of the vector. For GPU programming in order to take advantage of its matrix operations speeds due to its many cores we must also be easily able to change back and forth between matrix and vector form between the implicit and explicit portions of the solution. A good ordering for a two-dimensional domain looks like this:
@@ -388,19 +406,63 @@ This can be easily resized into a matrix of the form:
 
 This has the benefits of making good use of GPU programming by using the parallelism found in matrix operations. This also means you can share boundary conditions by taking or providing rows for this matrix in chunks. You can do operations on specific unknowns by taking the approriate column.
 
-\subsection{Normalization}\label{sec:normalization}
+\section{Normalization}\label{sec:normalization}
+
+The unknowns in the simulations must be normalized. This is typical good practice in numerics when we're dealing with computers due to how computers deal with floating point number. Since computers deal with discrete numbers the floating point number line is discrete and also less regular than the real number line. There are more floating point numbers between -1 and 1 than there are between 10 and 11 for example. For this purpose, it is important to find a way in which the common numbers we will be dealing with be normalized to 1. We can do this by having, usually, the largest numbers found in the simulation domain be the normalizing constants.
+
+\subsection{Constants}\label{sec:normconstants}
+
+The normalization constants were chosen for the chromospheric case we study in Chapter~\ref{chap:chromosphere}. For a more in-depth discussion on why these were chosen see Section~\ref{sec:simulationdomain}.
+
+\begin{table}[h]\label{tab:normalization}
+\centering
+\caption[Normalization Constants]{Normalization constants chosen for the chromospheric simulation}
+\begin{tabular}[]{l  c  r}
+	\toprule
+	Magnetic Field & $B_0$ & $0.1$ T\\
+	Length & $L_0$ & $2.1\times 10^6$ m \\
+	Number Density & $n_0$ & $1.0\times 10^{20}$ m$^{-3}$ \\
+	Mass & $m_0 = m_i$ & $1.672621898\times10^{−27}$ kg \\
+	Vacuum Permeability & $\mu_0$ & $1.2566370614\times 10^{−6}$ Vs/A/m \\
+	Charge & e_0 & $1.6021766208\times10−^{19}$ C \\
+	Boltzmann Constant & $k_B$ & $1.38065\times10^-{23}$ J/K\\
+	Velocity & $V_0=\frac{B_0}{\sqrt{\mu_0 m_i n_0}}$ & $2.18 \times 10^{8}$ m/s\\
+	Pressure & $p_0= \frac{{B_0}^2}{\mu_0}$ & $8.0 \times 10^3$ Pa \\
+	Temperature & $T_0 = \frac{p_0}{n_0 k_B} $ & $5.79438\times10^6$ K\\
+	\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Normalized Equations}\label{sec:normequations}
+
+Once we have our normalization constants we may normalize the equations. Replacing each term by its normalized version reduces the equations further. There is less need to include physical constants like $\mu_0$ and $k_B$ as they are implicit in the quantities. Hence, we get normalized MHD equations of the form:
+
+\begin{equation}\label{eq:normcontinuity}
+	\frac{\partial \bar{n_s}}{\partial \bar{t}} + \nabla \cdot (\bar{n_s} \bar{\textbf{v}_s}) = \bar{S} - \bar{L}
+\end{equation}
+
+\begin{equation}\label{eq:normmomentumcom}
+\begin{aligned}
+	&\frac{\partial \bar{n} \bar{\textbf{V}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}} + \frac{\bar{B}^2}{2}\textbf{I} - \bar{\textbf{B}}\bar{\textbf{B}}) \\
+	&= - (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} +\bar{m_e}\bar{\textbf{J}}  - \bar{\textbf{U}}) + \bar{m_e}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
+	&+ (\bar{S} \bar{m_n} \textbf{U} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{1+\bar{m_e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\bar{\textbf{J}}) )
+\end{aligned} 
+\end{equation}
+
 
 \chapter{Chromosphere Dynamics}\label{chap:chromosphere} 
 
+\section{Simulation Domain}\label{sec:simulationdomain}
+
+
 \chapter{Conclusion}\label{chap:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\nocite{*}
+\nocite{*}
 \bibliographystyle{plainnat}
 \bibliography{phd-thesis}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
 \chapter{Appendix Chapter}
-\lipsum[2]
 
 \end{document}
