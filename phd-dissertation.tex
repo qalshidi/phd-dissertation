@@ -51,7 +51,7 @@ In this dissertation, an attempt will be made to show the benefits and utility o
 \section{The Sun}
 \begin{figure}[h!]\label{fig:sunstructure}
 	\centering
-	\includegraphics[width=1.0\linewidth]{sunstructure.png}
+	\includegraphics[width=1.0\linewidth]{images/sunstructure.png}
 	\caption{A more complicated view of the sun's structure and layers. [{Image from \url{https://phys.org/news/2015-12-sun-energy.html}}]} % chktex 8
 \end{figure}
 Whenever we say `the sun' we do not mean any star---we mean \textit{our} star. The sun is a 4.6 billion year old yellow dwarf. It generates a lot of the energy we use for life on Earth. It creates this energy through nuclear fusion in its core, turning hydrogen into helium. The sun is mostly hydrogen with a small amount of helium and even smaller amounts of metal ions which require tremendous energy to fuse. The sun has six regions (from innermost to outermost): the core, the radiative zone, the covection zone, the photosphere, the chromosphere and the corona. The core is where the fusion happens. Here is where hydrogen is made into helium and other metals. The radiative zone and convection zone is where the energy travels radially upwards to wards the surface, the photosphere. The photosphere is the surface of the Sun. Here photons are trapped but the ones that do escape mimic black-body radiation (not perfectly). It is optically thick and is the white light we see when looking at the Sun. Above the photosphere is the atmospheric layer, the chromosphere, which we will go in much detail about in this dissertation. Above that, is the corona which is what gives the sun its tendrils and the hair we give our cartoon drawings of the sun.
@@ -62,7 +62,7 @@ The chromosphere is the interface between the surface, the photosphere, and the 
 
 \begin{figure}[ht!]\label{fig:chromoprofile}
 	\centering
-	\includegraphics[width=0.75\linewidth]{chromoprofile.jpg}
+	\includegraphics[width=0.75\linewidth]{images/chromoprofile.jpg}
 	\caption{A view of the upper, middle and lower chromosphere. The chromosphere is partially ionized and is much colder than the corona (above the transition region).~\citep{Song2014,Avrett2008}}
 \end{figure}
 
@@ -180,7 +180,7 @@ The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequatio
 	\frac{\partial n_e}{\partial t} + \nabla \cdot (n_e \textbf{v}_s) = S - L
 \end{equation}
 
-\begin{equation}\label{eq:econtinuity}
+\begin{equation}\label{eq:ncontinuity}
 	\frac{\partial n_n}{\partial t} + \nabla \cdot (n_n \textbf{v}_s) = L - S
 \end{equation}
 
@@ -204,14 +204,24 @@ The ion and electron fluid can be simplified further to be one plasma that track
 
 
 \begin{equation}\label{eq:quasineutrality}
-	n_i = n_e
+	n_i = n_e = n
 \end{equation}
 
 This can simplify the current density equation as well:
 
 \begin{equation}\label{eq:currentdensity}
-	\textbf{J} = n_i \textbf{v}_i - n_e \textbf{v}_e = n_i (\textbf{v}_i - \textbf{v}_e)
+	\textbf{J} = e ( n_i \textbf{v}_i - n_e \textbf{v}_e) = e n (\textbf{v}_i - \textbf{v}_e)
 \end{equation}
+
+Where $e$ is the elementary charge. Subtracting the ion and electron continuity equations gives:
+\begin{equation}
+	\frac{\partial n_i - n_e}{\partial t} + \nabla\cdot(n_i v_i - n_e v_e) = 0
+\end{equation}
+\begin{equation}\label{eq:chargeconservation}
+	\nabla\cdot\textbf{J} = 0
+\end{equation}
+
+The charge conservation equation.
 
 To simplify the three MHD equations (Equations~\ref{eq:imomentum}-\ref{eq:nmomentum}) we can take the multiple of their masses and add Equation~\ref{eq:imomentum} and~\ref{eq:emomentum}.
 
@@ -234,11 +244,11 @@ This way we can have a magnetic flux and make use of our conservative scheme in 
 	\textbf{V} = \frac{\rho_i \textbf{v}_i + \rho_e \textbf{v}_e}{\rho_i+\rho_e}
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:vi}
 	\textbf{v}_i = \textbf{V} + \frac{\rho_e}{\rho_i+\rho_e} \frac{1}{n e} \textbf{J} \sim \textbf{V} + \frac{m_e}{m_i} \frac{\textbf{J}}{n e} 
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq:ve}
 	\textbf{v}_e = \textbf{V} - \frac{\rho_i}{\rho_i+\rho_e} \frac{1}{n e} \textbf{J} \sim \textbf{V} -\frac{\textbf{J} }{n e}
 \end{equation}
 
@@ -250,10 +260,67 @@ This way we can have a magnetic flux and make use of our conservative scheme in 
 \end{aligned}
 \end{equation}
 
-The dynamic pressure and thermal pressures have been combined into one kinetic tensor term $\textbf{K}$. The elementary charge is $e$. $\textbf{U}$ is the neutral velocity.
+The dynamic pressure and thermal pressures have been combined into one kinetic tensor term $\textbf{K}$. $\textbf{U}$ is the neutral velocity.
 
-\section{Generalized Ohm's Law}\label{sec:ohmslaw}
+\section{Maxwell's Equations}
 
+Since a plasma is a gas the reacts strongly to electro-magnetic fields. Maxwell's equations must be enforced in order to have a plasma consistent with reality. The Maxwell equations will also help us with the time evolution of the fields, as the fields are interconnected. The Maxwell's equations are:
+
+\begin{equation}\label{eq:gausslaw}
+	\varepsilon_0\nabla\cdot\textbf{E} = n q
+\end{equation}
+\begin{equation}\label{eq:maggausslaw}
+	\nabla\cdot\textbf{B} = 0
+\end{equation}
+\begin{equation}\label{eq:lawofinduction}
+	\frac{\partial\textbf{B}}{\partial t} = - \nabla\times\textbf{E}
+\end{equation}
+\begin{equation}\label{eq:ampereslaw}
+	\mu_0\varepsilon_0\frac{\partial\textbf{E}}{\partial t} + \mu_0\textbf{J} = \nabla\times\textbf{B}
+\end{equation}
+
+In a plasma, any evolution of the electric field is very quickly resolved in the timescales we are considered about. Ions and electrons would rearrange quickly to cancel out the electric field so it can be assumed as a perfect electrical conductor. This means the evolution of the magnetic field is more useful than the evolution of the electric field in timescales of interest. This also leads to the approximation $\partial\textbf{E}/\partial t \sim 0$:
+
+\begin{equation}\label{eq:ampereslawapprox}
+	\mu_0\textbf{J} = \nabla\times\textbf{B}
+\end{equation}
+
+The plasma is therefore in a static electric field. We will need a definition of the electric field in order to evolve our magnetic fields. This will be discussed in the next Section~\ref{sec:ohmslaw}.
+
+The magnetic field has also never been observed to have monopoles which makes it a solenoidal vector field. This is called Gauss's law of magnetism. The magnetic field will need to keep this shape despite errors in the simulation. The implentation will be discussed in Section~\ref{eq:divergencefree}.
+
+\subsection{Generalized Ohm's Law}\label{sec:ohmslaw}
+
+When talking about the Generalized Ohm's Law (GOL) or the Ohm's Law we typically think about conductivity in metal. Or at least that is how it is taught in college level physics. The Generalized Ohm's Law's purpose is to find the electric field within the plasma. This can be found by subtracting the ion and electron momentum equations~\ref{eq:imomentum}-\ref{eq:emomentum} and multiplying by electron mass.
+
+\begin{equation}
+\begin{aligned}
+	&\frac{m_e}{e}\frac{\partial \textbf{J}}{\partial t} + \nabla \cdot (m_e n [\textbf{v}_i \textbf{v}_i - \textbf{v}_e \textbf{v}_e] +m_e \frac{\textbf{P}_i}{m_i} - \textbf{P}_e) - n e (-\frac{m_e}{m_i}+1) \textbf{E} - \frac{n e m_e}{m_i} \textbf{v}_i \times \textbf{B} - n e\textbf{v}_e \times \textbf{B} \\
+	&= -n m_e [ \nu_{ie} (\textbf{v}_i -\textbf{v}_e) + \nu_{in} (\textbf{v}_i -\textbf{v}_n) - \nu_{ei} (\textbf{v}_e -\textbf{v}_i) - \nu_{en} (\textbf{v}_e -\textbf{v}_n)] \\
+	&+ (\frac{m_e}{m_i} - 1) S m_n \textbf{v}_n - \frac{m_e}{m_i} S m_e \textbf{v}_e - L m_e \textbf{v}_i + S m_n \textbf{v}_n - S m_i \textbf{v}_i - L m_e \textbf{v}_e
+\end{aligned}
+\end{equation}
+
+Simplifying further by taking the $m_e/m_i \sim 0$ approximation, current density~\ref{eq:currentdensity}, charge conservation~\ref{eq:chargeconservation}, and the velocity definitions~\ref{eq:vi} and~\ref{eq:ve}.
+
+\begin{equation}
+\begin{aligned}
+	&\frac{m_e}{n e^2} \frac{\partial\textbf{J}}{\partial t}+ \frac{m_e}{ne^2} \nabla\cdot[\textbf{V}\textbf{J} + \textbf{J}\textbf{V}] + \frac{-\nabla\cdot\textbf{P}_e + \textbf{J}\times\textbf{B}}{ne}- \textbf{E} - \textbf{V}\times\textbf{B} \\
+	& = - \frac{m_e}{e}[\nu_{in} (\textbf{V}-\textbf{v}_n) + \nu_{en}(\textbf{V} - \textbf{v}_n)] - \eta\textbf{J}
+\end{aligned}
+\end{equation}
+\begin{equation}\label{eq:gom}
+\begin{aligned}
+	&\textbf{E}  = - \textbf{V}\times\textbf{B} + \frac{m_e}{n e^2} \frac{\partial\textbf{J}}{\partial t}+ \frac{m_e}{ne^2} \nabla\cdot[\textbf{V}\textbf{J} + \textbf{J}\textbf{V}] \\
+	&+ \frac{-\nabla\cdot\textbf{P}_e + \textbf{J}\times\textbf{B}}{ne} \\
+	&  + \frac{m_e}{e}[\nu_{in} (\textbf{V}-\textbf{U}) - \nu_{en}(\textbf{V} - \textbf{U})] + \eta\textbf{J}
+\end{aligned}
+\end{equation}
+
+
+Where $\eta = \frac{m_e \nu_e}{e^2 n}$ is the Ohmic resistivity. The relation between the electric field and the resistivity is what we think of when we invoke Ohm's law in college physics. Clearly the equation is a little more complicated in MHD\@. Note that collision with neutrals may change the electric field also. The collisions can cause a drift between the ions and electrons, seperating them and causing an electric field.
+
+In Chapter~\ref{chap:chromosphere} we will simplify the above equation further to suit our needs. Typically in simulations you only want to include the terms that matter the most. With careful consideration we can come up with a GOL that is most appropriate for our application.
 
 \chapter{Implementation}\label{chap:implementation}
 
@@ -278,7 +345,7 @@ In codes designed to solve differential equations numerically we must decide on 
 We would also like a total-variation-diminishing (TVD) scheme, this is because spatial derivatives are approximated on a computer. If we take a taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ we see that there are many higher order terms missing. Taking the fourier analysis of these terms show that any high-frequency errors may compound (sometimes referred to as spurious oscillations). This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
 
 \begin{equation}\label{eq:tvd}
-	\frac{dTV}{dt} = \frac{d}{dt} \int \lvert \frac{\partial u}{\partial x} dx \leq 1
+	\frac{d(TV)}{dt} = \frac{d}{dt} \int \lvert \frac{\partial u}{\partial x} \rvert dx \leq 1
 \end{equation}
 
 Therefore, for the the purpose of our code, we will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
@@ -342,13 +409,86 @@ With the left and right extrapolated variables we may construct a flux.
 
 Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical terms means the largest wave speeds of the system. Typically for the ion plasma it is the fast-mode speed and for the neutrals it is the sound speed. It's important to note in conservative MHD this is only the wave speed ($c_{fast}$) and not the same as the fastest speed of information propagation ($v+c_{fast}$). The diffusive terms proportional to $\lambda$ are meant to avoid the oscillations and if they are larger than they need to be the solution will be more diffusive.
 
+
+\section{Enforcing a Solenoidal Magnetic Field}
+
+The Gauss's law for magnetic fields (Equation~\ref{eq:maggausslaw}) needs to be taken care of because due to machine rounding error and other errors due to discretization, there will be evolution of the divergence. That is to say, although:
+\begin{equation}
+	\frac{\partial\nabla\cdot\textbf{B}}{\partial t} = -\nabla\cdot\nabla\times\textbf{E} = 0
+\end{equation}
+
+The reality is, due to errors:
+\begin{equation}
+	\frac{\partial\nabla\cdot\textbf{B}}{\partial t} = \epsilon_{errors}
+\end{equation}
+
+There are many methods to resolving this. A popular method is Yee grids, sometimes reffered to as staggered grids. Placing the magnetic fields to the cell edges of the electric fields. By doing this, evolving the magnetic fields reduces errors to machine rounding errors since Stoke's theorem is imposed on the problem.
+
+\begin{equation}\label{eq:stokesyee}
+	\iint_S\frac{\partial\textbf{B}}{\partial t}\cdot d\textbf{A} = {\oint}_{edges} \textbf{E}\cdot d\textbf{l}
+\end{equation}
+
+This is not the method used for CoMFi. Staggering the grid makes using a finite-volume-method difficult especially when trying to find cell centers from one quantity to the next. Instead we employ the Generalized Lagrange Multiplier method introduced by~\citet{glm}.
+
+\subsection{Generalized Lagrange Multiplier}
+
+The Generalized Lagrange Multiplier (GLM) method adds another unknown to the system of equations to be solved. This has the drawback of using more memory. Its implementation is simple, however, which means adding it to an existing code is easy. The GLM $\Phi$ tries to minimize the monopoles created due to errors in the simulation. It does this by first creating some stress to the induction equation if there is some monopole.
+
+\begin{equation}
+	\frac{\partial\textbf{B}}{\partial t} = - \nabla\times\textbf{E} + \nabla \Phi
+\end{equation}
+
+And filter the monopoles into the GLM using this method of evolution:
+\begin{equation}
+	\mathcal{D}(\Phi) + \nabla\cdot\textbf{B} = 0
+\end{equation}
+
+$\mathcal{D}$ is a differential operator and we can choose the GLM to evolve in any way we want. A hyperbolic evolution and/or a parabolic evolution may be used. Due to the non-linear and parabolic nature of our equations we opt to use both:
+
+\begin{equation}
+	\matchal{D}(\Phi) = \frac{1}{c^2_h}\frac{\partial\Phi}{\partial t} + \frac{1}{c^2_p}\Phi
+\end{equation}
+
+Here $c_h$ and $c_p$ are the hyperbolic and parabolic spees of the divergence errors. That means the divergence errors will propogate at a speed of $c_h$ and dissipate at rate of $c_p$. The new equation that must be solved is:
+
+\begin{equation}\label{eq:glm}
+	\frac{\partial\Phi}{\partial t} + c^2_h \nabla\cdot\textbf{B} = - \frac{c^2_h}{c^2_p} \Phi
+\end{equation}
+
+The hyperbolic speed, $c_h$, can be chosen to be similar the wave speeds in the magnetic field (i.e.\ the fast-mode speed). We have more freedom to chose the ratio of dissipation to propogation, $\alpha = c_h / c^2_p$, also known as the damping parameter. Through testing 0.5 was find to be a good parameter~\citep[p. 5899-5911]{glm2}.
+
+We can seperate Equation~\ref{eq:glm} into two parts two solve. We can solve the right hand side exactly, and use the conservative scheme to solve the second term on the left hand side. First solve the left hand side and setting the right hand side equal to zero. Then minimize it with the exact solution:
+
+\begin{equation}
+	\Phi(t+\Delta t) = \Phi(t) e^{-c_h\alpha\Delta t}
+\end{equation}
+
+The efficacy of this method is keeping the normalized divergence errors to lower than the normalized grid-spacing. This is useful so that the monopoles are not evident when drawing the magnetic field lines nor does it have a strong effect on the results.
+
 \section{Time Integration}\label{sec:timeintegration}
+
+Time integration is imporant to the time stepping nature of simulations. We can have both implicit time stepping and explicit time stepping. Explicit time stepping for the euler equation takes the form:
+
+\begin{equation}\label{eq:explicit}
+	u^{n+1} = u^n + v\int^{n+1}_n \frac{d}{dx}(u^{n}) dt
+\end{equation}
+
+This is the easiest approach to the solutions because you use values in the previous time step to solve for the next. This does not require a solution of a linear system which we will show later. Explicit schemes are limited to time steps that are smaller than the wave period, $\Delta x / v > \Delta t$, and depending on the scheme a multiple smaller but usually within the same order of magnitude. This is because the largest characteristic speed (the speed of information propogation) cannot be faster than the grid spacing and time steps. This will cause loss of information and instabilities as there will be an attempt to skip grids but due to discretization it will fail to resolve.
+
+In implicit time steps
+\begin{equation}\label{eq:implicit}
+	u^{n+1} - v\int^{n+1}_n \frac{d}{dx}(u^{n+1}) dt = u^n 
+\end{equation}
+This introduces a linear equation that must be solved, $Au^{n+1} = u^n$, and the solution is to invert the matrix A, $u^{n+1} = A^{-1} u^n$. This gets more complicated in non-linear systems. In this case we are not limited by that characteristic speed.
+
+There is also a third option, semi-implicit schemes. This integrates some variables implicitly and others explicitly. This is helpful when you do not want to be limited by certain characteristic speeds. For the chromosphere example in Chapter~\ref{chap:chromosphere} a characteristic we try to overcome is the collision times since it is orders of magnitude larger than the Alf\'ven and sound times in the chromosphere.
+
 
 \section{Architecture}\label{sec:architecture}
 
 It is important in scientific computing not to reinvent the wheel. There are many libraries, particularly C++ libraries, that use template programming to make it easier to write linear algebra in code. It is always easier to add an entire vector with one + sign than looping through each element of the two vectors and adding each. For this reason we can avoid low-level programming like Fortran for CPUs or OpenCL and CUDA for GPUs because the Basic Linear Algebra Subroutines (BLAS) have already been written and abstracted by someone else. C++ is a language that is all about abstraction and speed. There is a pervasive myth that if you want to do scientific computing you must use Fortran or CUDA but this is not true and is usually reinforced by scientists' lack of understanding of computer science and/or bad code.
 
-The code uses to template expression libraries in C++. Template expression is how C++ abstracts operators such as +, - and / to deal with one variable and the next and call the low level BLAS functions. The libraries used are Armadillo for CPU\@. This is a code typically used for Machine Learning applications so speed and big data is its focus. For GPU programming ViennaCL is used, it's a library used by PETSc for its GPU portion. However, at the time of this writing, PETSc's GPU code is not fully developed so ViennaCL is used directly. Luckily, ViennaCL interfaces with Armadillo well and there exists copy constructors to go from shared memory to GPU memory.
+The code uses to template expression libraries in C++. Template expression is how C++ abstracts operators such as $+$, $-$ and $/$ to deal with one variable and the next and call the low level BLAS functions. The libraries used are Armadillo for CPU\@. This is a code typically used for Machine Learning applications so speed and big data is its focus. For GPU programming ViennaCL is used, it's a library used by PETSc for its GPU portion. However, at the time of this writing, PETSc's GPU code is not fully developed so ViennaCL is used directly. Luckily, ViennaCL interfaces with Armadillo well and there exists copy constructors to go from shared memory to GPU memory.
 
 Matrices {\it must\/} be built on the CPU\@. Accessing GPU elements individually is a slow process that is limited by the PCI-e speed and when the machine code (running on cpu) is asked to go back and forth, we get slow code. Best practice is to first build a matrix on the CPU then copy to the GPU\@.
 
@@ -452,14 +592,21 @@ Once we have our normalization constants we may normalize the equations. Replaci
 
 \chapter{Chromosphere Dynamics}\label{chap:chromosphere} 
 
+\section{Governing Equations}\label{sec:governingeq}
+
 \section{Simulation Domain}\label{sec:simulationdomain}
 
+\section{Boundary Conditions}\label{sec:bc}
+
+\section{Results}\label{sec:results}
+
+\section{Discussion}\label{sec:discussion}
 
 \chapter{Conclusion}\label{chap:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \nocite{*}
 \bibliographystyle{plainnat}
-\bibliography{phd-thesis}
+\bibliography{phd-dissertation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
