@@ -5,6 +5,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{booktabs}
 
 % use fancyhdr, to enable page style stuff (below)
@@ -483,6 +484,112 @@ This introduces a linear equation that must be solved, $Au^{n+1} = u^n$, and the
 
 There is also a third option, semi-implicit schemes. This integrates some variables implicitly and others explicitly. This is helpful when you do not want to be limited by certain characteristic speeds. For the chromosphere example in Chapter~\ref{chap:chromosphere} a characteristic we try to overcome is the collision times since it is orders of magnitude larger than the Alf\'ven and sound times in the chromosphere.
 
+\subsection{Stability}\label{sec:stability}
+
+In order for schemes to be stable, errors must not grow over time. We can make sure errors are not growing by employing the Von Neumann analysis. Let's use a simple explicit forward difference scheme on the wave equation for example.
+
+\begin{equation}
+	\frac{\partial u}{\partial t} = -v\frac{\partial u}{\partial x}
+\end{equation}
+\begin{equation}\label{eq:upwind}
+	u^{n+1}_j = u^n_j - \frac{\Delta t}{\Delta x}v(u^n_{j+1}-u^n_{j})
+\end{equation}
+
+The above is the Euler equation for a wave propogating at constant speed $v$ using a forward difference method, also called an upwind scheme. The Von Neumann method takes a fourier analysis to the error waves generated due to discretization. We say that by using the Taylor series the discretization should have this {\it exact\/} solution.
+
+\begin{equation}
+	u_{j+1} = u_j + \Delta x {\frac{\partial u}{\partial x}}\rvert_j + \frac{\Delta x^2}{2} {\frac{\partial^2 u}{\partial x^2}}\rvert_j + \frac{\Delta x^3}{3!} {\frac{\partial^3 u}{\partial x^3}}\rvert_j + \cdots 
+\end{equation}
+
+Where $j$ is the location of the cell solution. Rearranging so that it looks like a forward difference scheme shows its relation to the exact solution of the partial derivative.
+
+\begin{equation}
+	\epsilon = \frac{u_{j+1} - u_j}{\Delta x} - {\frac{\partial u}{\partial x}}\rvert_j =  \frac{\Delta x}{2} {\frac{\partial^2 u}{\partial x^2}}\rvert_j + \frac{\Delta x^2}{3!} {\frac{\partial^3 u}{\partial x^3}}\rvert_j + \cdots = O(\Delta x)
+\end{equation}
+
+This means the errors, $\epsilon$, are of first order, proportional to $\Delta x$ so the upwind scheme is a first order scheme in space. To see how the errors evolve in time we employ the Von Neumman analysis. Assuming the computed solution is a linear combination of the real solution and the error.
+
+\begin{equation}
+	u_{computed} = u_{exact} + \epsilon
+\end{equation}
+
+We can subtract the exact solution and do a fourier analysis of the errors found. Doing this on Equation~\ref{eq:upwind} yields.
+
+\begin{equation}
+	e^{a(t+\Delta t)+ikx} = e^{at+ikx} - \beta (e^{at + ik(x+\Delta x)}-e^{at + ikx})
+\end{equation}
+
+Where $\beta = v(\Delta t / \Delta x)$, $a$ is the component of the errors in time, and $k$ is the series of frequencies of the errors in space. To find the error growth due to time we must find the ratio $e^{at} = u^{n+1}/u^n$.
+
+\begin{equation}
+	G = e^{a\Delta t} = 1 - \beta (e^{ik\Delta x}- 1)
+\end{equation}
+
+$G$ is the growth in error each time step also called the amplification factor. In order to keep the errors bounded we need to ensure that this ratio is less than or equal to 1.
+
+\begin{equation}
+	\lvert G \rvert \leq 1
+\end{equation}
+
+For the upwind scheme example we used:
+
+\begin{equation}
+	\lvert 1 - \beta (e^{ik\Delta x}- 1) \rvert \leq 1
+\end{equation}
+
+This will lead to
+
+\begin{equation}
+	\beta \leq 1
+\end{equation}
+
+Or the stability requirement, also known as the Courant-Friedrich Levy condition:
+
+\begin{equation}
+	v \frac{\Delta t}{\Delta x} \leq 1
+\end{equation}
+
+An explicit central difference scheme behaves differently, however.
+\begin{equation}\label{eq:central}
+	u^{n+1}_j = u^n_j - \beta \frac{u^n_{j+1}-u^n_{j-1}}{2}
+\end{equation}
+
+Doing the Von Neumann analysis here using a more simplified notation:
+\begin{equation}
+	u^{n+1} e^{ijk} = u^n e^{ijk} - \beta \frac{u^n e^{i(j+1)k} - u^n e^{i(j-1)k}}{2}
+\end{equation}
+\begin{equation}
+	G = 1 - \beta \frac{e^{ik} - e^{-ik}}{2} = 1 - i\beta \sin{(k)}
+\end{equation}
+\begin{equation}
+	\lvert 1 - i\beta \sin{(k)} \rvert = 1 + \beta^2 \sin^2(k) \nleq 1
+\end{equation}
+
+Since the amplification factor is always larger than 1, errors will always grow. This scheme is {\it unconditionally unstable}. Doing this scheme in an implicit fashion can fix this problem.
+
+\begin{equation}\label{eq:implicitcentral}
+	u^{n+1}_j = u^n_j - \beta \frac{u^{n+1}_{j+1}-u^{n+1}_{j-1}}{2}
+\end{equation}
+
+Now doing the fourier analysis,
+
+\begin{equation}
+	u^{n+1}_j - \beta \frac{u^{n+1}_{j+1}-u^{n+1}_{j-1}}{2} = u^n_j
+\end{equation}
+\begin{equation}
+	u^{n+1}e^{ijk} - \beta \frac{u^{n+1}e^{i(j+1)k}-u^{n+1}e^{i(j-1)k}}{2} = u^n
+\end{equation}
+\begin{equation}
+	G (1 - \beta \frac{e^{ik}-e^{-ik}}{2}) = 1
+\end{equation}
+\begin{equation}
+	G  = \frac{1}{1 - i \beta \sin{(k)}} 
+\end{equation}
+\begin{equation}
+\lvert G \rvert = \frac{1}{1+\beta^2 \sin^2{(k)}} \leq 1
+\end{equation}
+
+Since the amplification factor is always less than or equal to 1 this implicit central difference scheme is {\it unconditionally stable}.
 
 \section{Architecture}\label{sec:architecture}
 
@@ -601,6 +708,26 @@ Once we have our normalization constants we may normalize the equations. Replaci
 \section{Results}\label{sec:results}
 
 \section{Discussion}\label{sec:discussion}
+
+A magnetic canopy forms due to the magnetic and thermal pressure imbalance of the strong field regions from the photosphere and the weak field but high temperature regions scaling up to the transition region. This is consistent with a two-fluid analytic model that was presented in \citet{Song2017}. It shows that the model can provide numerical solutions for chromospheric conditions. However, the magnetic canopy does not relax or reach a steady-state due to the nature of the collisional model and not in the timescales of the current simulation. The supergranule canopy may not last because the photospheric power flux, generated at the lower boundary, continuously adds energy into the system. Small scale processes or highly dynamic events like jets override the canopy magnetic field because of large plasma speeds. Our results show that the jet has immediate effects on the magnetic field due to induction and not vice versa.
+
+Largest Alfv\'en speeds seen in the simulation is 11 Mm/s which means that in the 30s of simulation, magnetic effects can travel through the domain at least 3 times with constant density and even less in a hydrostatic density. Alfv\'en waves generated as the drivers for frictional heating at the bottom boundary do not reflect at the top boundary enough times to warrant a time-averaged study of the entire heating of the chromosphere nor does it have enough energy to drive the jet of the same kind as presented. The presence of the shock also inhibits any long-term ideal studies of the atmosphere since it depletes and cavities form with the jet. In a future study, we will see how Alf\'ven waves affect the chromosphere with force-free initial conditions so as to not form any jets that can destroy a canopy configuration.
+
+Although the frictional heating is large in the entire magnetic network column, an instance of no frictional heating creates a separation of upstream and downstream fluids preceding the shock. This can be seen in Figure~\ref{fig:prespicule} and~\ref{fig:midspicule} and is due to a high temperatures and density which causes the two fluids to move in unison and therefore $\rho_{in} \nu_{in} \|V-U\| = 0$. The cause of the frictional heating is not Alfv\'en wave damping but the imbalanced initial conditions and the horizontal \textbf{J} $\times$ \textbf{B} force. The lower medium heats faster than above it and this creates the shock in the lower atmosphere that then propagates due to thermal pressure.
+
+It has been suggested that the driver of these kinds of spicule-like events is magnetic reconnection which originates from the vicinity of a large magnetic flux concentration in the network \citep{Pontieu2007}. In our simulation, the frictional heating heats a fluid downstream of the unison speed ring larger than that of upstream causing a shockwave as expected from a Type I spicule. However the simulation does not show reconnection effects with enough energy to drive a spicule. Although MHD simulations do not mimic reconnection directly, currents present in reconnection events would accelerate electrons into a collision due to the dense and hot medium surrounding it. Therefore, magnetic reconnection is directly related to ohmic heating in the chromosphere. If comparing the dominating heating terms, frictional heating dominates ohmic heating which means {\it collisions are causing these jets to form and not reconnection-like currents}. The size and extreme temperatures of the jet in the simulation closely resemble chromospheric jets~\citep{Shimojo2000,Nishizuka2011}.
+
+In Figure~\ref{fig:shockwavefront1d} the jet can be seen accumulating a shock of number density $10^{11}$ cm$^{-3}$. This density is consistent with IRIS observations of spicules in the corona~\citep{Alissandrakis2018}. The simulation does show that changes in the magnetic field happen behind the shockwave front's direction of motion. Figure~\ref{fig:spiculefield1d} implies the change in the magnetic field is a consequence of the jet and the rising magnetic field density in the plane of the simulation is due to compression from the shock itself. The shock in the frictional heating term, $\frac{\rho_i \nu_{in} \| \textbf{V} - \textbf{U} \|^2}{n_n}$, seen in Figure~\ref{fig:spiculefriction1d} coincides exactly at the shock showing enhanced heating behind the shockfront. The cause of the shock climb is the thermal pressure behind and in front of the shock.
+
+The jet's temperatures and speed are much larger than observed. This is mostly due to the fact that in our model we have not included the radiative loss effect in the energy equations. The larger than reality shock heating because of the greater flow speed may also further amplify the temperature. The over-estimated temperature of the downstream medium may also lead to estimate of the collision frequencies. This growing downstream temperature has a compounding effect on the thermal pressure gradient downstream and upstream and causes the speeds to go supersonic. Further studies will incorporate the photo-chemistry and also radiative losses. These implementations will help to see how they affect shock formation and the energy balance inside the chromosphere. It is also important to note that this shock travels at super-Alfv\'enic speeds so it is a super-Alfv\'enic jet.
+
+\citet{KuzmaApJ2017} made a numerical simulation of a solar spicule by imposing a vertical pulse in the solar limb. In contrast, the shock shown in our simulation self-consistently evolves without forcing a push on the plasma and the jet is a consequence of thermal effects. Thus, it provides a complete picture of the chromospheric heating conditions for shock formation. The spicule speeds in \citet{KuzmaApJ2017} match more closely to the observed $25~km~s^{-1}$ than our simulation, but that is expected in the case where the pulse is controlled and the simulation is single-fluid. \citet{KuzmaApJ2017} also investigated adiabatic and non-adiabatic studies of spicules and the wave structures found in the plasma. The jets in our simulation are different than the imposed pulses of~\citet{Kuzma2017} since that is a cold dense plasma that has been imposed, while in our simulation, it is a hot large plasma jet that evolved self-consistently.
+
+\citet{Song2014} found that by subtracting the two fluids' momentum equations the evolution of the speed differences, $d/dt|\textbf{V}-\textbf{U}|$, which leads to frictional heating is caused and maintained by magnetic pressure and thermal pressure differences between the fluids. \citet{Tu2013}, who studied a time-averaged heating in the chromosphere, found that ohmic heating dominated the lower chromosphere and frictional heating dominated the upper chromosphere which adequately explained the heating of the chromosphere. This picture seems to be different from the results of our simulation as frictional heating dominated ohmic heating in the lower chromosphere but this is most likely due to the field strength used in the two studies. Their study limited the field in less than 100 G, but our model includes region of 1 kG field. The one order of magnitude higher in the field decreases the ohmic-to-frictional heating ratio by two orders of magnitude.
+
+We use our model to demonstrate the importance of collisions in the chromosphere. A model without collisions is incomplete as neutral particles dominates the charged particles in this small layer of the sun. By simply adding collision terms we show that the simulation replicates chromospheric conditions well. Such a model can be used as an interface between the (fully) neutral photosphere and the (fully) ionized corona. \citet{Hillier2016} investigated 1D slow-mode shocks in chromospheric conditions and how magnetic energy can be converted to frictional heating in these cases.
+
+Finally, this work serves as a step towards a better understanding of the solar chromosphere. The {\it Parker Solar Probe\/} mission \citep{SolarProbe16} is expected to shed light on the dominant processes in the solar atmosphere, including the chromosphere, and these processes will be implemented in the model. 
 
 \chapter{Conclusion}\label{chap:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
