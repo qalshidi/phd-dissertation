@@ -33,9 +33,8 @@
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{acknowledgments}
-An acknowledgments page is optional.
-\end{acknowledgments}
+\chapter*{Acknowledgements}
+To my partner Alexis Ploss, who believed in me without judgment or apprehension. To my family, that supported me beyond the ocean. To my dog Ada Lovelace, that provided emotional support through the hardships.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,7 +54,7 @@ In this dissertation, an attempt will be made to show the benefits and utility o
 	\includegraphics[width=1.0\linewidth]{images/sunstructure.png}
 	\caption{A more complicated view of the sun's structure and layers. [{Image from \url{https://phys.org/news/2015-12-sun-energy.html}}]} % chktex 8
 \end{figure}
-Whenever we say `the sun' we do not mean any star---we mean \textit{our} star. The sun is a 4.6 billion year old yellow dwarf. It generates a lot of the energy we use for life on Earth. It creates this energy through nuclear fusion in its core, turning hydrogen into helium. The sun is mostly hydrogen with a small amount of helium and even smaller amounts of metal ions which require tremendous energy to fuse. The sun has six regions (from innermost to outermost): the core, the radiative zone, the covection zone, the photosphere, the chromosphere and the corona. The core is where the fusion happens. Here is where hydrogen is made into helium and other metals. The radiative zone and convection zone is where the energy travels radially upwards to wards the surface, the photosphere. The photosphere is the surface of the Sun. Here photons are trapped but the ones that do escape mimic black-body radiation (not perfectly). It is optically thick and is the white light we see when looking at the Sun. Above the photosphere is the atmospheric layer, the chromosphere, which we will go in much detail about in this dissertation. Above that, is the corona which is what gives the sun its tendrils and the hair we give our cartoon drawings of the sun.
+Whenever we say `the sun' we do not mean any star---we mean \textit{our} star. The sun is a 4.6 billion year old yellow dwarf. It generates a lot of the energy we use for life on Earth. It creates this energy through nuclear fusion in its core, turning hydrogen into helium. The sun is mostly hydrogen with a small amount of helium and even smaller amounts of metal ions which require tremendous energy to fuse. The sun has six regions (from innermost to outermost): the core, the radiative zone, the convection zone, the photosphere, the chromosphere and the corona. The core is where the fusion happens. Here is where hydrogen is made into helium and other metals. The radiative zone and convection zone is where the energy travels radially upwards to wards the surface, the photosphere. The photosphere is the surface of the Sun. Here photons are trapped but the ones that do escape mimic black-body radiation (not perfectly). It is optically thick and is the white light we see when looking at the Sun. Above the photosphere is the atmospheric layer, the chromosphere, which we will go in much detail about in this dissertation. Above that, is the corona which is what gives the sun its tendrils and the hair we give our cartoon drawings of the sun.
 
 \subsection{The Chromosphere}
 
@@ -74,7 +73,7 @@ The term space weather refers to weather effects found above our immediate atmos
 
 \subsection{Motivation: A storm is coming}
 
-In 1859, a famous (or infamous) geomagnetic storm hit the Earth. Fortunately, we did not sprawl global electrical power grids at the time or it would have had devastating effects. It was caused by a CME observed by Richard C. Carrington and was thusly named the Carrington Event. Depending on the strength of the geomagnetic storm (which happens frequently at higher/lower latitudes due to night side reconnection) it may reach mid-latitude areas which we habitate. Here geomagnetic storms due to the quick changes in magnetic fields and the law of induction cause ground induced currents (GIC) that can have damaging effects to any ground based electrical devices.
+In 1859, a famous (or infamous) geomagnetic storm hit the Earth. Fortunately, we did not sprawl global electrical power grids at the time or it would have had devastating effects. It was caused by a CME observed by Richard C. Carrington and was thusly named the Carrington Event. Depending on the strength of the geomagnetic storm (which happens frequently at higher/lower latitudes due to night side reconnection) it may reach mid-latitude areas which we inhabit. Here geomagnetic storms due to the quick changes in magnetic fields and the law of induction cause ground induced currents (GIC) that can have damaging effects to any ground based electrical devices.
 
 The Carrington event was our last encounter with a storm of that scale, that does not mean we have not had any near misses. In 2012, a coronal mass ejection that has the strength and size comparable to the previously mentioned Carrington event almost hit the Earth. It missed the Earth by nine days~\citep{Baker2013}. Unlike in 1859, the world of 2012 was filled with electrical power grids. The internet is part of our daily lives and still relies on ground based electrical wiring.
 
@@ -89,7 +88,7 @@ Although plasmas are classically defined as charged gasses, they can coexist wit
 
 \section{Magnetohydrodynamics}\label{sec:mhd}
 
-Magnetohydrodynamics (MHD) is a fluid approximation of plasma popular amongst macroscopic studies of space plasmas. In order to arrive at the fluid approximation we must first look at the particles first and ensure the approximation is appropriate for our case. All of physics is a model and to go from the kinetic theory of plasmas by modelling particles to MHD plasmas by modelling fluids there must be a derivation since there are less assumptions in the kinetic theory than there are in MHD\@.
+Magnetohydrodynamics (MHD) is a fluid approximation of plasma popular amongst macroscopic studies of space plasmas. In order to arrive at the fluid approximation we must first look at the particles first and ensure the approximation is appropriate for our case. All of physics is a model and to go from the kinetic theory of plasmas by modeling particles to MHD plasmas by modeling fluids there must be a derivation since there are less assumptions in the kinetic theory than there are in MHD\@.
 
 \subsection{Kinetic Theory}\label{sec:kinetictheory}
 
@@ -139,7 +138,7 @@ The first order moment will give us the momentum equations:
 	\frac{\partial n_s \textbf{v}_s}{\partial t} + \nabla \cdot (n_s \textbf{v}_s \textbf{v}_s + \frac{\textbf{P}_s}{m_s} ) -n_s \frac{q}{m_s}(\textbf{E} + \textbf{v}_s \times \textbf{B}) = {(\frac{\delta n_s \textbf{v}_s}{\delta t})}_{source}
 \end{equation}
 
-Where $\textbf{P}_s$ is the kinetic pressure tensor and can be simplified to the ideal gas law $P_s\textbf{I} = n_s k_B T_s \textbf{I}$ if applicable. The source terms due to the zeroth order also exists here as well as frictional terms that may appear in multifluid cases. It is apparent that this equation is fluid-like, a form of the Navier-Stokes equation and hence the naming of these equations as hydrodynamic.
+Where $\textbf{P}_s$ is the kinetic pressure tensor and can be simplified to the ideal gas law $P_s\textbf{I} = n_s k_B T_s \textbf{I}$ if applicable. The source terms due to the zeroth order also exists here as well as frictional terms that may appear in multi-fluid cases. It is apparent that this equation is fluid-like, a form of the Navier-Stokes equation and hence the naming of these equations as hydrodynamic.
 
 To close the system equations we need one more for the pressure shown previously. So integrating for the second moment gives:
 
@@ -169,7 +168,7 @@ Where subscript $n$ is the neutral species and $\nu$ is the collision rate. We c
 	\nu_n = n_n \sigma_n <v>
 \end{equation}
 
-The thermal speed is a function of temperature and under the Maxwellian velocity distribution assumption, $\sigma$ is the collisional cross-section which can be found in the literature through experiments. The collisional cross-section between ion and electrons include Coloumb effects as well.
+The thermal speed is a function of temperature and under the Maxwellian velocity distribution assumption, $\sigma$ is the collisional cross-section which can be found in the literature through experiments. The collisional cross-section between ion and electrons include Coulomb effects as well.
 
 The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequation}) for the three species will look like this:
 
@@ -239,7 +238,7 @@ The $\rho$ here is the mass density of the fluid. Using the induction equation M
 	\textbf{J} \times \textbf{B} = \frac{1}{\mu_0} (\nabla \times \textbf{B}) \times \textbf{B} = -\nabla \cdot (\frac{B^2}{2\mu_0}\textbf{I} - \textbf{BB})
 \end{equation}
 
-This way we can have a magnetic flux and make use of our conservative scheme in Section~\ref{sec:tvd-muscl}. Finaly by dividing by $m_i+m_e$ to Equation~\ref{eq:singlemomentum} we can find the center of momentum velocity and simplify the equation one last time:
+This way we can have a magnetic flux and make use of our conservative scheme in Section~\ref{sec:tvd-muscl}. Finally by dividing by $m_i+m_e$ to Equation~\ref{eq:singlemomentum} we can find the center of momentum velocity and simplify the equation one last time:
 
 \begin{equation}
 	\textbf{V} = \frac{\rho_i \textbf{v}_i + \rho_e \textbf{v}_e}{\rho_i+\rho_e}
@@ -288,7 +287,7 @@ In a plasma, any evolution of the electric field is very quickly resolved in the
 
 The plasma is therefore in a static electric field. We will need a definition of the electric field in order to evolve our magnetic fields. This will be discussed in the next Section~\ref{sec:ohmslaw}.
 
-The magnetic field has also never been observed to have monopoles which makes it a solenoidal vector field. This is called Gauss's law of magnetism. The magnetic field will need to keep this shape despite errors in the simulation. The implentation will be discussed in Section~\ref{eq:divergencefree}.
+The magnetic field has also never been observed to have monopoles which makes it a solenoidal vector field. This is called Gauss's law of magnetism. The magnetic field will need to keep this shape despite errors in the simulation. The implementation will be discussed in Section~\ref{sec:divergencefree}.
 
 \subsection{Generalized Ohm's Law}\label{sec:ohmslaw}
 
@@ -319,13 +318,13 @@ Simplifying further by taking the $m_e/m_i \sim 0$ approximation, current densit
 \end{equation}
 
 
-Where $\eta = \frac{m_e \nu_e}{e^2 n}$ is the Ohmic resistivity. The relation between the electric field and the resistivity is what we think of when we invoke Ohm's law in college physics. Clearly the equation is a little more complicated in MHD\@. Note that collision with neutrals may change the electric field also. The collisions can cause a drift between the ions and electrons, seperating them and causing an electric field.
+Where $\eta = \frac{m_e \nu_e}{e^2 n}$ is the Ohmic resistivity. The relation between the electric field and the resistivity is what we think of when we invoke Ohm's law in college physics. Clearly the equation is a little more complicated in MHD\@. Note that collision with neutrals may change the electric field also. The collisions can cause a drift between the ions and electrons, separating them and causing an electric field.
 
 In Chapter~\ref{chap:chromosphere} we will simplify the above equation further to suit our needs. Typically in simulations you only want to include the terms that matter the most. With careful consideration we can come up with a GOL that is most appropriate for our application.
 
 \chapter{Implementation}\label{chap:implementation}
 
-Computational fluid dynamics is a well studied field in computer science, numerics and engineering. Many of its principles can be appled to MHD due to the fluid nature of its equations. We will be focusing on only the ones implementedd in the code my for this dissertation, the Collisional Multi-Fluid ion (CoMFi) code made for the chromosphere case which will be explored in more detail in the upcoming chapter (Chapter~\ref{chap:chromosphere}). The code is an ever-evolving code that uses Graphical Processing Units (GPUs) instead of the common CPUs you see for MHD codes. This is to implement MHD that makes use of the frontiers of computer technology. GPUs were made for graphical operations in video games. This means they are specifically designed to be very fast at matrix rotations, translations and other linear algebra. In this chapter we will explore proper general purpose GPU programming techniques for solving differential equations and the schemes used alongside it. CoMFi is written in C++ using ViennaCL for GPU linear algebra template programming and Armadillo for setting up the matrices on the CPU (the reason for this will be discussed in).
+Computational fluid dynamics is a well studied field in computer science, numerics and engineering. Many of its principles can be applied to MHD due to the fluid nature of its equations. We will be focusing on only the ones implemented in the code my for this dissertation, the Collisional Multi-Fluid ion (CoMFi) code made for the chromosphere case which will be explored in more detail in the upcoming chapter (Chapter~\ref{chap:chromosphere}). The code is an ever-evolving code that uses Graphical Processing Units (GPUs) instead of the common CPUs you see for MHD codes. This is to implement MHD that makes use of the frontiers of computer technology. GPUs were made for graphical operations in video games. This means they are specifically designed to be very fast at matrix rotations, translations and other linear algebra. In this chapter we will explore proper general purpose GPU programming techniques for solving differential equations and the schemes used alongside it. CoMFi is written in C++ using ViennaCL for GPU linear algebra template programming and Armadillo for setting up the matrices on the CPU (the reason for this will be discussed in).
 
 \section{Schemes}\label{sec:schemes}
 
@@ -335,25 +334,25 @@ CoMFi uses the conservative MHD equations therefore conservative schemes are of 
 	\frac{\partial \textbf{u}}{\partial t} + \nabla \cdot \textbf{F(u)} = 0
 \end{equation}
 
-The above equation is a general euler equation demonstrating a conservation law problem. The quantity to be conserved is $\textbf{u}$ and is a function the flux $\textbf{F}$. We will be considering the linear case for simplicity however MHD has demonstrably non-linear terms as the flux (e.g. Equation~\ref{eq:imomentum}) but it can easily follow from this linear case. The point is to show the total volume is conserved:
+The above equation is a general Euler equation demonstrating a conservation law problem. The quantity to be conserved is $\textbf{u}$ and is a function the flux $\textbf{F}$. We will be considering the linear case for simplicity however MHD has demonstrably non-linear terms as the flux (e.g. Equation~\ref{eq:imomentum}) but it can easily follow from this linear case. The point is to show the total volume is conserved:
 
 \begin{equation}\label{eq:geneulerint}
 	\frac{d\textbf{u}}{dt} + \frac{1}{V} \oint \textbf{F} \cdot \textbf{n} dS
 \end{equation}
 
-In codes designed to solve differential equations numerically we must decide on the discretization. Since we are using a finite-volume-method we are discretizing the domain by cells with density quantities in them. The code is discretized in cells existing in cartesian coordinates (rectangular cells) so we are tasked to find the values of the variables at the cell faces in order to conserve the volume.
+In codes designed to solve differential equations numerically we must decide on the discretization. Since we are using a finite-volume-method we are discretizing the domain by cells with density quantities in them. The code is discretized in cells existing in Cartesian coordinates (rectangular cells) so we are tasked to find the values of the variables at the cell faces in order to conserve the volume.
 
-We would also like a total-variation-diminishing (TVD) scheme, this is because spatial derivatives are approximated on a computer. If we take a taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ we see that there are many higher order terms missing. Taking the fourier analysis of these terms show that any high-frequency errors may compound (sometimes referred to as spurious oscillations). This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
+We would also like a total-variation-diminishing (TVD) scheme, this is because spatial derivatives are approximated on a computer. If we take a Taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ we see that there are many higher order terms missing. Taking the Fourier analysis of these terms show that any high-frequency errors may compound (sometimes referred to as spurious oscillations). This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
 
 \begin{equation}\label{eq:tvd}
 	\frac{d(TV)}{dt} = \frac{d}{dt} \int \lvert \frac{\partial u}{\partial x} \rvert dx \leq 1
 \end{equation}
 
-Therefore, for the the purpose of our code, we will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
+Therefore, for the purpose of our code, we will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
 
 \subsection{Flux limiters}\label{sec:fluxlimiters}
 
-To conserve the cell's quantities we must be able to approximate the quantities on the cell edges. At the same time we must perserve monotonicity to avoid the oscillations. This can be achieved through flux limiters. The utility of the flux limiters is to turn the scheme into a first-order upwind scheme in sharp discontinuities and a high-resolution scheme when the solution is smooth.
+To conserve the cell's quantities we must be able to approximate the quantities on the cell edges. At the same time we must preserve monotonicity to avoid the oscillations. This can be achieved through flux limiters. The utility of the flux limiters is to turn the scheme into a first-order upwind scheme in sharp discontinuities and a high-resolution scheme when the solution is smooth.
 
 \begin{equation}\label{eq:fluxlimiter}
 	u_{j+1/2} = u_j + \frac{1}{2} \phi(r_j) (u_{j+1} - u_j)
@@ -376,7 +375,7 @@ The CoMFi code provides several flux limiters and finding the best one is a matt
 	\phi_{va}(r) = \frac{r^2 + r}{r^2 + 1}, \lim_{r \to \infty} \phi(r) = 1
 \end{equation}
 
-Implementing these on a computer however is not a trivial task. Many initial conditions require the entirety of the domain be the same number for instance. In that case we get an $r = \frac{0}{0}$ and this causes a computer to return NaN (not a number). Setting to $r=0$ is approriate but requires extra coding. A work around is to add a small number $\epsilon$ to the denominator known as the machine epsilon to avoid these cases.
+Implementing these on a computer however is not a trivial task. Many initial conditions require the entirety of the domain be the same number for instance. In that case we get an $r = \frac{0}{0}$ and this causes a computer to return NaN (not a number). Setting to $r=0$ is appropriate but requires extra coding. A work around is to add a small number $\epsilon$ to the denominator known as the machine epsilon to avoid these cases.
 
 \begin{equation}
 	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j + \epsilon(u_{j+1} - u_j + 1)}
@@ -411,7 +410,7 @@ With the left and right extrapolated variables we may construct a flux.
 Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical terms means the largest wave speeds of the system. Typically for the ion plasma it is the fast-mode speed and for the neutrals it is the sound speed. It's important to note in conservative MHD this is only the wave speed ($c_{fast}$) and not the same as the fastest speed of information propagation ($v+c_{fast}$). The diffusive terms proportional to $\lambda$ are meant to avoid the oscillations and if they are larger than they need to be the solution will be more diffusive.
 
 
-\section{Enforcing a Solenoidal Magnetic Field}
+\section{Enforcing a Solenoidal Magnetic Field}\label{sec:divergencefree}
 
 The Gauss's law for magnetic fields (Equation~\ref{eq:maggausslaw}) needs to be taken care of because due to machine rounding error and other errors due to discretization, there will be evolution of the divergence. That is to say, although:
 \begin{equation}
@@ -423,7 +422,7 @@ The reality is, due to errors:
 	\frac{\partial\nabla\cdot\textbf{B}}{\partial t} = \epsilon_{errors}
 \end{equation}
 
-There are many methods to resolving this. A popular method is Yee grids, sometimes reffered to as staggered grids. Placing the magnetic fields to the cell edges of the electric fields. By doing this, evolving the magnetic fields reduces errors to machine rounding errors since Stoke's theorem is imposed on the problem.
+There are many methods to resolving this. A popular method is Yee grids, sometimes referred to as staggered grids. Placing the magnetic fields to the cell edges of the electric fields. By doing this, evolving the magnetic fields reduces errors to machine rounding errors since Stokes' theorem is imposed on the problem.
 
 \begin{equation}\label{eq:stokesyee}
 	\iint_S\frac{\partial\textbf{B}}{\partial t}\cdot d\textbf{A} = {\oint}_{edges} \textbf{E}\cdot d\textbf{l}
@@ -450,15 +449,15 @@ $\mathcal{D}$ is a differential operator and we can choose the GLM to evolve in 
 	\matchal{D}(\Phi) = \frac{1}{c^2_h}\frac{\partial\Phi}{\partial t} + \frac{1}{c^2_p}\Phi
 \end{equation}
 
-Here $c_h$ and $c_p$ are the hyperbolic and parabolic spees of the divergence errors. That means the divergence errors will propogate at a speed of $c_h$ and dissipate at rate of $c_p$. The new equation that must be solved is:
+Here $c_h$ and $c_p$ are the hyperbolic and parabolic speeds of the divergence errors. That means the divergence errors will propagate at a speed of $c_h$ and dissipate at rate of $c_p$. The new equation that must be solved is:
 
 \begin{equation}\label{eq:glm}
 	\frac{\partial\Phi}{\partial t} + c^2_h \nabla\cdot\textbf{B} = - \frac{c^2_h}{c^2_p} \Phi
 \end{equation}
 
-The hyperbolic speed, $c_h$, can be chosen to be similar the wave speeds in the magnetic field (i.e.\ the fast-mode speed). We have more freedom to chose the ratio of dissipation to propogation, $\alpha = c_h / c^2_p$, also known as the damping parameter. Through testing 0.5 was find to be a good parameter~\citep[p. 5899-5911]{glm2}.
+The hyperbolic speed, $c_h$, can be chosen to be similar the wave speeds in the magnetic field (i.e.\ the fast-mode speed). We have more freedom to chose the ratio of dissipation to propagation, $\alpha = c_h / c^2_p$, also known as the damping parameter. Through testing 0.5 was find to be a good parameter~\citep[p. 5899-5911]{glm2}.
 
-We can seperate Equation~\ref{eq:glm} into two parts two solve. We can solve the right hand side exactly, and use the conservative scheme to solve the second term on the left hand side. First solve the left hand side and setting the right hand side equal to zero. Then minimize it with the exact solution:
+We can separate Equation~\ref{eq:glm} into two parts two solve. We can solve the right hand side exactly, and use the conservative scheme to solve the second term on the left hand side. First solve the left hand side and setting the right hand side equal to zero. Then minimize it with the exact solution:
 
 \begin{equation}
 	\Phi(t+\Delta t) = \Phi(t) e^{-c_h\alpha\Delta t}
@@ -468,13 +467,13 @@ The efficacy of this method is keeping the normalized divergence errors to lower
 
 \section{Time Integration}\label{sec:timeintegration}
 
-Time integration is imporant to the time stepping nature of simulations. We can have both implicit time stepping and explicit time stepping. Explicit time stepping for the euler equation takes the form:
+Time integration is important to the time stepping nature of simulations. We can have both implicit time stepping and explicit time stepping. Explicit time stepping for the Euler equation takes the form:
 
 \begin{equation}\label{eq:explicit}
 	u^{n+1} = u^n + v\int^{n+1}_n \frac{d}{dx}(u^{n}) dt
 \end{equation}
 
-This is the easiest approach to the solutions because you use values in the previous time step to solve for the next. This does not require a solution of a linear system which we will show later. Explicit schemes are limited to time steps that are smaller than the wave period, $\Delta x / v > \Delta t$, and depending on the scheme a multiple smaller but usually within the same order of magnitude. This is because the largest characteristic speed (the speed of information propogation) cannot be faster than the grid spacing and time steps. This will cause loss of information and instabilities as there will be an attempt to skip grids but due to discretization it will fail to resolve.
+This is the easiest approach to the solutions because you use values in the previous time step to solve for the next. This does not require a solution of a linear system which we will show later. Explicit schemes are limited to time steps that are smaller than the wave period, $\Delta x / v > \Delta t$, and depending on the scheme a multiple smaller but usually within the same order of magnitude. This is because the largest characteristic speed (the speed of information propagation) cannot be faster than the grid spacing and time steps. This will cause loss of information and instabilities as there will be an attempt to skip grids but due to discretization it will fail to resolve.
 
 In implicit time steps
 \begin{equation}\label{eq:implicit}
@@ -495,7 +494,7 @@ In order for schemes to be stable, errors must not grow over time. We can make s
 	u^{n+1}_j = u^n_j - \frac{\Delta t}{\Delta x}v(u^n_{j+1}-u^n_{j})
 \end{equation}
 
-The above is the Euler equation for a wave propogating at constant speed $v$ using a forward difference method, also called an upwind scheme. The Von Neumann method takes a fourier analysis to the error waves generated due to discretization. We say that by using the Taylor series the discretization should have this {\it exact\/} solution.
+The above is the Euler equation for a wave propagating at constant speed $v$ using a forward difference method, also called an upwind scheme. The Von Neumann method takes a Fourier analysis to the error waves generated due to discretization. We say that by using the Taylor series the discretization should have this {\it exact\/} solution.
 
 \begin{equation}
 	u_{j+1} = u_j + \Delta x {\frac{\partial u}{\partial x}}\rvert_j + \frac{\Delta x^2}{2} {\frac{\partial^2 u}{\partial x^2}}\rvert_j + \frac{\Delta x^3}{3!} {\frac{\partial^3 u}{\partial x^3}}\rvert_j + \cdots 
@@ -513,7 +512,7 @@ This means the errors, $\epsilon$, are of first order, proportional to $\Delta x
 	u_{computed} = u_{exact} + \epsilon
 \end{equation}
 
-We can subtract the exact solution and do a fourier analysis of the errors found. Doing this on Equation~\ref{eq:upwind} yields.
+We can subtract the exact solution and do a Fourier analysis of the errors found. Doing this on Equation~\ref{eq:upwind} yields.
 
 \begin{equation}
 	e^{a(t+\Delta t)+ikx} = e^{at+ikx} - \beta (e^{at + ik(x+\Delta x)}-e^{at + ikx})
@@ -543,7 +542,7 @@ This will lead to
 	\beta \leq 1
 \end{equation}
 
-Or the stability requirement, also known as the Courant-Friedrich Levy condition:
+Or the stability requirement, also known as the Courant-Friedrich-Lewy condition:
 
 \begin{equation}
 	v \frac{\Delta t}{\Delta x} \leq 1
@@ -571,7 +570,7 @@ Since the amplification factor is always larger than 1, errors will always grow.
 	u^{n+1}_j = u^n_j - \beta \frac{u^{n+1}_{j+1}-u^{n+1}_{j-1}}{2}
 \end{equation}
 
-Now doing the fourier analysis,
+Now doing the Fourier analysis,
 
 \begin{equation}
 	u^{n+1}_j - \beta \frac{u^{n+1}_{j+1}-u^{n+1}_{j-1}}{2} = u^n_j
@@ -597,11 +596,11 @@ It is important in scientific computing not to reinvent the wheel. There are man
 
 The code uses to template expression libraries in C++. Template expression is how C++ abstracts operators such as $+$, $-$ and $/$ to deal with one variable and the next and call the low level BLAS functions. The libraries used are Armadillo for CPU\@. This is a code typically used for Machine Learning applications so speed and big data is its focus. For GPU programming ViennaCL is used, it's a library used by PETSc for its GPU portion. However, at the time of this writing, PETSc's GPU code is not fully developed so ViennaCL is used directly. Luckily, ViennaCL interfaces with Armadillo well and there exists copy constructors to go from shared memory to GPU memory.
 
-Matrices {\it must\/} be built on the CPU\@. Accessing GPU elements individually is a slow process that is limited by the PCI-e speed and when the machine code (running on cpu) is asked to go back and forth, we get slow code. Best practice is to first build a matrix on the CPU then copy to the GPU\@.
+Matrices {\it must\/} be built on the CPU\@. Accessing GPU elements individually is a slow process that is limited by the PCI-e speed and when the machine code (running on CPU) is asked to go back and forth, we get slow code. Best practice is to first build a matrix on the CPU then copy to the GPU\@.
 
 \subsection{Data Structure}\label{sec:datastructure}
 
-When using the semi-implicit method a linear system $Ab^{n+1}=b$ must be solved. We must think of an approriate ordering of our vector in terms of the where the unknowns must be in the elements of the vector. For GPU programming in order to take advantage of its matrix operations speeds due to its many cores we must also be easily able to change back and forth between matrix and vector form between the implicit and explicit portions of the solution. A good ordering for a two-dimensional domain looks like this:
+When using the semi-implicit method a linear system $Ab^{n+1}=b$ must be solved. We must think of an appropriate ordering of our vector in terms of the where the unknowns must be in the elements of the vector. For GPU programming in order to take advantage of its matrix operations speeds due to its many cores we must also be easily able to change back and forth between matrix and vector form between the implicit and explicit portions of the solution. A good ordering for a two-dimensional domain looks like this:
 
 \begin{equation}
 	b =
@@ -651,7 +650,7 @@ This can be easily resized into a matrix of the form:
 	\end{bmatrix}
 \end{equation}
 
-This has the benefits of making good use of GPU programming by using the parallelism found in matrix operations. This also means you can share boundary conditions by taking or providing rows for this matrix in chunks. You can do operations on specific unknowns by taking the approriate column.
+This has the benefits of making good use of GPU programming by using the parallelism found in matrix operations. This also means you can share boundary conditions by taking or providing rows for this matrix in chunks. You can do operations on specific unknowns by taking the appropriate column.
 
 \section{Normalization}\label{sec:normalization}
 
@@ -696,6 +695,17 @@ Once we have our normalization constants we may normalize the equations. Replaci
 \end{aligned} 
 \end{equation}
 
+\section{Validation}
+
+\begin{figure}[ht!]
+	\includegraphics[width=0.75\textwidth]{images/shocktube.eps}
+	\caption{Neutral fluid shock tube tests. The shocks are being captured appropriately due to the TVD-MUSCL scheme used.}\label{fig:shocktube}
+\end{figure}
+
+\begin{figure}[ht!]
+	\includegraphics[width=1\textwidth]{images/soler.eps}
+	\caption{The \citet{Soler2013} initial value problem tests. Velocity is taken at $z=0$ of the standing Alf\'ven wave. The solid red is the ion velocity, the dashed blue line is neutral velocity. The top row is where the initial neutral velocity is the same as the ion velocity and the bottom row is where the initial neutral velocity is at zero. The results resemble reasonably well the tests in the \citet{Soler2013} paper.}\label{fig:soler}
+\end{figure}
 
 \chapter{Chromosphere Dynamics}\label{chap:chromosphere} 
 
@@ -707,17 +717,88 @@ Once we have our normalization constants we may normalize the equations. Replaci
 
 \section{Results}\label{sec:results}
 
+Figure~\ref{fig:granulegeometry} shows a snapshot on the chromospheric solution after $348~ms$. It shows that our simulation produces magnetic field topology that is characterized by canopy or `wine glass' shape \citep{Rutten2007}, with a strong field of about $1~kG$ at the stem on the left, and a weaker field of about $50~G$ at the near the upper boundary of the simulation domain, near the transition region.  This topology is obtained fairly quickly, in around $\sim$350ms, because of the magnetic pressure imbalance imposed in the initial conditions. This is not a relaxed system as the canopy holds for a few seconds before an eruption starts forming. 
+
+\begin{figure}[ht!]
+	\includegraphics[width=1\textwidth]{images/granulegeometry.eps}
+	\caption{Formation of a canopy seen after around 348ms (13000 time steps). The initial condition of a concentrated strong field region (1 kG) and weak field region (5G) creates vertical asymmetry as plasma beta drastically decreases. The left and right boundaries are mirrored so effects of other granules behaving the same way are considered. Because of the short time period this is \textit{not} a relaxed system but simply a consequence of the pressure imbalance frequently seen in the chromosphere.}\label{fig:granulegeometry}
+\end{figure}
+
+Figure~\ref{fig:spiculeshock} shows a formation of what resembles a jet --- a parcel of plasma quickly moving upward towards the transition region. The shock spontaneously forms after around 20s and the jet speeds up and shoots up outside of the chromosphere into the corona in about 5s. 
+
+\begin{figure}[ht!]
+		\centering
+		\includegraphics[width=0.6\textwidth]{images/spiculeshock.eps}
+		\caption{A zoom into the shock wave front of the jet. The arrows represents the direction and magnitude of ion flow. The color bar represents the neutral number density in cm$^{-3}$}\label{fig:spiculeshock}
+\end{figure}
+
+In Figure~\ref{fig:prespicule}, we show the distribution of the two heating terms---the ohmic heating, $\eta J^2$, and the frictional heating, $\nu_{in} \rho_i |\textbf{V} - \textbf{U}|^2$, in the simulation domain, right before the eruption. The heating rates are normalized per neutral particle. It can be seen that the frictional heating dominates the ohmic heating by orders of magnitude, especially in the strong field region where the shock forms.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1\textwidth]{images/prespicule.eps}
+    \caption{Heating of the shock origin before the formation of the jet at t=18.9s. Top image is the frictional heating per neutral particle. Bottom image is the ohmic heating per neutral particle. The frictional heating is orders of magnitude larger than the heating due to currents.}\label{fig:prespicule}
+\end{figure}
+
+Figure~\ref{fig:midspicule} shows the neutral temperature, the frictional heating, and the velocity difference, $| \textbf{V} - \textbf{U}|^2$ during the emergence of the jet to the corona (at $t=26.8~s$). The plots show the formation of an appreciable shock which separates a low number density, high temperature and strong heating region with a high number density, lower temperature and weaker heating with the rest of the medium. The figure also shows a very clear difference in heating rates on both sides of the shock, where the front of the shock travels at super sonic speeds. The shock propagates supersonically until the plasma is ejected when the chromosphere is depleted and starts to fill up again with flows going back down. Downstream of the shock, the plasma flow is returning due to a cavity left behind, where upstream of the shock, the chromospheric plasma is still unchanged.
+
+\begin{figure}[ht!]
+	\centering
+    \includegraphics[width=1\textwidth]{images/midspicule.eps}
+	\caption{These figures show the jet in the middle of its journey to the corona at t=26.8s. From top to bottom, the temperature of the neutral plasma, the frictional heating per neutral particle, and the difference in speeds $\| \textbf{V} - \textbf{U} \|^2$ of the charged and neutral plasma. The shock can be clearly seen in the bottom-left corner of the simulation where the magnetic flux concentration is strongest. Due to large plasma beta a `ring' of slow moving plasma is formed and persists in the shock allowing the shock to start forming.}\label{fig:midspicule}
+\end{figure}
+
+Figure~\ref{fig:spiculetimeseries} shows a time series of the evolution of the shock number density and magnetic field lines. It can be seen that the field lines follow the shock evolution, which means magnetic field topology (i.e., reconnection region) is not a driver of the jet. Figure~\ref{fig:heatingtimeseries} shows the same time series but with contours of frictional heating and flow streamlines. It clearly shows that the jet is driven by frictional joule heating.
+
+\begin{figure}[ht!]
+	\centering
+    \includegraphics[width=1\textwidth]{images/spiculetimeseries.eps}
+    \caption{Time series of the shock. From left to right and top to bottom the times are t=26.751s, 26.785s, 26.831s, 26.842s, 26.844s, 26.849s. The white streamlines denote the magnetic field lines and the number density of the neutrals are in cm$^{-3}$. This shows them magnetic field geometry changing due to the jet and not the other way round. The jet is not generated because of the magnetic field.}\label{fig:spiculetimeseries}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+    \includegraphics[width=1\textwidth]{images/heatingtimeseries.eps}
+    \caption{Time series of frictional heating in the jet. From left to right and top to bottom the times are t=26.751s, 26.785s, 26.831s, 26.842s, 26.844s, 26.849s. The white streamlines denote flow.}\label{fig:heatingtimeseries}
+\end{figure}
+
+Figures~\ref{fig:shockwavefront1d},~\ref{fig:spiculefield1d},~\ref{fig:spiculefriction1d} and~\ref{fig:spiculespeed1d} show one-dimensional extractions of the solution during the shock emergence along a vertical line at $x=0.6~Mm$.  These plots exemplify the cause and effect of the shock. The first plot shows the time series of the wavefront of the shock climbing in the chromosphere. The second and third show that the frictional heating jump follows the shock, and that the magnetic field changes correspond to the jet behind the shock. The last plot shows a velocity profile of the jet.
+
+\begin{figure}[ht!]
+	\centering
+    \includegraphics[width=1\textwidth]{images/shockwavefront1d.eps}
+    \caption{Ion number density snapshots of shock wave front at line of extraction x=0.6Mm. Ion number density is in units of $10^{11}$ cm$^{-3}$. The wavefront can be clearly seen climbing the Chromosphere.}\label{fig:shockwavefront1d}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+    \includegraphics[width=1\textwidth]{images/spiculefield1d.eps}
+    \caption{Blue line is ion number density and the black and gray dashed lines are $B_x$ and $B_z$ respectively at t=26.83s and vertical line at x=0.6Mm. Ion number density is in units of $10^{11}$ cm$^{-3}$. The magnetic field is changed behind the shock wave front.}\label{fig:spiculefield1d}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+    \includegraphics[width=1\textwidth]{images/spiculefriction1d.eps}
+    \caption{Blue line is ion number density and red dashed line is frictional heating per neutral particle at t=26.83s and vertical line x=0.6Mm. Ion number density is in units of $10^{11}$ cm$^{-3}$. The frictional heating per neutral particle behind the wavefront is orders of magnitude higher than in front of it.}\label{fig:spiculefriction1d}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+    \includegraphics[width=1\textwidth]{images/spiculespeed1d.eps}
+    \caption{Blue line is ion number density and black dashed line is vertical ion velocity at t=26.83s and vertical line x=0.6Mm. Ion number density is in units of $10^{11}$ cm$^{-3}$. The jet speed is supersonic.}\label{fig:spiculespeed1d}
+\end{figure}
+
 \section{Discussion}\label{sec:discussion}
 
-A magnetic canopy forms due to the magnetic and thermal pressure imbalance of the strong field regions from the photosphere and the weak field but high temperature regions scaling up to the transition region. This is consistent with a two-fluid analytic model that was presented in \citet{Song2017}. It shows that the model can provide numerical solutions for chromospheric conditions. However, the magnetic canopy does not relax or reach a steady-state due to the nature of the collisional model and not in the timescales of the current simulation. The supergranule canopy may not last because the photospheric power flux, generated at the lower boundary, continuously adds energy into the system. Small scale processes or highly dynamic events like jets override the canopy magnetic field because of large plasma speeds. Our results show that the jet has immediate effects on the magnetic field due to induction and not vice versa.
+A magnetic canopy forms due to the magnetic and thermal pressure imbalance of the strong field regions from the photosphere and the weak field but high temperature regions scaling up to the transition region. This is consistent with a two-fluid analytic model that was presented in \citet{Song2017}. It shows that the model can provide numerical solutions for chromospheric conditions. However, the magnetic canopy does not relax or reach a steady-state due to the nature of the collisional model and not in the timescales of the current simulation. The super granule canopy may not last because the photospheric power flux, generated at the lower boundary, continuously adds energy into the system. Small scale processes or highly dynamic events like jets override the canopy magnetic field because of large plasma speeds. Our results show that the jet has immediate effects on the magnetic field due to induction and not vice versa.
 
 Largest Alfv\'en speeds seen in the simulation is 11 Mm/s which means that in the 30s of simulation, magnetic effects can travel through the domain at least 3 times with constant density and even less in a hydrostatic density. Alfv\'en waves generated as the drivers for frictional heating at the bottom boundary do not reflect at the top boundary enough times to warrant a time-averaged study of the entire heating of the chromosphere nor does it have enough energy to drive the jet of the same kind as presented. The presence of the shock also inhibits any long-term ideal studies of the atmosphere since it depletes and cavities form with the jet. In a future study, we will see how Alf\'ven waves affect the chromosphere with force-free initial conditions so as to not form any jets that can destroy a canopy configuration.
 
 Although the frictional heating is large in the entire magnetic network column, an instance of no frictional heating creates a separation of upstream and downstream fluids preceding the shock. This can be seen in Figure~\ref{fig:prespicule} and~\ref{fig:midspicule} and is due to a high temperatures and density which causes the two fluids to move in unison and therefore $\rho_{in} \nu_{in} \|V-U\| = 0$. The cause of the frictional heating is not Alfv\'en wave damping but the imbalanced initial conditions and the horizontal \textbf{J} $\times$ \textbf{B} force. The lower medium heats faster than above it and this creates the shock in the lower atmosphere that then propagates due to thermal pressure.
 
-It has been suggested that the driver of these kinds of spicule-like events is magnetic reconnection which originates from the vicinity of a large magnetic flux concentration in the network \citep{Pontieu2007}. In our simulation, the frictional heating heats a fluid downstream of the unison speed ring larger than that of upstream causing a shockwave as expected from a Type I spicule. However the simulation does not show reconnection effects with enough energy to drive a spicule. Although MHD simulations do not mimic reconnection directly, currents present in reconnection events would accelerate electrons into a collision due to the dense and hot medium surrounding it. Therefore, magnetic reconnection is directly related to ohmic heating in the chromosphere. If comparing the dominating heating terms, frictional heating dominates ohmic heating which means {\it collisions are causing these jets to form and not reconnection-like currents}. The size and extreme temperatures of the jet in the simulation closely resemble chromospheric jets~\citep{Shimojo2000,Nishizuka2011}.
+It has been suggested that the driver of these kinds of spicule-like events is magnetic reconnection which originates from the vicinity of a large magnetic flux concentration in the network \citep{Pontieu2007}. In our simulation, the frictional heating heats a fluid downstream of the unison speed ring larger than that of upstream causing a shock wave as expected from a Type I spicule. However the simulation does not show reconnection effects with enough energy to drive a spicule. Although MHD simulations do not mimic reconnection directly, currents present in reconnection events would accelerate electrons into a collision due to the dense and hot medium surrounding it. Therefore, magnetic reconnection is directly related to ohmic heating in the chromosphere. If comparing the dominating heating terms, frictional heating dominates ohmic heating which means {\it collisions are causing these jets to form and not reconnection-like currents}. The size and extreme temperatures of the jet in the simulation closely resemble chromospheric jets~\citep{Shimojo2000,Nishizuka2011}.
 
-In Figure~\ref{fig:shockwavefront1d} the jet can be seen accumulating a shock of number density $10^{11}$ cm$^{-3}$. This density is consistent with IRIS observations of spicules in the corona~\citep{Alissandrakis2018}. The simulation does show that changes in the magnetic field happen behind the shockwave front's direction of motion. Figure~\ref{fig:spiculefield1d} implies the change in the magnetic field is a consequence of the jet and the rising magnetic field density in the plane of the simulation is due to compression from the shock itself. The shock in the frictional heating term, $\frac{\rho_i \nu_{in} \| \textbf{V} - \textbf{U} \|^2}{n_n}$, seen in Figure~\ref{fig:spiculefriction1d} coincides exactly at the shock showing enhanced heating behind the shockfront. The cause of the shock climb is the thermal pressure behind and in front of the shock.
+In Figure~\ref{fig:shockwavefront1d} the jet can be seen accumulating a shock of number density $10^{11}$ cm$^{-3}$. This density is consistent with IRIS observations of spicules in the corona~\citep{Alissandrakis2018}. The simulation does show that changes in the magnetic field happen behind the shock wave front's direction of motion. Figure~\ref{fig:spiculefield1d} implies the change in the magnetic field is a consequence of the jet and the rising magnetic field density in the plane of the simulation is due to compression from the shock itself. The shock in the frictional heating term, $\frac{\rho_i \nu_{in} \| \textbf{V} - \textbf{U} \|^2}{n_n}$, seen in Figure~\ref{fig:spiculefriction1d} coincides exactly at the shock showing enhanced heating behind the shock front. The cause of the shock climb is the thermal pressure behind and in front of the shock.
 
 The jet's temperatures and speed are much larger than observed. This is mostly due to the fact that in our model we have not included the radiative loss effect in the energy equations. The larger than reality shock heating because of the greater flow speed may also further amplify the temperature. The over-estimated temperature of the downstream medium may also lead to estimate of the collision frequencies. This growing downstream temperature has a compounding effect on the thermal pressure gradient downstream and upstream and causes the speeds to go supersonic. Further studies will incorporate the photo-chemistry and also radiative losses. These implementations will help to see how they affect shock formation and the energy balance inside the chromosphere. It is also important to note that this shock travels at super-Alfv\'enic speeds so it is a super-Alfv\'enic jet.
 
