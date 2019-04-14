@@ -31,7 +31,6 @@
 \begin{abstract}
 	Since the discovery of space plasmas, the space science community have been deriving fluid models of plasmas to best suit their scenarios. The simplest case is the ideal magnetohydrodynamic (MHD) model which assumes a collisionless perfectly-conducting plasma. Multi-fluid collisional MHD gives each fluid its own set of MHD equations while using collisions to set frictional and resistive terms between them. An important case of this nature is the solar chromosphere. The high density and relatively cold plasma ensures collision times are shorter than magnetic time scales. Multi-fluid collisional MHD has many cases from the Earth's ionosphere to stellar atmosphere and having a good grasp of the physics is important in studying these plasmas.
 \end{abstract}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Acknowledgements}
 To my partner Alexis Ploss, who believed in me without judgment or apprehension. To my family, that supported me beyond the ocean. To my dog Ada Lovelace, that provided emotional support through the hardships.
@@ -350,7 +349,7 @@ We would also like a total-variation-diminishing (TVD) scheme, this is because s
 
 Therefore, for the purpose of our code, we will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
 
-\subsection{Flux limiters}\label{sec:fluxlimiters}
+\subsection{Flux Limiters}\label{sec:fluxlimiters}
 
 To conserve the cell's quantities we must be able to approximate the quantities on the cell edges. At the same time we must preserve monotonicity to avoid the oscillations. This can be achieved through flux limiters. The utility of the flux limiters is to turn the scheme into a first-order upwind scheme in sharp discontinuities and a high-resolution scheme when the solution is smooth.
 
@@ -378,8 +377,10 @@ The CoMFi code provides several flux limiters and finding the best one is a matt
 Implementing these on a computer however is not a trivial task. Many initial conditions require the entirety of the domain be the same number for instance. In that case we get an $r = \frac{0}{0}$ and this causes a computer to return NaN (not a number). Setting to $r=0$ is appropriate but requires extra coding. A work around is to add a small number $\epsilon$ to the denominator known as the machine epsilon to avoid these cases.
 
 \begin{equation}
-	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j + \epsilon(u_{j+1} - u_j + 1)}
+	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j + \epsilon}
 \end{equation}
+
+This machine epsilon should have no effect on the result so long as the variables have been normalized appropriately (see Section~\ref{sec:normalization}). This means the valuable results are within an order of magnitude so the machine epsilon of a 64bit floating point number of $2^{-−52} \sim 2.22 \times 10^{-16}$ would be negligible. If two adjacent cells have the same value, as is common with initial values, then dividing by zero is usefully avoided.
 
 \subsection{TVD-MUSCL}\label{sec:tvd-muscl}
 
@@ -665,19 +666,21 @@ The normalization constants were chosen for the chromospheric case we study in C
 \caption[Normalization Constants]{Normalization constants chosen for the chromospheric simulation}
 \begin{tabular}[]{l  c  r}
 	\toprule
-	Magnetic Field & $B_0$ & $0.1$ T\\
-	Length & $L_0$ & $2.1\times 10^6$ m \\
-	Number Density & $n_0$ & $1.0\times 10^{20}$ m$^{-3}$ \\
-	Mass & $m_0 = m_i$ & $1.672621898\times10^{−27}$ kg \\
-	Vacuum Permeability & $\mu_0$ & $1.2566370614\times 10^{−6}$ Vs/A/m \\
-	Charge & e_0 & $1.6021766208\times10−^{19}$ C \\
-	Boltzmann Constant & $k_B$ & $1.38065\times10^-{23}$ J/K\\
+	\textbf{Magnetic Field} & $B_0$ & $0.1$ T\\
+	\textbf{Length} & $L_0$ & $2.1 \times 10^6$ m \\
+	\textbf{Number Density} & $n_0$ & $1.0\times 10^{20}$ m$^{-3}$ \\
+	Mass & $m_0 = m_i$ & $1.672621898\times 10^{-−27}$ kg \\
+	Vacuum Permeability & $\mu_0$ & $1.2566370614\times 10^{-−6}$ Vs/A/m \\
+	Charge & e_0 & $1.6021766208\times10^{-19}$ C \\
+	Boltzmann Constant & $k_B$ & $1.38065\times10^{-23}$ J/K\\
 	Velocity & $V_0=\frac{B_0}{\sqrt{\mu_0 m_i n_0}}$ & $2.18 \times 10^{8}$ m/s\\
 	Pressure & $p_0= \frac{{B_0}^2}{\mu_0}$ & $8.0 \times 10^3$ Pa \\
 	Temperature & $T_0 = \frac{p_0}{n_0 k_B} $ & $5.79438\times10^6$ K\\
 	\bottomrule
 \end{tabular}
 \end{table}
+
+In bold are the free parameters you may choose for the CoMFi code. The constants must be chosen carefully so that the largest numbers of interest are normalized to 1. The reason for choosing the quantities above is discussed in Chapter~\ref{chap:chromosphere}.
 
 \subsection{Normalized Equations}\label{sec:normequations}
 
@@ -709,9 +712,97 @@ Once we have our normalization constants we may normalize the equations. Replaci
 
 \chapter{Chromosphere Dynamics}\label{chap:chromosphere} 
 
+The base of the solar atmosphere (right above the photosphere), referred to as the chromosphere, is highly dynamic and is strongly influenced by magnetic field activities \citep{Hasan08}. It is partially ionized, with as much as a thousand times more neutral Hydrogen than ions \citep{Alissandrakis2018}. \citet{Song2011} and \citet{Leake2014} discussed in detail the effects of ion-neutral coupling in  the chromosphere by considering neutrals and collisions into the momentum and Maxwell equations. A local-scale configuration commonly used in chromosphere models are so-called supergranules, convection cells of 30 Mm in the horizontal directions. Supergranules are separated by strong magnetic field regions, referred to as networks. It is believed that the network regions correspond to strong magnetic field at the photosphere altitude. Because the thermal pressure decreases with height while the total magnetic flux is conserved, the magnetic field tends to expand in higher altitudes to form a canopy or `wine glass' shaped magnetic geometry so that total pressure, the  magnetic pressure, $p_B$, plus thermal pressure, $p_T$, i.e., $p_T+p_B$, is balanced at each height \citep{gabriel1976}. This geometry is reflected in a significant altitudinal change in the plasma beta, which is the ratio of the thermal to magnetic pressures, $\beta=p_T/p_B$. The chromosphere has much lower temperature than that of the hot corona. The average temperature of the Chromosphere is around 6000 K while the coronal temperature is over million degrees \citep{AvrettLoeser2008}. This dramatic change in the temperature, taking place in a very narrow region of a few hundred kilometers referred to as the transition region, known as the coronal heating problem and it is a long-standing problem in solar physics.
+
+In the chromosphere shocks often observed and jets are commonplace in the form of spicules. Spicules are local, hot upward jets of plasma observed in the corona. The origination and mechanism behind spicule formation is not well known. Spicules are categorized into two types \citep{Pontieu2007}. Type I spicules have longer lifetimes and are typically larger (5 min and $\sim$15 Mm). Type II spicules have shorter lifetimes and are smaller ($\leq$2 min and $\sim$6 Mm). \citet{Pontieu2004} suggested that photospheric oscillations give birth to spicules. It was also suggested that magnetic reconnection may be the cause of Type II spicules \citep{Pontieu2007}.
+
+There is strong observational evidence for the ubiquity of Alfv\'en waves in the sun's atmosphere \citep{Mathioudakis2013,McIntosh2011,Jess2009,Ofman2008,Aschwanden1999,Nakariakov1999}. These observations of the solar limbs show Alfv\'en waves with amplitudes in the range of 5-25 km/s and phase speeds 250-500 km/s.  \citet{Pontieu2007} have shown that Alfv\'en waves are carried by spicules with significant amplitudes of order 20 km s$^{-1}$. It has been suggested that Alfv\'en waves could be damped in the chromosphere due to collisions between plasma ions and neutrals and causes sufficient heating \citep{Song2011} and \citep{Song2014}. \citet{Song2017} further proposed that the nonuniform heating associated with the Alfv\'en waves may explain the formation of the spicules. \citet{Khomenko2017} looks at other waves as well as Alfv\'en waves and their effects in weakly ionized solar plasma. %chktex 8
+
+Recent simulations and models of the chromosphere have adopted a single-fluid approach~\citep{Kuzma2017,Ni2016,BradyArber2016,Gudiksen2011}. In order to account for neutrals' effect on the plasma and electric field an `ambipolar diffusion' term is added to the Generalized Ohm's Law to account for collisions~\citep{Martinez-Sykora2012,Martinez-Sykora2017}. This is useful to study the highly magnetized, low $\beta$, environment of the upper chromosphere. A two-fluid approach takes into account separate fluid motions of plasma and neutrals especially in highly collisional environments like the low solar atmosphere in regions of high magnetic gradients. \citet{Soler2013} studied Alfv\'en wave propagation in partially ionized plasma while taking a generalized approach with free parameters with the lower solar atmosphere case as an example. \citet{Maneva2017} and \citet{Wojcik2018} studied acoustic wave propogation using a collisional two-fluid approach as well. Three-fluid simulations, with electrons being the third fluid, were made to study reconnection events in the chromosphere~\citep{Leake2013}. In these highly localized small regions electron motion is seperate from ion and neutral motion and its effects cannot be neglected. The previously mentioned work uses the {\it Bifrost\/} \citep{Gudiksen2011} code which employs a very large artificial viscosity for stability. By self-consistently solving plasma, neutral fluids, and Maxwell's equations, \citet{Tu2013} have shown that due to Joule dissipation Alfv\'en waves can provide strong enough chromospheric heating and that the heating rate is consistent with the theoretical model of \citet{Song2011}.
+
 \section{Governing Equations}\label{sec:governingeq}
 
+In the model presented here, a two-fluid, collisional approach is used to account for the friction between ions and neutrals. The first fluid, the ion fluid, is similar to the traditional, single-fluid plasma, and assumes charge quasi-neutrality. With the Maxwell's equations, this fluid is used to calculate self-consistently the evolution of the plasma motion, magnetic fields and currents in the system. The second, neutral fluid, accounts for the neutral particles in the system. The two fluids interact by collisions. The friction between ions and neutrals affects the neutral fluid motion so that the neutrals experience the electromagnetic effects. 
+
+This is similar to the three-fluid HiFi code used for studying reconnetion in the chromosphere \citep{Leake2012}. Except electrons are not treated as a separated fluid in this model because the electron's mass is more than three orders of magnitude smaller than ion or neutral particle mass, so its contribution to heating and the equations considering the scales is negligible. The effects of its motion are included in the current terms. We use empirical number density model that comes from observations assuming steady-states in the chromosphere~\citep{AvrettLoeser2008}. Here, we do not account for ionization and recombination which we plan to implement photo-chemistry in future work.
+
+Our model uses Cartesian, 2.5 dimensionality, which means that all the quantities are functions of horizontal ($x$) and vertical ($z$) directions but uniform in the $y-$ direction, while vector quantities  have all three components including the third component that is perpendicular ($\perp$) to the $x-z$ plane. The perpendicular components are used to generate Alfv\'en waves at the photospheric boundary. 
+
+The governing equations are adapted from \citet{Tu2016} for the two-fluid (plasma and neutral) system as follows:
+
+\begin{equation}
+	\frac{\partial \rho_i}{\partial t} + \nabla \cdot \rho_i \textbf{V} = 0
+\end{equation}
+
+\begin{equation}
+	\frac{\partial \rho_n}{\partial t} + \nabla \cdot \rho_n \textbf{U} = 0
+\end{equation}
+
+\begin{equation}\label{eq:plasmamomentum}
+	\frac{\partial \rho_i \textbf{V}}{\partial t} = - \nabla \cdot [\rho_i \textbf{VV} + n_i k_b T_i + \frac{B^2}{2 \mu_0}\textbf{I} - \frac{\textbf{BB}}{\mu_0}] + \rho_i \textbf{g} - \rho_i \nu_{in} (\textbf{V} - \textbf{U})
+\end{equation}
+
+\begin{equation}\label{eq:neutralmomentum}
+	\frac{\partial \rho_n \textbf{U}}{\partial t} = - \nabla \cdot [\rho_n \textbf{UU} + n_n k_b T_n] + \rho_n \textbf{g} + \rho_i \nu_{in} (\textbf{V} - \textbf{U})
+\end{equation}
+
+\begin{equation}
+	\frac{\partial \textbf{B}}{\partial t} = - \nabla \cdot ( \textbf{VB} - \textbf{BV} ) - \nabla \times ( \eta \textbf{J}  + \frac{1}{n_e e} \textbf{J} \times \textbf{B} )
+\end{equation}
+
+\begin{equation}\label{eq:energyion}
+\begin{aligned}
+	\frac{\partial k_b T_i}{\partial t} = - \nabla \cdot (k_b T_i \textbf{V}) + \frac{1}{3} k_b T_i \nabla \cdot \textbf{V} - \frac{2}{3} \frac{\nabla \cdot (\textbf{q}_i + \eta \textbf{B} \times \textbf{J})}{n_i} \\
+	+ \frac{2}{3} \frac{m_i}{m_i+m_n} \nu_{in} [3 k_b (T_n - T_i) + m_n | \textbf{V} - \textbf{U} |^{2} ]
+\end{aligned}
+\end{equation}
+\begin{equation}\label{eq:energyneutral}
+\begin{aligned}
+	\frac{\partial k_b T_n}{\partial t} = - \nabla \cdot (k_b T_n \textbf{U}) + \frac{1}{3} k_b T_n \nabla \cdot \textbf{U} - \frac{2}{3} \frac{\nabla \cdot \textbf{q}_n}{n_n} \\
+	+ \frac{2}{3} \frac{m_n}{m_i+m_n}  \nu_{in} [ 3 k_b (T_i - T_n) + m_i | \textbf{V} - \textbf{U}|^{2} ]
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+	\nabla \times \textbf{B} = \mu_0 \textbf{J}
+\end{equation}
+
+\begin{equation}
+	\textbf{q} = - \kappa \nabla T
+\end{equation}
+
+Here $i$, $e$ and $n$ subscripts denote proton, electron and neutral, respectively. The primitive scalars $m$, $\rho$, $T$ are particle mass, mass density and temperature, respectively. $\textbf{V}$, $\textbf{U}$, and $\textbf{B}$ are ion velocity, neutral velocity, and the magnetic field, respectively, with $\textbf{g}$ denoting the solar gravitational acceleration near the solar surface. $\kappa$ is the Spitzer conductivity. $\nu_{ij}$ denotes collision rate of species $i$ to species $j$, and $\eta = m_e(\nu_{en} + \nu_{ei})/e^2n_e$ is the ohmic resistivity. We use the following collision rates \citep[see][Appendix A]{Pontieu2001} 
+\begin{eqnarray}
+&\nu_{in} = 7.4 \times 10^{-11} n_n T^{1/2}& \nonumber\\
+&\nu_{en} = 1.95 \times 10^{-10} n_n T^{1/2}& \\
+&\nu_{ei} = 3.759 \times 10^{-6} n_e T_e^{-3/2} \ln \Lambda& \nonumber
+\end{eqnarray}
+where $\ln \Lambda$ is the Coulomb logarithm taken as 10 for simplicity and $n$ is in cm$^{-3}$ and $T = \frac{T_i + T_n}{2}$ in K.
+
 \section{Simulation Domain}\label{sec:simulationdomain}
+
+In the horizontal dimension, we simulate a supergranule similar to that described in \citet{Song2017}. Because of symmetry, our simulation domain contains half of a supergranule, from the center of a network with strong field to the center of internetwork at the photospheric boundary. If we further assume that the neighboring supergranules have the same polarity as the one in the simulation domain, there is no reconnection between the supergranules of interest.  In this case  the normal component of the field, $B_x$, is zero at the left and right boundaries. The right and left boundaries act as mirrors to reflect any normal component of the field. Similarly, the normal component of the velocity is also set to zero at the right and left boundaries, i.e.\ there is no horizontal flow from one supergranule to another at the chromospheric altitude although inter-supergranule flow is possible in the corona height and in or below the photosphere. 
+
+Since we only simulate the chromosphere and treat the transition region above and photosphere below as upper and lower boundaries, respectively. The photosphere below is made up as a Dirichlet boundary conditions below the surface of the photosphere, the sun is highly dynamic. The assumption made in this mode is the Alfv\'en waves are generated at the photosphere and propagate while undergoing damping towards the transition region. For this reason to imitate the energy flux and activity of the photosphere, a driver at the bottom of the simulation domain is made as a Dirichlet boundary condition. Using the broadband spectrum driving method of \citet{Tu2013}, the perpendicular velocity is a continuous oscillation with a broadband time series of the form:
+
+\begin{equation}
+\begin{aligned}
+	V_{\perp} (t, z=0) = V_b [ \sum_{k=0}^s {(\omega_k/\omega_p)}^{5/6} \cos{(\omega_k t + \Phi_k)} \\
+	+ \sum_{j=s+1}^m {(\omega_p/\omega_j)}^{5/6} \cos{(\omega_j t + \Phi_j)} ]
+\end{aligned}
+\end{equation}
+
+where $V_{\perp}$ will be the imposed speed on the lower boundary in the direction normal to the $x-z$ plane. $V_b$ is the amplitude of the broadband spectrum, 2 km/s, to ensure an appropriate photospheric flux of $2 \times 10^7$ erg cm$^{-2}$ s$^{-1}$ \citep[see][section 3.2]{Tu2013}, $\omega_j$ and $\omega_k$ are angular frequencies filled logarithmically, $\omega_p$ is the peak angular frequency at 1.65 mHz. The driver also has random phases $\Phi_j, \Phi_k$ which is a multiple of 2$\pi \times$ by random number between 0 and s+m. For the case of this simulation s=100 and m=500. 
+
+The number density of the ions and neutrals are specified at the boundary as the photospheric values from \citet{AvrettLoeser2008} of 10$^{20}$ m$^{-3}$ and 10$^{23}$ m$^{-3}$, respectively. As an initial condition, a stratified hydrostatic profile is made for the ion densities $n(z) = n(z=0) e^{-m_{i}gz/kT_0}$ and a more realistic neutral number density profile is filled based on the above mentioned model. Here T$_0$ = 7000 K which is the temperature imposed on the photosphere and also the initial condition for both ionized plasma and neutrals in the entire domain. An isothermal approach was chosen initially because the chromosphere's temperature does not change much, between 6000K to 8000 K, between the photosphere and the transition region. At later times, the temperatures are determined from the energy equations~\ref{eq:energyion} and~\ref{eq:energyneutral}. 
+
+A requirement in some MHD codes with zero magnetic field divergence constraints is that the initial condition must also be divergence free. For this reason $B_x(t=0)$ and $B_\perp(t=0)$ is chosen to be zero while $B_z(x, t=0)$ varies in the horizontal $x$ direction. It consists of regions of strong field, $\sim$1kG, for the network region and weak fieild, $\sim$50 G, for the internetwork region with a sharp linear drop in between. The 1 kG region only takes up 0.05 Mm in the horizontal direction and is in the left part of the domain. The weak region part of the rest of the domain. The goal is to allow this initial condition to quickly relax to a canopy because of the large $\beta$ change due to height without solving a force-free field. At the bottom boundary,  a Dirichlet condition is applied to $B_z(x)$ but for the other two components the field is set Neumann conditions $\frac{\partial B_{z,\perp}}{\partial z}\vline_{z=0km} = 0$. This configuration resembles the stem of the canopy and the magnitude of the supergranule strengths at the photosphere. The bottom boundary's $B_z(x)$ is an unchanging Dirichlet condition to mimic the convection cell underneath.
+
+At the top boundary which represents the transition region and the corona above it, the model uses Neumann conditions to allow free-flow of the plasma through it (i.e. $\frac{\partial \textbf{u}}{\partial z}\vline_{z=2100km} = 0$).
+
+In the simulations and results shown in this paper the domain is 15 Mm horizontally (half the size of the magnetic internetwork) and 2.1 Mm vertically (typical thickness of the chromosphere). It is a uniform Cartesian grid of 256$\times$128 where $\Delta x = 58.6$ km and $\Delta z = 16.4$ km. This is the largest resolution chosen for speed and memory considering the usage of a dedicated scientific computing GPU (see Chapter~\ref{chap:implementation}). This is larger than the length scale of the collisionally reduced Alfv\'en wavelength ($\frac{V_A}{\nu_{in}}$) which means for this simulation the plasma and neutrals are coupled. Since this is a 2.5D simulation all spatial derivatives in the perpendicular direction are taken as zero ($\frac{\partial}{\partial \perp} = 0$).
+
+All momentum components are set initially as zero.
 
 \section{Boundary Conditions}\label{sec:bc}
 
@@ -811,6 +902,13 @@ We use our model to demonstrate the importance of collisions in the chromosphere
 Finally, this work serves as a step towards a better understanding of the solar chromosphere. The {\it Parker Solar Probe\/} mission \citep{SolarProbe16} is expected to shed light on the dominant processes in the solar atmosphere, including the chromosphere, and these processes will be implemented in the model. 
 
 \chapter{Conclusion}\label{chap:conclusion}
+
+In this paper, we present a self-consistent, two-fluid MHD model to study the chromosphere. The model includes ion-neutral interaction, which allows us to investigate the role of frictional heating in the dynamics of the chromosphere.  The very high collision rates in the partially ionized chromosphere stabilizes the code so that no numerical viscosity is needed.  
+
+The model obtains preliminary results which require further investigation. Our simulation presents that, between network and internetwork regions, a jet could potentially be driven purely by thermal processes, especially the frictional heating, and not by magnetic reconnection. Thus, it is crucial to include the neutrals in any attempt to model the lower chromosphere.
+
+The discrepancy between observational speeds and speeds in the simulation could be explained by the need to include the effects of photo chemical reactions in the chromosphere and the radiative losses. Further refinement of the model with photo-chemical effects, radiation and new observations from the upcoming {\it Parker Solar Probe\/} mission will lead to an improved model of the chromosphere.  
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \nocite{*}
 \bibliographystyle{plainnat}
