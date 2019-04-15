@@ -253,13 +253,23 @@ This way we can have a magnetic flux and make use of our conservative scheme in 
 
 \begin{equation}\label{eq:momentumcom}
 \begin{aligned}
-	&\frac{\partial \rho \textbf{V}}{\partial t} + \nabla \cdot (\textbf{K} + \frac{B^2}{2\mu_0}\textbf{I} - \textbf{BB}) \\
-	&= - (\rho_i \nu_{in} + \rho_e \nu_{en})(\textbf{V} + \frac{m_e}{m_i} \frac{\textbf{J}}{n e} - \textbf{v}_n) + \frac{m_e}{e}(\nu_{en}-\nu_{in}) \textbf{J} \\
+	&\frac{\partial \rho \textbf{V}}{\partial t} + \nabla \cdot (\textbf{K}_{i,e} + \frac{B^2}{2\mu_0}\textbf{I} - \frac{\textbf{BB}}{\mu_0}) \\
+	&= - (\rho_i \nu_{in} + \rho_e \nu_{en})(\textbf{V} - \textbf{U}) + \frac{m_e}{e}(\nu_{en}-\nu_{in}) \textbf{J} \\
 	& + [S m_n \textbf{U} - L m_i (\textbf{V} + \frac{m_e}{m_i} \frac{\textbf{J}}{n e})- L m_e (\textbf{V} -\frac{\textbf{J}}{n e})]
 \end{aligned}
 \end{equation}
 
 The dynamic pressure and thermal pressures have been combined into one kinetic tensor term $\textbf{K}$. $\textbf{U}$ is the neutral velocity.
+
+The neutral momentum equation is much easier since it is not affected by the Lorentz force and the momentum exchange is reversed, so it becomes:
+
+\begin{equation}\label{eq:momentumneutral}
+\begin{aligned}
+	&\frac{\partial \rho_n \textbf{U}}{\partial t} + \nabla \cdot (\textbf{K}_n) \\
+	&= (\rho_i \nu_{in} + \rho_e \nu_{en})(\textbf{V} - \textbf{U}) - \frac{m_e}{e}(\nu_{en}-\nu_{in}) \textbf{J} \\
+	& - [S m_n \textbf{U} - L m_i (\textbf{V} + \frac{m_e}{m_i} \frac{\textbf{J}}{n e})- L m_e (\textbf{V} -\frac{\textbf{J}}{n e})]
+\end{aligned}
+\end{equation}
 
 \section{Maxwell's Equations}
 
@@ -692,18 +702,64 @@ Once we have our normalization constants we may normalize the equations. Replaci
 
 \begin{equation}\label{eq:normmomentumcom}
 \begin{aligned}
-	&\frac{\partial \bar{n} \bar{\textbf{V}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}} + \frac{\bar{B}^2}{2}\textbf{I} - \bar{\textbf{B}}\bar{\textbf{B}}) \\
-	&= - (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} +\bar{m_e}\bar{\textbf{J}}  - \bar{\textbf{U}}) + \bar{m_e}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
+	&\frac{\partial \bar{n} \bar{\textbf{V}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}_i} + \frac{\bar{B}^2}{2}\textbf{I} - \bar{\textbf{B}}\bar{\textbf{B}}) \\
+	&= - (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} - \bar{\textbf{U}}) + \bar{m_e}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
+	&+ (\bar{S} \bar{m_n} \textbf{U} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{1+\bar{m_e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\bar{\textbf{J}}) )
+\end{aligned} 
+\end{equation}
+
+\begin{equation}\label{eq:normmomentumneutral}
+\begin{aligned}
+	&\frac{\partial \bar{n}_n \bar{\textbf{U}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}_n}) \\
+	&= + (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} +\bar{m_e}\bar{\textbf{J}}  - \bar{\textbf{U}}) + \bar{m_e}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
 	&+ (\bar{S} \bar{m_n} \textbf{U} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{1+\bar{m_e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\bar{\textbf{J}}) )
 \end{aligned} 
 \end{equation}
 
 \section{Validation}
 
+The simulation now needs to be validated against well known tests. Our goals are to have a scheme that is shock-capturing, and colissional. A classic test fluid codes undergo is the Sod shock tube test~\citep{Sod1978}. It is inspired by real life shock tubes in which a discontinuity is forced between the left and right halves of the tube. In a real shock tube the diaphragm between the two states is ruptured and the shocks are then observed. They're mostly used to observe material responses to shocks, however, we do have an analytical expectation of how the shock tube evolves through time.
+
+The initial conditions for our left and right states in the CoMFi code are:
+\begin{equation}\label{eq:shockinitialconditionsl}
+	\begin{pmatrix}
+		n_l \\
+		P_l \\
+		V_l \\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		1.0 \\
+		1.0 \\
+		0.0 \\
+	\end{pmatrix}
+\end{equation}
+\begin{equation}\label{eq:shockinitialconditionsr}
+	\begin{pmatrix}
+		n_r \\
+		P_r \\
+		V_r \\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		0.125 \\
+		0.1 \\
+		0.0 \\
+	\end{pmatrix}
+\end{equation}
+	
+Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary units. In the density graph it can be clearly seen the rarefraction wave, the contact discontinuity and the shock discontinuity. The exact sharpness is difficult to maintain in these codes but what is important is that it has not been too diffusive and the shocks are clear and maintaining their correct values. For the exact, analytical, solution see~\citet{Sod1978}. A resolution of 1001 grid points were used for this simulation. The boundary conditions on the right and left side are set equal to those initial values at all times. The energy equation was changed to the conservative internal energy equation to match Sod's equation set and what is used is the neutral component since it is acting more like a classical fluid and the Lorentz forces are irrelevant.
+
 \begin{figure}[ht!]
 	\includegraphics[width=0.75\textwidth]{images/shocktube.eps}
 	\caption{Neutral fluid shock tube tests. The shocks are being captured appropriately due to the TVD-MUSCL scheme used.}\label{fig:shocktube}
 \end{figure}
+
+\citet{Soler2013} devised an initial value problem to test Alfv\'en waves in partially ionized plasmas. In the paper two-fluid plasma dynamics were explored in many ways. Analytical derivations and wave mode derivations were made. The initial value problem posed by~\citet{Soler2013} is based on their fundamental standing mode of an Alfv\'en wave in the fully ionized case of $\omega L / V_A = \pi / 20$. This means in the simulation domain of $z = (-10L,10L)$ an initial value for the velocity perturbation is:
+\begin{equation}\label{eq:solerintial}
+	V_{\perp}(t=0,z) = \cos{(\frac{\pi}{20 L} z)}
+\end{equation}
+The left and right boundary conditions in this case are set at $V_{\perp} = 0$ for both ions and neutrals. Constant and arbitrary for all other values. Three different orders of magnitude of the collision rate was used for two different cases. The first with a neutral initial value the same as the ions $V_{\perp} = U_{\perp}$ and the other where $U=0$. The results in Figure~\ref{fig:soler} show the results at $z=0$ and the Alfv\'en wave can be seen clearly damped in the cases. Note how at $\nu_{ni}=1$ the medium is moving in unison but still being damped. It is also important to note the equations used to solve this are fundamentally different than the ones in~\citet{Soler2013}. They solve for the primitive variables while CoMFi solves the conservative form. Still the graphs look similar which helps with the case of the validation of the code.
 
 \begin{figure}[ht!]
 	\includegraphics[width=1\textwidth]{images/soler.eps}
@@ -903,11 +959,15 @@ Finally, this work serves as a step towards a better understanding of the solar 
 
 \chapter{Conclusion}\label{chap:conclusion}
 
-In this paper, we present a self-consistent, two-fluid MHD model to study the chromosphere. The model includes ion-neutral interaction, which allows us to investigate the role of frictional heating in the dynamics of the chromosphere.  The very high collision rates in the partially ionized chromosphere stabilizes the code so that no numerical viscosity is needed.  
+MHD collissional modeling, chromospheric modeling, scientific computing, and introducing the CoMFi code were the focus of this dissertation. Typically in the world of physics, the uptake of new ideas in science is not without inertia. This is understandable as we spend our time focusing on the physics above all else. If we take Moore's Law as a metaphor, we should understand that eventually computers will be able to do whatever we please it to and relying on legacy codes will be a thing of the past. An example of this is the Python programming language. A couple decades ago we could not prototype the kind of software we are able to nowadays by the invention of this programming language. Analogously, decades from now we should be able to solve differential equations by taking new computer science inventions and hopefully with less resistance.
+
+We present a self-consistent, two-fluid MHD model to study the chromosphere. The model includes ion-neutral interaction, which allows us to investigate the role of frictional heating in the dynamics of the chromosphere.  The very high collision rates in the partially ionized chromosphere stabilizes the code so that no numerical viscosity is needed.  
 
 The model obtains preliminary results which require further investigation. Our simulation presents that, between network and internetwork regions, a jet could potentially be driven purely by thermal processes, especially the frictional heating, and not by magnetic reconnection. Thus, it is crucial to include the neutrals in any attempt to model the lower chromosphere.
 
 The discrepancy between observational speeds and speeds in the simulation could be explained by the need to include the effects of photo chemical reactions in the chromosphere and the radiative losses. Further refinement of the model with photo-chemical effects, radiation and new observations from the upcoming {\it Parker Solar Probe\/} mission will lead to an improved model of the chromosphere.  
+
+It is my hope that the CoMFi code can continue to provide good physics in the future and hopefully adapted to suit the needs of the user. GPU clusters are an attractive new frontier in scientific computing and its thousands of cores per unit is exactly suited to solve our differential equations. As GPUs become cheaper our codes must be sure to utilize them.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \nocite{*}
