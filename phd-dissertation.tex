@@ -197,6 +197,22 @@ The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequatio
 
 $S$ and $L$ are source and loss terms respectively due to chemistry processes like ionization and recombination. These are three-fluid MHD equations if the only ion considered is the hydrogen ion.
 
+\subsection{Temperature Equation}
+
+We wish to study the thermal evolution of a plasma in Chapter~\ref{chap:chromosphere}. For this we must transform the energy equation (Equation~\ref{eq:energyequation}) to a form that evolves thermal pressure. We can do this by taking the dot product of the momentum equation and subtracting it from the energy equation. This leaves the energy equation with the thermal energy equation:
+
+\begin{equation}\label{eq:pressureequation}
+	\frac{\partial }{\partial t}\frac{P_s}{\gamma_s - 1} +\nabla\cdot(\frac{P_s}{\gamma_s -1}\textbf{v}_s) + (1 - \frac{P_s}{\gamma_s - 1}) \nabla\cdot\textbf{v}_s = {(\frac{\delta E_s}{\delta t})}_{source} - \textbf{v}_s \cdot(\frac{\delta m_s n_s\textbf{v}_s}{\delta t})
+\end{equation}
+
+Elastic collisions may take the form of~\citep{Banks1973}:
+
+\begin{equation}\label{eq:energycollisions}
+	{(\frac{\delta E_s}{\delta t})}_{collisions} = \textbf{v}_s \cdot {(\frac{\delta m_s n_s \textbf{v}_s}{\delta t})}_{collisions} + m_{sn} \nu_{sn} n_s [ (3 k_B / m_s) (T_n - T_s) + \lvert \textbf{v}_s - \textbf{v}_n \rvert^2 ]
+\end{equation}
+
+Where $m_{sn}$ is the reduced mass of the species with the neutral species, $T$ is temperature, $k_B$ is the Boltzmann constant. The previous equation shows thermal exchange due to collision between the species as well as {\it frictional heating\/} term that is proportional to the difference in speeds between the two. For a conservative scheme it is more approriate to use the total energy equation, but this depends on a case by case basis. The CoMFi code is capable of doing both approaches. For the chromosphere we will be concerned with the thermal evolution.
+
 \subsection{Two-fluid MHD}\label{sec:2fluidmhd}
 
 The ion and electron fluid can be simplified further to be one plasma that tracks the center of momentum between the two. Plasmas are typically quasi-neutral, it has as many positive charges as negative ones. Any imbalance in the charge will create a strong electric field within the plasma and strongly attract outside sources of charges until it is quasi-neutral again. In single hydrogen ion case that means:
@@ -271,6 +287,25 @@ The neutral momentum equation is much easier since it is not affected by the Lor
 \end{aligned}
 \end{equation}
 
+Finally, following the ideal gas law $P_s = n_s k_B T_s$ and the monoatomic ratio of specific heats $\gamma = 5/3$, the last two equations needed are the temperature equations of the two fluids:
+
+\begin{equation}\label{eq:temperatureion}
+	\begin{aligned}
+		&\frac{3}{2} n [\frac{\partial k_B T}{\partial t} + \nabla\cdot(k_B T \textbf{V})] - \frac{1}{2} n k_B T (\nabla\cdot\textbf{V}) + \nabla\cdot\textbf{q} \\
+	& = n m_{in} \nu_{in} [ 3 k_B (T_n - T) + m_n \lvert \textbf{U} - \textbf{V} \rvert^2 ] + Q
+	\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:temperatureneutral}
+	\begin{aligned}
+		&\frac{3}{2} n_n [\frac{\partial k_B T_n}{\partial t} + \nabla\cdot(k_B T_n \textbf{U})] - \frac{1}{2} n_n k_B T_n (\nabla\cdot\textbf{U}) + \nabla\cdot\textbf{q} \\
+	&= n_n m_{ni} \nu_{ni} [ 3 k_B (T - T_n) + m_i \lvert \textbf{V} - \textbf{U} \rvert^2 ] + Q_n
+	\end{aligned}
+\end{equation}
+
+Where $\textbf{q}$ is the heat flux and $Q$ are other heating and cooling terms such as radiative losses.
+
+
 \section{Maxwell's Equations}
 
 Since a plasma is a gas the reacts strongly to electro-magnetic fields. Maxwell's equations must be enforced in order to have a plasma consistent with reality. The Maxwell equations will also help us with the time evolution of the fields, as the fields are interconnected. The Maxwell's equations are:
@@ -329,7 +364,35 @@ Simplifying further by taking the $m_e/m_i \sim 0$ approximation, current densit
 
 Where $\eta = \frac{m_e \nu_e}{e^2 n}$ is the Ohmic resistivity. The relation between the electric field and the resistivity is what we think of when we invoke Ohm's law in college physics. Clearly the equation is a little more complicated in MHD\@. Note that collision with neutrals may change the electric field also. The collisions can cause a drift between the ions and electrons, separating them and causing an electric field.
 
+We can take Equation~\ref{eq:gom} a step further and eliminate the need for an evolving current and instead use the low-frequency approximation (i.e.\ the time scales is much smaller than the plasma frequency $\omega_p = \sqrt{\frac{n_e e^2}{\varepsilon_0 m_e}}$). Removing the convective derivate of the current gives this approximation:
+
+\begin{equation}\label{eq:gomlowfreq}
+\begin{aligned}
+	&\textbf{E}  = - \textbf{V}\times\textbf{B} \\
+	&+ \frac{-\nabla\cdot\textbf{P}_e + \textbf{J}\times\textbf{B}}{ne} \\
+	&  + \frac{m_e}{e}[\nu_{in} (\textbf{V}-\textbf{U}) - \nu_{en}(\textbf{V} - \textbf{U})] + \eta\textbf{J}
+\end{aligned}
+\end{equation}
+
+And in a two-fluid approach we may define current along with the same assumptions:
+\begin{equation}
+	\textbf{J} = \frac{\nabla\times\textbf{B}}{\mu_0}
+\end{equation}
+
+The collisional terms may also be ignored under careful consideration of how small $\frac{\nu}{\omega^2_p}$ may be.
+
 In Chapter~\ref{chap:chromosphere} we will simplify the above equation further to suit our needs. Typically in simulations you only want to include the terms that matter the most. With careful consideration we can come up with a GOL that is most appropriate for our application.
+
+\subsection{Induction Equation}
+
+To close our set of equations we need a way to evolve the magnetic fields. For this we can use the law of induction (Equation~\ref{eq:lawofinduction}) with the GOL (Equation~\ref{eq:gomlowfreq}).
+
+\begin{equation}\label{eq:inductionequation}
+	\begin{aligned}
+		\frac{\partial\textbf{B}}{\partial t} =& \nabla\times(\textbf{V}\times\textbf{B} - \frac{-\nabla\cdot\textbf{P}_e + \textbf{J}\times\textbf{B}}{ne} \\
+						       &- \frac{m_e}{e}[\nu_{in} (\textbf{V}-\textbf{U}) - \nu_{en}(\textbf{V} - \textbf{U})] - \eta\textbf{J})
+\end{aligned}
+\end{equation}
 
 \chapter{Implementation}\label{chap:implementation}
 
@@ -686,6 +749,8 @@ The normalization constants were chosen for the chromospheric case we study in C
 	Velocity & $V_0=\frac{B_0}{\sqrt{\mu_0 m_i n_0}}$ & $2.18 \times 10^{8}$ m/s\\
 	Pressure & $p_0= \frac{{B_0}^2}{\mu_0}$ & $8.0 \times 10^3$ Pa \\
 	Temperature & $T_0 = \frac{p_0}{n_0 k_B} $ & $5.79438\times10^6$ K\\
+	Current Density & $j_0 = e_0 n_0 V_0$ & $3.493\times10^9$ A/m/m \\
+	Heat Flow & $q_0 = p_0 V_0$ & $1.744\times10^{12}$ Pa m/s \\
 	\bottomrule
 \end{tabular}
 \end{table}
@@ -703,17 +768,31 @@ Once we have our normalization constants we may normalize the equations. Replaci
 \begin{equation}\label{eq:normmomentumcom}
 \begin{aligned}
 	&\frac{\partial \bar{n} \bar{\textbf{V}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}_i} + \frac{\bar{B}^2}{2}\textbf{I} - \bar{\textbf{B}}\bar{\textbf{B}}) \\
-	&= - (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} - \bar{\textbf{U}}) + \bar{m_e}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
-	&+ (\bar{S} \bar{m_n} \textbf{U} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{1+\bar{m_e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\bar{\textbf{J}}) )
+	&= - (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} - \bar{\textbf{U}}) + \frac{\bar{m_e}}{\bar{e}}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
+	&+ (\bar{S} \bar{m_n} \bar{\textbf{U}} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{\bar{n}\bar{e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\frac{\bar{\textbf{J}}}{\bar{n}\bar{e}}) )
 \end{aligned} 
 \end{equation}
 
 \begin{equation}\label{eq:normmomentumneutral}
-\begin{aligned}
+	\begin{aligned}
 	&\frac{\partial \bar{n}_n \bar{\textbf{U}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}_n}) \\
-	&= + (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} +\bar{m_e}\bar{\textbf{J}}  - \bar{\textbf{U}}) + \bar{m_e}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
-	&+ (\bar{S} \bar{m_n} \textbf{U} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{1+\bar{m_e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\bar{\textbf{J}}) )
-\end{aligned} 
+	&= + (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} - \bar{\textbf{U}}) - \frac{\bar{m_e}}{\bar{e}}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
+	&- (\bar{S} \bar{m_n} \bar{\textbf{U}} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{\bar{n}\bar{e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\frac{\bar{\textbf{J}}}{\bar{n}\bar{e}}) )
+	\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:normtemperatureion}
+	\begin{aligned}
+		&[\frac{\partial\bar{T}}{\partial \bar{t}} + \nabla\cdot(\bar{T} \bar{\textbf{V}})] - \frac{1}{3}\bar{T} (\nabla\cdot\bar{\textbf{V}}) + \frac{1}{\bar{n}}\nabla\cdot\bar{\textbf{q}} \\
+		& = \bar{m}_{in} \bar{\nu}_{in} [2(\bar{T_n} - \bar{T}) + \frac{1}{3}\bar{m_n} \lvert \bar{\textbf{U}} - \bar{\textbf{V}} \rvert^2 ] + \frac{2}{3}\bar{Q}
+	\end{aligned}
+\end{equation}
+
+\begin{equation}\label{eq:normtemperatureneutral}
+	\begin{aligned}
+		&[\frac{\partial\bar{T}_n}{\partial \bar{t}} + \nabla\cdot(\bar{T}_n \bar{\textbf{U}})] - \frac{1}{3}\bar{T}_n (\nabla\cdot\bar{\textbf{U}}) + \frac{1}{\bar{n}_n}\nabla\cdot\bar{\textbf{q}_n} \\
+		& = \bar{m}_{ni} \bar{\nu}_{ni} [2(\bar{T} - \bar{T}_n) + \frac{1}{3}\bar{m_i} \lvert \bar{\textbf{V}} - \bar{\textbf{U}} \rvert^2 ] + \frac{2}{3}\bar{Q}_n
+	\end{aligned}
 \end{equation}
 
 \section{Validation}
