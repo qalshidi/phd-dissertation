@@ -8,6 +8,7 @@
 \usepackage{amssymb}
 \usepackage{booktabs}
 
+\def\code#1{\texttt{#1}}
 % use fancyhdr, to enable page style stuff (below)
 \usepackage{fancyhdr}
 \setlength{\headheight}{15.2pt}
@@ -184,15 +185,24 @@ The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequatio
 \end{equation}
 
 \begin{equation}\label{eq:imomentum}
-	\frac{\partial n_i \textbf{v}_i}{\partial t} + \nabla \cdot (n_i \textbf{v}_i \textbf{v}_i + \frac{\textbf{P}_i}{m_i} ) - n_i \frac{q_i}{m_i}(\textbf{E} + \textbf{v}_i \times \textbf{B}) = - \sum_{i \neq s} [n_i \nu_{is}(\textbf{v}_i - \textbf{v}_s)] + \frac{1}{m_i} (S m_n \textbf{v}_n - S m_e \textbf{v}_e -L m_i \textbf{v}_i)
+	\begin{aligned}
+	& \frac{\partial n_i \textbf{v}_i}{\partial t} + \nabla \cdot (n_i \textbf{v}_i \textbf{v}_i + \frac{\textbf{P}_i}{m_i} ) - n_i \frac{q_i}{m_i}(\textbf{E} + \textbf{v}_i \times \textbf{B}) \\
+	& = - \sum_{i \neq s} [n_i \nu_{is}(\textbf{v}_i - \textbf{v}_s)] + \frac{1}{m_i} (S m_n \textbf{v}_n - S m_e \textbf{v}_e -L m_i \textbf{v}_i)
+\end{aligned}
 \end{equation}
 
 \begin{equation}\label{eq:emomentum}
-	\frac{\partial n_e \textbf{v}_e}{\partial t} + \nabla \cdot (n_e \textbf{v}_e \textbf{v}_e + \frac{\textbf{P}_e}{m_e} ) - n_e \frac{q_e}{m_e}(\textbf{E} + \textbf{v}_e \times \textbf{B}) = - \sum_{e \neq s} [n_e \nu_{es}(\textbf{v}_e - \textbf{v}_s)] + \frac{1}{m_e} (S m_n \textbf{v}_n - S m_i \textbf{v}_i - L m_e \textbf{v}_e)
+	\begin{aligned}
+	& \frac{\partial n_e \textbf{v}_e}{\partial t} + \nabla \cdot (n_e \textbf{v}_e \textbf{v}_e + \frac{\textbf{P}_e}{m_e} ) - n_e \frac{q_e}{m_e}(\textbf{E} + \textbf{v}_e \times \textbf{B}) \\
+	& = - \sum_{e \neq s} [n_e \nu_{es}(\textbf{v}_e - \textbf{v}_s)] + \frac{1}{m_e} (S m_n \textbf{v}_n - S m_i \textbf{v}_i - L m_e \textbf{v}_e)
+\end{aligned}
 \end{equation}
 
 \begin{equation}\label{eq:nmomentum}
-	\frac{\partial n_n \textbf{v}_n}{\partial t} + \nabla \cdot (n_n \textbf{v}_n \textbf{v}_n + \frac{\textbf{P}_n}{m_n} ) = - \sum_{n \neq s} [n_n \nu_{es}(\textbf{v}_n - \textbf{v}_s)] + \frac{1}{m_n} (L(m_i\textbf{v}_i+m_e\textbf{v}_e) -S m_n \textbf{v}_n)
+	\begin{aligned}
+	& \frac{\partial n_n \textbf{v}_n}{\partial t} + \nabla \cdot (n_n \textbf{v}_n \textbf{v}_n + \frac{\textbf{P}_n}{m_n} ) \\
+	& = - \sum_{n \neq s} [n_n \nu_{es}(\textbf{v}_n - \textbf{v}_s)] + \frac{1}{m_n} (L(m_i\textbf{v}_i+m_e\textbf{v}_e) -S m_n \textbf{v}_n)
+\end{aligned}
 \end{equation}
 
 $S$ and $L$ are source and loss terms respectively due to chemistry processes like ionization and recombination. These are three-fluid MHD equations if the only ion considered is the hydrogen ion.
@@ -232,11 +242,11 @@ Where $e$ is the elementary charge. Subtracting the ion and electron continuity 
 \begin{equation}
 	\frac{\partial n_i - n_e}{\partial t} + \nabla\cdot(n_i v_i - n_e v_e) = 0
 \end{equation}
+The charge conservation equation.
 \begin{equation}\label{eq:chargeconservation}
 	\nabla\cdot\textbf{J} = 0
 \end{equation}
 
-The charge conservation equation.
 
 To simplify the three MHD equations (Equations~\ref{eq:imomentum}-\ref{eq:nmomentum}) we can take the multiple of their masses and add Equation~\ref{eq:imomentum} and~\ref{eq:emomentum}.
 
@@ -387,12 +397,37 @@ In Chapter~\ref{chap:chromosphere} we will simplify the above equation further t
 
 To close our set of equations we need a way to evolve the magnetic fields. For this we can use the law of induction (Equation~\ref{eq:lawofinduction}) with the GOL (Equation~\ref{eq:gomlowfreq}).
 
-\begin{equation}\label{eq:inductionequation}
+\begin{equation}
 	\begin{aligned}
 		\frac{\partial\textbf{B}}{\partial t} =& \nabla\times(\textbf{V}\times\textbf{B} - \frac{-\nabla\cdot\textbf{P}_e + \textbf{J}\times\textbf{B}}{ne} \\
 						       &- \frac{m_e}{e}[\nu_{in} (\textbf{V}-\textbf{U}) - \nu_{en}(\textbf{V} - \textbf{U})] - \eta\textbf{J})
 \end{aligned}
 \end{equation}
+
+We may use vector identities to transform the advective terms.
+
+\begin{equation}
+	\nabla\times(\textbf{V}\times\textbf{B}) = \nabla\cdot(\textbf{BV}-\textbf{VB})
+\end{equation}
+
+This also gives the opportunity to have as many terms in conservative forms as we can.
+\begin{equation}\label{eq:inductionequation}
+	\begin{aligned}
+		& \frac{\partial\textbf{B}}{\partial t} = \\
+		&\nabla\cdot(\textbf{BV}-\textbf{VB} + \textbf{B}\textbf{V}_{hall}-\textbf{V}_{hall}\textbf{B}) \\
+		&-k_B (\frac{\nabla n \times \nabla T_e}{ne}) \\
+		&- \nabla\times(\frac{m_e}{e}[\nu_{in} (\textbf{V}-\textbf{U}) - \nu_{en}(\textbf{V} - \textbf{U})]) \\
+		& - \frac{1}{\mu_0} \nabla\eta\times\textbf{J} + \eta\nabla^2\textbf{B}
+\end{aligned}
+\end{equation}
+
+Where
+
+\begin{equation}
+	\textbf{V}_{hall} = \frac{\textbf{J}}{ne}
+\end{equation}
+
+Since it is associated with the Hall term in the induction equation.
 
 \chapter{Implementation}\label{chap:implementation}
 
@@ -441,7 +476,7 @@ We have some freedom in choosing how to set the flux limiter. Many flux limiters
 	\phi_{minmod}(r) = \max(0, \min(1, r)), \lim_{r \to \infty} \phi(r) = 1
 \end{equation}
 
-The CoMFi code provides several flux limiters and finding the best one is a matter of trial and error. The limiter used by default is the van Albada limiter.
+The CoMFi code provides several flux limiters (see Appendix~\ref{app:fluxlimiters}) and finding the best one is a matter of trial and error. The limiter used by default is the van Albada limiter.
 
 \begin{equation}\label{eq:vanalbada}
 	\phi_{va}(r) = \frac{r^2 + r}{r^2 + 1}, \lim_{r \to \infty} \phi(r) = 1
@@ -604,7 +639,7 @@ $G$ is the growth in error each time step also called the amplification factor. 
 	\lvert G \rvert \leq 1
 \end{equation}
 
-For the upwind scheme example we used:
+For the upwind scheme example we used: 
 
 \begin{equation}
 	\lvert 1 - \beta (e^{ik\Delta x}- 1) \rvert \leq 1
@@ -767,7 +802,7 @@ Once we have our normalization constants we may normalize the equations. Replaci
 
 \begin{equation}\label{eq:normmomentumcom}
 \begin{aligned}
-	&\frac{\partial \bar{n} \bar{\textbf{V}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}_i} + \frac{\bar{B}^2}{2}\textbf{I} - \bar{\textbf{B}}\bar{\textbf{B}}) \\
+	&\frac{\partial \bar{n} \bar{\textbf{V}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}}_{i,e} + \frac{\bar{B}^2}{2}\textbf{I} - \bar{\textbf{B}}\bar{\textbf{B}}) \\
 	&= - (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} - \bar{\textbf{U}}) + \frac{\bar{m_e}}{\bar{e}}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
 	&+ (\bar{S} \bar{m_n} \bar{\textbf{U}} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{\bar{n}\bar{e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\frac{\bar{\textbf{J}}}{\bar{n}\bar{e}}) )
 \end{aligned} 
@@ -775,7 +810,7 @@ Once we have our normalization constants we may normalize the equations. Replaci
 
 \begin{equation}\label{eq:normmomentumneutral}
 	\begin{aligned}
-	&\frac{\partial \bar{n}_n \bar{\textbf{U}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}_n}) \\
+	&\frac{\partial \bar{n}_n \bar{\textbf{U}}}{\partial \bar{t}} + \nabla \cdot (\bar{\textbf{K}}_n) \\
 	&= + (\bar{n} \bar{\nu}_{in} + \bar{m_e} \bar{n} \bar{\nu}_{en})(\bar{\textbf{V}} - \bar{\textbf{U}}) - \frac{\bar{m_e}}{\bar{e}}(\bar{\nu}_{en}-\bar{\nu}_{in}) \bar{\textbf{J}}  \\
 	&- (\bar{S} \bar{m_n} \bar{\textbf{U}} - \bar{L} (\bar{\textbf{V}}+ \frac{\bar{m_e}}{\bar{n}\bar{e}}\bar{\textbf{J}}) - \bar{L} \bar{m_e} (\bar{\textbf{V}} -\frac{\bar{\textbf{J}}}{\bar{n}\bar{e}}) )
 	\end{aligned}
@@ -790,14 +825,25 @@ Once we have our normalization constants we may normalize the equations. Replaci
 
 \begin{equation}\label{eq:normtemperatureneutral}
 	\begin{aligned}
-		&[\frac{\partial\bar{T}_n}{\partial \bar{t}} + \nabla\cdot(\bar{T}_n \bar{\textbf{U}})] - \frac{1}{3}\bar{T}_n (\nabla\cdot\bar{\textbf{U}}) + \frac{1}{\bar{n}_n}\nabla\cdot\bar{\textbf{q}_n} \\
+		&[\frac{\partial\bar{T}_n}{\partial \bar{t}} + \nabla\cdot(\bar{T}_n \bar{\textbf{U}})] - \frac{1}{3}\bar{T}_n (\nabla\cdot\bar{\textbf{U}}) + \frac{1}{\bar{n}_n}\nabla\cdot\bar{\textbf{q}}_n \\
 		& = \bar{m}_{ni} \bar{\nu}_{ni} [2(\bar{T} - \bar{T}_n) + \frac{1}{3}\bar{m_i} \lvert \bar{\textbf{V}} - \bar{\textbf{U}} \rvert^2 ] + \frac{2}{3}\bar{Q}_n
 	\end{aligned}
 \end{equation}
 
-\section{Validation}
+\begin{equation}\label{eq:norminductionequation}
+	\begin{aligned}
+		& \frac{\partial\bar{\textbf{B}}}{\partial \bar{t}} = \\
+		&\nabla\cdot(\bar{\textbf{B}}\bar{\textbf{V}}-\bar{\textbf{V}}\bar{\textbf{B}} + \bar{\textbf{B}}\bar{\textbf{V}}_{hall}-\bar{\textbf{V}}_{hall}\bar{\textbf{B}}) \\
+		&-\frac{\nabla \bar{n} \times \nabla \bar{T}_e}{\bar{n}\bar{e}} \\
+		&- \nabla\times(\frac{\bar{m_e}}{\bar{e}}[\bar{\nu}_{in} (\bar{\textbf{V}}-\bar{\textbf{U}}) - \bar{\nu}_{en}(\bar{\textbf{V}} - \bar{\textbf{U}})]) \\
+		& - \nabla\bar{\eta}\times\bar{\textbf{J}} + \eta\nabla^2\bar{\textbf{B}}
+\end{aligned}
+\end{equation}
 
-The simulation now needs to be validated against well known tests. Our goals are to have a scheme that is shock-capturing, and colissional. A classic test fluid codes undergo is the Sod shock tube test~\citep{Sod1978}. It is inspired by real life shock tubes in which a discontinuity is forced between the left and right halves of the tube. In a real shock tube the diaphragm between the two states is ruptured and the shocks are then observed. They're mostly used to observe material responses to shocks, however, we do have an analytical expectation of how the shock tube evolves through time.
+
+\section{Validation}\label{sec:validation}
+
+The simulation now needs to be validated against well known tests. Our goals are to have a scheme that is shock-capturing, and collissional. A classic test fluid codes undergo is the Sod shock tube test~\citep{Sod1978}. It is inspired by real life shock tubes in which a discontinuity is forced between the left and right halves of the tube. In a real shock tube the diaphragm between the two states is ruptured and the shocks are then observed. They're mostly used to observe material responses to shocks, however, we do have an analytical expectation of how the shock tube evolves through time.
 
 The initial conditions for our left and right states in the CoMFi code are:
 \begin{equation}\label{eq:shockinitialconditionsl}
@@ -827,7 +873,7 @@ The initial conditions for our left and right states in the CoMFi code are:
 	\end{pmatrix}
 \end{equation}
 	
-Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary units. In the density graph it can be clearly seen the rarefraction wave, the contact discontinuity and the shock discontinuity. The exact sharpness is difficult to maintain in these codes but what is important is that it has not been too diffusive and the shocks are clear and maintaining their correct values. For the exact, analytical, solution see~\citet{Sod1978}. A resolution of 1001 grid points were used for this simulation. The boundary conditions on the right and left side are set equal to those initial values at all times. The energy equation was changed to the conservative internal energy equation to match Sod's equation set and what is used is the neutral component since it is acting more like a classical fluid and the Lorentz forces are irrelevant.
+Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary units. In the density graph it can be clearly seen the rarefaction wave, the contact discontinuity and the shock discontinuity. The exact sharpness is difficult to maintain in these codes but what is important is that it has not been too diffusive and the shocks are clear and maintaining their correct values. For the exact, analytical, solution see~\citet{Sod1978}. A resolution of 1001 grid points were used for this simulation. The boundary conditions on the right and left side are set equal to those initial values at all times. The energy equation was changed to the conservative internal energy equation to match Sod's equation set and what is used is the neutral component since it is acting more like a classical fluid and the Lorentz forces are irrelevant.
 
 \begin{figure}[ht!]
 	\includegraphics[width=0.75\textwidth]{images/shocktube.eps}
@@ -838,12 +884,21 @@ Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary unit
 \begin{equation}\label{eq:solerintial}
 	V_{\perp}(t=0,z) = \cos{(\frac{\pi}{20 L} z)}
 \end{equation}
-The left and right boundary conditions in this case are set at $V_{\perp} = 0$ for both ions and neutrals. Constant and arbitrary for all other values. Three different orders of magnitude of the collision rate was used for two different cases. The first with a neutral initial value the same as the ions $V_{\perp} = U_{\perp}$ and the other where $U=0$. The results in Figure~\ref{fig:soler} show the results at $z=0$ and the Alfv\'en wave can be seen clearly damped in the cases. Note how at $\nu_{ni}=1$ the medium is moving in unison but still being damped. It is also important to note the equations used to solve this are fundamentally different than the ones in~\citet{Soler2013}. They solve for the primitive variables while CoMFi solves the conservative form. Still the graphs look similar which helps with the case of the validation of the code.
 
 \begin{figure}[ht!]
 	\includegraphics[width=1\textwidth]{images/soler.eps}
 	\caption{The \citet{Soler2013} initial value problem tests. Velocity is taken at $z=0$ of the standing Alf\'ven wave. The solid red is the ion velocity, the dashed blue line is neutral velocity. The top row is where the initial neutral velocity is the same as the ion velocity and the bottom row is where the initial neutral velocity is at zero. The results resemble reasonably well the tests in the \citet{Soler2013} paper.}\label{fig:soler}
 \end{figure}
+
+\begin{figure}[ht!]
+	\includegraphics[width=1\textwidth]{images/soleretal2013.png}
+	\caption{Taken from \citet{Soler2013}. Compare with above (Figure~\ref{fig:soler}) for validation.}\label{fig:soleretal2013}
+\end{figure}
+
+The left and right boundary conditions in this case are set at $V_{\perp} = 0$ for both ions and neutrals. Constant and arbitrary for all other values. Three different orders of magnitude of the collision rate was used for two different cases. The first with a neutral initial value the same as the ions $V_{\perp} = U_{\perp}$ and the other where $U=0$. The results in Figure~\ref{fig:soler} show the results at $z=0$ and the Alfv\'en wave can be seen clearly damped in the cases. Note how at $\nu_{ni}=1$ the medium is moving in unison but still being damped. It is also important to note the equations used to solve this are fundamentally different than the ones in~\citet{Soler2013}. They solve for the primitive variables while CoMFi solves the conservative form. Still the graphs look similar (Figure~\ref{fig:soleretal2013}) which helps with the case of the validation of the code.
+\section{Visualization}\label{sec:visualization} 
+
+CoMFi comes with its own visualization suite written in Python using Matplotlib. The data is saved in the HDF5 file format which is compatible with many other visualization software, however the bundled \code{plot-scripts} folder contains the file \code{comfi.py} when imported gives tools to make plots and even animations.
 
 \chapter{Chromosphere Dynamics}\label{chap:chromosphere} 
 
@@ -1055,6 +1110,38 @@ It is my hope that the CoMFi code can continue to provide good physics in the fu
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
-\chapter{Appendix Chapter}
+\chapter{Flux Limiters}\label{app:fluxlimiters}
+
+The CoMFi code provides several flux limiters. The pre-made flux limiters tend to be symmetric:
+
+\begin{equation}
+	\frac{\phi(r)}{r} = \phi(\frac{1}{r})
+\end{equation}
+
+This is to ensure that it is consistent in negative and positive fluxes.
+
+The provided flux limiters are:
+
+\begin{equation}
+	\phi_{ospre} (r) = 1.5 \frac{(r^2 + r)}{r^2 + r + 1}
+\end{equation}
+
+This is the Ospre~\citep{Waterson2007} limiter, the default limiter in the code.
+
+\begin{equation}
+	\phi_{van Albada} (r) = \frac{r^2 + r}{r^2 + 1}
+\end{equation}
+
+By~\citet{vanalbada1982}.
+
+\begin{equation}
+	\phi_{van Leer} (r) = \frac{r + \lvert r \rvert}{1 + \lvert r \rvert}
+\end{equation}
+
+By~\citet{vanleer1974}
+
+These were chosen because of ViennaCL's limitation of not having element-wise min and max functions. ViennaCL does have the ability to compile custom kernels and examples of min-mod in that case does exist.
+
+Only second-order TVD limiters were chosen because when the scheme is at its high-resolution it is a second-order scheme.
 
 \end{document}

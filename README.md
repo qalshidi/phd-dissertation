@@ -1,7 +1,7 @@
 # My PhD Dissertation
 ## Multi-Fluid Collisional Magnetohydrodynamic Modeling - PhD. Thesis
 
-Here you can find my PhD thesis. For any contact details visit my [personal website](qalshidi.science).
+Here you can find my PhD thesis. For any contact details visit my [personal website](https://qalshidi.science).
 
 ## License
 
