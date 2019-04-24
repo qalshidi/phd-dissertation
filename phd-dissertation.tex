@@ -49,11 +49,13 @@ The word `plasma' was first used by \citet{Langmuir1928} to describe oscillation
 In this dissertation, an attempt will be made to show the benefits and utility of multi-fluid magnetohydrodynamic (MHD) models. We will show that the solar chromosphere is a good case for this. The implementation will also be studied with careful use of good, modern computer science practices.
 
 \section{The Sun}
+
 \begin{figure}[h!]\label{fig:sunstructure}
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/sunstructure.png}
 	\caption{A more complicated view of the sun's structure and layers. [{Image from \url{https://phys.org/news/2015-12-sun-energy.html}}]} % chktex 8
 \end{figure}
+
 Whenever I say `the sun' I do not mean any star---I mean \textit{our} star. The sun is a 4.6 billion year old yellow dwarf. It generates a lot of the energy we use for life on Earth. It creates this energy through nuclear fusion in its core, turning hydrogen into helium. The sun is mostly hydrogen with a small amount of helium and even smaller amounts of metal ions which require tremendous energy to fuse. The sun has six regions (from innermost to outermost): the core, the radiative zone, the convection zone, the photosphere, the chromosphere and the corona. The core is where the fusion happens. Here is where hydrogen is made into helium and other metals. The radiative zone and convection zone is where the energy travels radially upwards to wards the surface, the photosphere. The photosphere is the surface of the Sun. Here photons are trapped but the ones that do escape mimic black-body radiation (not perfectly). It is optically thick and is the white light we see when looking at the Sun. Above the photosphere is the atmospheric layer, the chromosphere, which I will go in much detail about in this dissertation. Above that, is the corona which is what gives the sun its tendrils and the hair we give our cartoon drawings of the sun.
 
 \subsection{The Chromosphere}
@@ -77,9 +79,26 @@ In 1859, a famous (or infamous) geomagnetic storm hit the Earth. Fortunately, we
 
 The Carrington event was our last encounter with a storm of that scale, that does not mean we have not had any near misses. In 2012, a coronal mass ejection that has the strength and size comparable to the previously mentioned Carrington event almost hit the Earth. It missed the Earth by nine days~\citep{Baker2013}. Unlike in 1859, the world of 2012 was filled with electrical power grids. The internet is part of our daily lives and still relies on ground based electrical wiring.
 
-
+A report by Predictive Science Inc.\ shows that the chance of another Carrington level storm striking the earth between 2012 and 2022 is 12\%~\citep{riley2012}.
 
 \subsection{Where does the chromosphere fit into this?}
+
+Since the chromosphere is the intermediary layer between the surface and the coronal with entirely difference physics, this means it is unfair to disentangle solar events from it.
+
+An important solar event that deals with the chromosphere are solar flares. Solar flares are sometimes accompanied by CMEs. Solar flares are bright flashes that usually occur near sun-spots. They emit electromagnetic energy of the order of $10^{20}$ joules. Their x-rays can cause disruptions in communication devices on Earth like GPS satellites since it can have effects on the Earth's ionosphere.
+
+A magnetic reconnection even close to the upper chromosphere may cause flares, and the physics of the upper chromosphere is very different than that of the corona. For example the former is occuring in partially ionized plasma and the latter in a fully ionized one.
+
+Filaments are a feature found in chromosphere of dense cool plasma that are associated by bright emissions in the chromosphere. These filaments can sometimes shoot off into the solar wind by a CME\@.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{images/filament.jpg}
+	\caption{Filaments. These are images taken in H-alpha. [Image taken from https://solarscience.msfc.nasa.gov/feature2.shtml]}\label{fig:filament} % chktex8
+\end{figure}
+
+Since the chromosphere is a relatively understudied part of the chromosphere but still has an important role in space weather, this dissertation will focus on how to model, simulate, and study such a region while at the same time focussing on modern techniques of scientific computing.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Collisional Plasmas}\label{chap:plasma}
@@ -876,6 +895,7 @@ The initial conditions for our left and right states in the CoMFi code are:
 Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary units. In the density graph it can be clearly seen the rarefaction wave, the contact discontinuity and the shock discontinuity. The exact sharpness is difficult to maintain in these codes but what is important is that it has not been too diffusive and the shocks are clear and maintaining their correct values. For the exact, analytical, solution see~\citet{Sod1978}. A resolution of 1001 grid points were used for this simulation. The boundary conditions on the right and left side are set equal to those initial values at all times. The energy equation was changed to the conservative internal energy equation to match Sod's equation set and what is used is the neutral component since it is acting more like a classical fluid and the Lorentz forces are irrelevant.
 
 \begin{figure}[ht!]
+	\centering
 	\includegraphics[width=0.75\textwidth]{images/shocktube.eps}
 	\caption{Neutral fluid shock tube tests. The shocks are being captured appropriately due to the TVD-MUSCL scheme used.}\label{fig:shocktube}
 \end{figure}
@@ -886,11 +906,13 @@ Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary unit
 \end{equation}
 
 \begin{figure}[ht!]
+	\centering
 	\includegraphics[width=1\textwidth]{images/soler.eps}
 	\caption{The \citet{Soler2013} initial value problem tests. Velocity is taken at $z=0$ of the standing Alf\'ven wave. The solid red is the ion velocity, the dashed blue line is neutral velocity. The top row is where the initial neutral velocity is the same as the ion velocity and the bottom row is where the initial neutral velocity is at zero. The results resemble reasonably well the tests in the \citet{Soler2013} paper.}\label{fig:soler}
 \end{figure}
 
 \begin{figure}[ht!]
+	\centering
 	\includegraphics[width=1\textwidth]{images/soleretal2013.png}
 	\caption{Taken from \citet{Soler2013}. Compare with above (Figure~\ref{fig:soler}) for validation.}\label{fig:soleretal2013}
 \end{figure}
@@ -1036,6 +1058,7 @@ All momentum components are set initially as zero.
 Figure~\ref{fig:granulegeometry} shows a snapshot on the chromospheric solution after $348~ms$. It shows that our simulation produces magnetic field topology that is characterized by canopy or `wine glass' shape \citep{Rutten2007}, with a strong field of about $1~kG$ at the stem on the left, and a weaker field of about $50~G$ at the near the upper boundary of the simulation domain, near the transition region.  This topology is obtained fairly quickly, in around $\sim$350ms, because of the magnetic pressure imbalance imposed in the initial conditions. This is not a relaxed system as the canopy holds for a few seconds before an eruption starts forming. 
 
 \begin{figure}[ht!]
+	\centering
 	\includegraphics[width=1\textwidth]{images/granulegeometry.eps}
 	\caption{Formation of a canopy seen after around 348ms (13000 time steps). The initial condition of a concentrated strong field region (1 kG) and weak field region (5G) creates vertical asymmetry as plasma beta drastically decreases. The left and right boundaries are mirrored so effects of other granules behaving the same way are considered. Because of the short time period this is \textit{not} a relaxed system but simply a consequence of the pressure imbalance frequently seen in the chromosphere.}\label{fig:granulegeometry}
 \end{figure}
@@ -1176,6 +1199,12 @@ By~\citet{vanalbada1982}.
 By~\citet{vanleer1974}
 
 These were chosen because of ViennaCL's limitation of not having element-wise min and max functions. ViennaCL does have the ability to compile custom kernels and examples of min-mod in that case does exist.
+
+\begin{figure}[h!]\label{fig:sweby}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sweby.png}
+	\caption{A Sweby diagram of the current limiters in the CoMFi code. The shaded region is the required region for the limiter to be in in order to be second-order TVD\@.}
+\end{figure}
 
 Only second-order TVD limiters were chosen because when the scheme is at its high-resolution it is a second-order scheme.
 
