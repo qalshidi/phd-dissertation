@@ -511,6 +511,13 @@ Implementing these on a computer however is not a trivial task. Many initial con
 
 This machine epsilon should have no effect on the result so long as the variables have been normalized appropriately (see Section~\ref{sec:normalization}). This means the valuable results are within an order of magnitude so the machine epsilon of a 64bit floating point number of $2^{-−52} \sim 2.22 \times 10^{-16}$ would be negligible. If two adjacent cells have the same value, as is common with initial values, then dividing by zero is usefully avoided.
 
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.75\textwidth]{images/spuriousoscillations.png} 
+	\caption{Spurious oscillations that may form in the advection equation due to discretization errors. An explanation of this can be found in Section~\ref{sec:stability}. Imagen taken from [http://farside.ph.utexas.edu/teaching/329/lectures/node93.html].}\label{fig:spuriousoscillations}
+\end{figure}
+
+
 \subsection{TVD-MUSCL}\label{sec:tvd-muscl}
 
 The TVD-MUSCL scheme reconstructs `left' ($L$) and `right' ($R$) states of the cell edge variables. 
