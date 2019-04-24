@@ -117,8 +117,8 @@ We start by assuming an ensemble phase space of particles $f(\textbf{x}, \textbf
 	\frac{\partial f}{\partial t} + \frac{\partial \textbf{x}}{\partial t} \cdot \nabla_{\textbf{x}} f + \frac{\partial \textbf{v}}{\partial t} \cdot \nabla_{\textbf{v}} f = {(\frac{\delta f}{\delta t})}_{collisions}
 \end{equation}
 
-This is called the Boltzmann equation. The term on the right hand side exists due to collisions changed the distribution function in its own way, this also include collisional ionization and other collisional effects that would change the distribution of particles. Simplifying the equation further by substituting how I expect the bulk particles to interact with fields I can get:
-
+This is called the Boltzmann equation~\citep{lerner2005}. The term on the right hand side exists due to collisions changed the distribution function in its own way, this also include collisional ionization and other collisional effects that would change the distribution of particles. Simplifying the equation further by substituting how I expect the bulk particles to interact with fields I can get:
+ 
 \begin{equation}
 	\frac{\partial f}{\partial t} + \textbf{v} \cdot \nabla_{\textbf{x}} f + \frac{q}{m} (\textbf{E} + \textbf{v} \times \textbf{B}) \cdot \nabla_{\textbf{v}} f = {(\frac{\delta f}{\delta t})}_{collisions}
 \end{equation}
@@ -129,7 +129,7 @@ This is the kinetic theory of plasmas. The assumptions made here are probability
 
 \subsection{Moments of the Distribution}\label{sec:moments}
 
-In order to arrive at the macroscopic variables I must make an assumption about the distribution of the fluid. This is the most fundamental assumption of MHD is that the distribution of the particles are behaving like a Maxwellian velocity distribution. If it is not the case that the velocity distribution is Maxwellian then the approach of MHD is challenged and must be rewritten and integrated differently. The Maxwellian velocity distribution is common in space plasmas that are in thermal equilibrium with itself which lends to the popularity of MHD\@.
+	In order to arrive at the macroscopic variables I must make an assumption about the distribution of the fluid. This is the most fundamental assumption of MHD is that the distribution of the particles are behaving like a Maxwellian velocity distribution~\citep{mandl1988}. If it is not the case that the velocity distribution is Maxwellian then the approach of MHD is challenged and must be rewritten and integrated differently. The Maxwellian velocity distribution is common in space plasmas that are in thermal equilibrium with itself which lends to the popularity of MHD\@.
 
 \begin{equation}
 	f(v) = n {(\frac{m}{2\pi k_B T})}^{3/2} \exp{(-\frac{mv^2}{2k_B T})}
@@ -175,7 +175,7 @@ Here $e$ is the internal energy and the potential energy is based on the momentu
 
 \subsection{Multi-fluid MHD}\label{sec:multifluidmhd}
 
-In order to make our code capable to solve the equations shown in the previous section (Section~\ref{sec:moments}) further approximations must be done. The three fluids of interest in a hydrogen plasma that includes neutrals are hydrogen ions, electrons and neutral hydrogen. Our plasma is collisional and in partially ionized plasmas I can use the Krook collision term.
+In order to make our code capable to solve the equations shown in the previous section (Section~\ref{sec:moments}) further approximations must be done. The three fluids of interest in a hydrogen plasma that includes neutrals are hydrogen ions, electrons and neutral hydrogen. Our plasma is collisional and in partially ionized plasmas I can use the Krook collision term~\citep{bhatnagar1954}.
 
 \begin{equation}\label{eq:krook}
 	{(\frac{\delta f}{\delta t})}_{collisions} = \nu_n (f_n - f)
@@ -447,6 +447,8 @@ Where
 \end{equation}
 
 Since it is associated with the Hall term in the induction equation.
+
+In the coming chapters I will be using a simplified form of the GOL---dropping the terms that are less significant.
 
 \chapter{Implementation}\label{chap:implementation}
 
@@ -920,18 +922,19 @@ Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary unit
 The left and right boundary conditions in this case are set at $V_{\perp} = 0$ for both ions and neutrals. Constant and arbitrary for all other values. Three different orders of magnitude of the collision rate was used for two different cases. The first with a neutral initial value the same as the ions $V_{\perp} = U_{\perp}$ and the other where $U=0$. The results in Figure~\ref{fig:soler} show the results at $z=0$ and the Alfv\'en wave can be seen clearly damped in the cases. Note how at $\nu_{ni}=1$ the medium is moving in unison but still being damped. It is also important to note the equations used to solve this are fundamentally different than the ones in~\citet{Soler2013}. They solve for the primitive variables while CoMFi solves the conservative form. Still the graphs look similar (Figure~\ref{fig:soleretal2013}) which helps with the case of the validation of the code.
 \section{Visualization}\label{sec:visualization} 
 
-CoMFi comes with its own visualization suite written in Python using Matplotlib. The data is saved in the HDF5 file format which is compatible with many other visualization software, however the bundled \code{plot-scripts} folder contains the file \code{comfi.py} when imported gives tools to make plots and even animations.
+CoMFi comes with its own visualization suite written in Python using Matplotlib~\citep{Hunter2007}. The data is saved in the HDF5 file format~\citep{hdf5} which is compatible with many other visualization software, however the bundled \code{plot-scripts} folder contains the file \code{comfi.py} when imported gives tools to make plots and even animations.
 
 \subsection{Storage}
 
-CoMFi uses the HDF5 file format to store the data. The data hierarchy is shown in Table~\ref{tab:datahierarchy}. Other software like Origin and IDL may be easily used with this format. The data found in each variable is a matrix of the form, $u[x, {nz}-z]$, where ${nz}$ is the number of grid cells in height. This was chosen so the matrix is displayed properly if shown in matrix form. Some software will require the matrix to be flipped when plotted.
+CoMFi uses the HDF5 file format to store the data. The data hierarchy is shown in Table~\ref{tab:datahierarchy}. Other software like Origin, IDL or Tecplot may be easily used with this format. The data found in each variable is a matrix of the form, $u[x, {nz}-z]$, where ${nz}$ is the number of grid cells in height. This was chosen so the matrix is displayed properly if shown in matrix form. Some software will require the matrix to be flipped when plotted.
 
 \begin{table}[h]\label{tab:datahierarchy}
 \centering
-\caption[CoMFi.hdf5 data hierarchy]{The HDF5 data hierarchy of the CoMFi code, this may be used in any visualization software with HDF5 support like IDL\@. All data is normalized. The \code{time-step} parent data name is referring to the time step of interest in the data.}
+\caption[CoMFi.hdf5 data hierarchy]{The HDF5 data hierarchy of the CoMFi code, this may be used in any visualization software with HDF5 support like IDL\@. All data is normalized. The \code{time-step} parent data name is referring to the time step of interest in the data. The \code{constant} name refers to the constant of interest with proper capitalization.}
 \begin{tabular}[]{l  c  r}
 	\toprule
 	Time Vector & \code{/t} \\
+	Normalization Constants & \code{/norm/[constant]} \\
 	Ion Density & \code{/[time-step]/Np} \\
 	Neutral Density & \code{/[time-step]/Nn} \\
 	Ion Momentum (Horizontal) & \code{/[time-step]/NVx} \\
