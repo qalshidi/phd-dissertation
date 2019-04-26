@@ -62,7 +62,7 @@ Whenever I say `the sun' I do not mean any star---I mean \textit{our} star. The 
 
 \subsection{The Chromosphere}
 
-The chromosphere is the interface between the surface, the photosphere, and the outer atmosphere, the corona. The plasma in it is partially ionized which means it consists of two kinds of plasma: ionized (charged) plasma, and neutral (uncharged) plasma. This means the charged plasma is affected by Lorentz forces while the uncharged plasma is not. This is a result of the temperature of the chromosphere and the composition of the plasma convected in the convection zone. The plasma has a high temperature in Earth standards but to the sun it is relatively cold. The temperature of the corona, which keep in mind is the outermost layer, is in the million of degrees in Kelvin. While most of the chromosphere and the photosphere is 5000K-6500K. This discrepancy in the temperature of the lower layers to the higher layers is called the coronal heating problem. The coronal heating problem is an outstanding problem in physics which makes understanding the chromosphere of special importance. Why is the corona hotter than the chromosphere?
+The chromosphere is the interface between the surface, the photosphere, and the outer atmosphere, the corona. The plasma in it is partially ionized which means it consists of two kinds of plasma: ionized (charged) plasma, and neutral (uncharged) gas. This means the charged particles are affected by Lorentz forces while the uncharged particles are not. This is a result of the temperature of the chromosphere and the composition of the plasma convected in the convection zone. The plasma has a high temperature in Earth standards but to the sun it is relatively cold. The temperature of the corona, which keep in mind is the outermost layer, is in the million of degrees in Kelvin. While most of the chromosphere and the photosphere is 5000K-6500K. This discrepancy in the temperature of the lower layers to the higher layers is called the coronal heating problem. The coronal heating problem is an outstanding problem in physics which makes understanding the chromosphere of special importance. Why is the corona hotter than the chromosphere? This work aims to shed light on this unsolved problem in solar physics.
 
 \begin{figure}[ht!]\label{fig:chromoprofile}
 	\centering
@@ -73,7 +73,7 @@ The chromosphere is the interface between the surface, the photosphere, and the 
 
 \section{Space Weather}
 
-The term space weather refers to weather effects found above our immediate atmosphere which is conversely named terrestrial weather. It focuses on the conditions and changes found between the Sun, the Earth and even behind the Earth along its night time. The Earth's surface magnetic field strength is in the 0.5G range~\citep{Finlay2010} and that is strong enough to shield most of the solar wind headed our direction. However, magnetic reconnection events between the Earth's magnetosphere (the sphere of Earth's magnetic influence) and the interstellar medium allows solar wind particles to enter the Earth's atmosphere. This can manifest itself in harmless weather, like auroras, or more harmful weather, like geomagnetic storms.
+The term space weather refers to weather effects found above our immediate atmosphere which is conversely named terrestrial weather. It focuses on the conditions and changes found between the Sun, the Earth and even behind the Earth along its night time. The Earth's surface magnetic field strength is in the 0.5G range~\citep{Finlay2010} and that is strong enough to shield most of the solar wind headed our direction. However, magnetic reconnection events between the Earth's magnetosphere (the sphere of Earth's magnetic influence) and the interstellar medium allows solar wind particles to enter the Earth's atmosphere. Massive eruptions from the sun can affect the Earth's magnetic fields. These solar events manifest itself in harmless weather, like auroras, or more harmful weather, like geomagnetic storms.
 
 \subsection{Motivation: A storm is coming}
 
@@ -170,10 +170,12 @@ To close the system equations I need one more for the pressure shown previously.
 Where $q$ is the heat flow tensor which can be approached in multiple ways and $E$ is the total energy:
 
 \begin{equation}\label{eq:energy}
-	E_s = e_s + \frac{1}{2} m_s {v^2}_s + E_{potential}
+	E_s = e_s + \frac{1}{2} m_s {v^2}_s + \frac{P_s}{\gamma_s - 1}
 \end{equation}
 
-Here $e$ is the internal energy and the potential energy is based on the momentum equation's extra acceleration terms like the fields or gravitational potential energy if included.
+Here $e$ is the internal energy and the potential energy is based on the momentum equation's extra acceleration terms like the fields or gravitational potential energy if included. $\gamma$ is the ratio of specific heats typically related to the degrees of freedom the particles exhibit. For the monoatomic case I use in this dissertation this number becomes $\frac{5}{3}$.
+
+In most cases, the second moment is enough to close the system of equations. Through the energy equation we may derive an `equation of state' for the pressure so we may use it in the momentum equation. The magnetic fields evolve due to Maxwell's equations which will be discussed in Section~\ref{sec:maxwell}. 
 
 \subsection{Multi-fluid MHD}\label{sec:multifluidmhd}
 
@@ -226,7 +228,9 @@ The moment equations (Equation~\ref{eq:continuityequation}-\ref{eq:energyequatio
 \end{aligned}
 \end{equation}
 
-$S$ and $L$ are source and loss terms respectively due to chemistry processes like ionization and recombination. These are three-fluid MHD equations if the only ion considered is the hydrogen ion.
+The first three equations are the continuity equations describing the number density evolution of the three kinds of species. The last three are the momentum equations describing the forces, pressures and convection for the three kinds of species.
+
+$S$ and $L$ are source and loss terms respectively due to chemistry processes like ionization and recombination. These are three-fluid MHD equations if the only ion considered is the hydrogen ion. They appear in all the equations in some form.
 
 \subsection{Temperature Equation}
 
@@ -337,7 +341,7 @@ Finally, following the ideal gas law $P_s = n_s k_B T_s$ and the monoatomic rati
 Where $\textbf{q}$ is the heat flux and $Q$ are other heating and cooling terms such as radiative losses.
 
 
-\section{Maxwell's Equations}
+\section{Maxwell's Equations}\label{sec:maxwell}
 
 Since a plasma is a gas the reacts strongly to electro-magnetic fields. Maxwell's equations must be enforced in order to have a plasma consistent with reality. The Maxwell equations will also help us with the time evolution of the fields, as the fields are interconnected. The Maxwell's equations are:
 
@@ -370,7 +374,8 @@ When talking about the Generalized Ohm's Law (GOL) or the Ohm's Law we typically
 
 \begin{equation}
 \begin{aligned}
-	&\frac{m_e}{e}\frac{\partial \textbf{J}}{\partial t} + \nabla \cdot (m_e n [\textbf{v}_i \textbf{v}_i - \textbf{v}_e \textbf{v}_e] +m_e \frac{\textbf{P}_i}{m_i} - \textbf{P}_e) - n e (-\frac{m_e}{m_i}+1) \textbf{E} - \frac{n e m_e}{m_i} \textbf{v}_i \times \textbf{B} - n e\textbf{v}_e \times \textbf{B} \\
+	&\frac{m_e}{e}\frac{\partial \textbf{J}}{\partial t} + \nabla \cdot (m_e n [\textbf{v}_i \textbf{v}_i - \textbf{v}_e \textbf{v}_e] +m_e \frac{\textbf{P}_i}{m_i} - \textbf{P}_e) \\
+	& - n e (-\frac{m_e}{m_i}+1) \textbf{E} - \frac{n e m_e}{m_i} \textbf{v}_i \times \textbf{B} - n e\textbf{v}_e \times \textbf{B} \\
 	&= -n m_e [ \nu_{ie} (\textbf{v}_i -\textbf{v}_e) + \nu_{in} (\textbf{v}_i -\textbf{v}_n) - \nu_{ei} (\textbf{v}_e -\textbf{v}_i) - \nu_{en} (\textbf{v}_e -\textbf{v}_n)] \\
 	&+ (\frac{m_e}{m_i} - 1) S m_n \textbf{v}_n - \frac{m_e}{m_i} S m_e \textbf{v}_e - L m_e \textbf{v}_i + S m_n \textbf{v}_n - S m_i \textbf{v}_i - L m_e \textbf{v}_e
 \end{aligned}
@@ -454,155 +459,7 @@ In the coming chapters I will be using a simplified form of the GOL---dropping t
 
 \chapter{Implementation}\label{chap:implementation}
 
-Computational fluid dynamics is a well studied field in computer science, numerics and engineering. Many of its principles can be applied to MHD due to the fluid nature of its equations. We will be focusing on only the ones implemented in the code my for this dissertation, the Collisional Multi-Fluid ion (CoMFi) code made for the chromosphere case which will be explored in more detail in the upcoming chapter (Chapter~\ref{chap:chromosphere}). The code is an ever-evolving code that uses Graphical Processing Units (GPUs) instead of the common CPUs you see for MHD codes. This is to implement MHD that makes use of the frontiers of computer technology. GPUs were made for graphical operations in video games. This means they are specifically designed to be very fast at matrix rotations, translations and other linear algebra. In this chapter I will explore proper general purpose GPU programming techniques for solving differential equations and the schemes used alongside it. CoMFi is written in C++ using ViennaCL for GPU linear algebra template programming and Armadillo for setting up the matrices on the CPU (the reason for this will be discussed in).
-
-\section{Schemes}\label{sec:schemes}
-
-CoMFi uses the conservative MHD equations therefore conservative schemes are of interest. This makes use of the conservative variables unknowns as opposed to the primitive variables ($n v$ as opposed to $v$). This way I can use a finite-volume-method and conserve these quantities to the machine rounding error. Conservative schemes are also known to do well at capturing shocks and the chromosphere is a region where I expect such shocks to exist.
-
-\begin{equation}\label{eq:geneuler}
-	\frac{\partial \textbf{u}}{\partial t} + \nabla \cdot \textbf{F(u)} = 0
-\end{equation}
-
-The above equation is a general Euler equation demonstrating a conservation law problem. The quantity to be conserved is $\textbf{u}$ and is a function the flux $\textbf{F}$. We will be considering the linear case for simplicity however MHD has demonstrably non-linear terms as the flux (e.g. Equation~\ref{eq:imomentum}) but it can easily follow from this linear case. The point is to show the total volume is conserved:
-
-\begin{equation}\label{eq:geneulerint}
-	\frac{d\textbf{u}}{dt} + \frac{1}{V} \oint \textbf{F} \cdot \textbf{n} dS
-\end{equation}
-
-In codes designed to solve differential equations numerically I must decide on the discretization. Since I am using a finite-volume-method I am discretizing the domain by cells with density quantities in them. The code is discretized in cells existing in Cartesian coordinates (rectangular cells) so I am tasked to find the values of the variables at the cell faces in order to conserve the volume.
-
-We would also like a total-variation-diminishing (TVD) scheme, this is because spatial derivatives are approximated on a computer. If I take a Taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ I see that there are many higher order terms missing. Taking the Fourier analysis of these terms show that any high-frequency errors may compound (sometimes referred to as spurious oscillations). This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
-
-\begin{equation}\label{eq:tvd}
-	\frac{d(TV)}{dt} = \frac{d}{dt} \int \lvert \frac{\partial u}{\partial x} \rvert dx \leq 1
-\end{equation}
-
-Therefore, for the purpose of our code, I will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
-
-\subsection{Flux Limiters}\label{sec:fluxlimiters}
-
-To conserve the cell's quantities I must be able to approximate the quantities on the cell edges. At the same time I must preserve monotonicity to avoid the oscillations. This can be achieved through flux limiters. The utility of the flux limiters is to turn the scheme into a first-order upwind scheme in sharp discontinuities and a high-resolution scheme when the solution is smooth.
-
-\begin{equation}\label{eq:fluxlimiter}
-	u_{j+1/2} = u_j + \frac{1}{2} \phi(r_j) (u_{j+1} - u_j)
-\end{equation}
-\begin{equation}
-	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j}
-\end{equation}
-
-Subscript $j$ is the discretized cell location with quantity $u$. The ratio of successive gradients $r$ determines how strongly the flux limiter acts to find the extrapolated cell edge variable. The flux limiter $\phi$ includes the cells around edge more readily the smoother the solution is ($r>0$), or sharp it is ($r<0$) in which case the flux limiter is zero ($\phi=0$). These are the properties flux limiters must abide in order to turn the scheme upwind in sharp gradients or high-resolution in smoother gradients. The above equation is a linear reconstruction of a cell edge. Other reconstructions exist but are more diffusive and avoids the shock-capturing goal of the code.
-
-We have some freedom in choosing how to set the flux limiter. Many flux limiters have been made and studied in the past. The simplest flux-limiter is the minmod.
-
-\begin{equation}\label{eq:minmod}
-	\phi_{minmod}(r) = \max(0, \min(1, r)), \lim_{r \to \infty} \phi(r) = 1
-\end{equation}
-
-The CoMFi code provides several flux limiters (see Appendix~\ref{app:fluxlimiters}) and finding the best one is a matter of trial and error. The limiter used by default is the van Albada limiter.
-
-\begin{equation}\label{eq:vanalbada}
-	\phi_{va}(r) = \frac{r^2 + r}{r^2 + 1}, \lim_{r \to \infty} \phi(r) = 1
-\end{equation}
-
-Implementing these on a computer however is not a trivial task. Many initial conditions require the entirety of the domain be the same number for instance. In that case I get an $r = \frac{0}{0}$ and this causes a computer to return NaN (not a number). Setting to $r=0$ is appropriate but requires extra coding. A work around is to add a small number $\epsilon$ to the denominator known as the machine epsilon to avoid these cases.
-
-\begin{equation}
-	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j + \epsilon}
-\end{equation}
-
-This machine epsilon should have no effect on the result so long as the variables have been normalized appropriately (see Section~\ref{sec:normalization}). This means the valuable results are within an order of magnitude so the machine epsilon of a 64bit floating point number of $2^{-−52} \sim 2.22 \times 10^{-16}$ would be negligible. If two adjacent cells have the same value, as is common with initial values, then dividing by zero is usefully avoided.
-
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=0.75\textwidth]{images/spuriousoscillations.png} 
-	\caption{Spurious oscillations that may form in the advection equation due to discretization errors. An explanation of this can be found in Section~\ref{sec:stability}. Imagen taken from [http://farside.ph.utexas.edu/teaching/329/lectures/node93.html].}\label{fig:spuriousoscillations}
-\end{figure}
-
-
-\subsection{TVD-MUSCL}\label{sec:tvd-muscl}
-
-The TVD-MUSCL scheme reconstructs `left' ($L$) and `right' ($R$) states of the cell edge variables. 
-
-\begin{equation}
-	u^L_{j-1/2} = u_{j-1} + \frac{1}{2} \phi(r_{j-1}) (u_j - u_{j-1})
-\end{equation}
-\begin{equation}
-	u^L_{j+1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_j - u_{j-1})
-\end{equation}
-\begin{equation}
-	u^R_{j-1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_{j+1} - u_{j})
-\end{equation}
-\begin{equation}
-	u^R_{j+1/2} = u_{j+1} + \frac{1}{2} \phi(r_{j+1}) (u_{j+1} - u_{j})
-\end{equation}
-
-With the left and right extrapolated variables I may construct a flux.
-
-\begin{equation}
-	F^*_{j-1/2} = \frac{1}{2} ([F(u^R_{j-1/2})+F(u^L_{j-1/2})] - \lambda_{j-1/2}[u^R_{j-1/2}-u^L_{j-1/2}])
-\end{equation}
-\begin{equation}
-	F^*_{j+1/2} = \frac{1}{2} ([F(u^r_{j+1/2})+F(u^l_{j+1/2})] - \lambda_{j+1/2}[u^r_{j+1/2}-u^l_{j+1/2}])
-\end{equation}
-
-Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical terms means the largest wave speeds of the system. Typically for the ion plasma it is the fast-mode speed and for the neutrals it is the sound speed. It's important to note in conservative MHD this is only the wave speed ($c_{fast}$) and not the same as the fastest speed of information propagation ($v+c_{fast}$). The diffusive terms proportional to $\lambda$ are meant to avoid the oscillations and if they are larger than they need to be the solution will be more diffusive.
-
-
-\section{Enforcing a Solenoidal Magnetic Field}\label{sec:divergencefree}
-
-The Gauss's law for magnetic fields (Equation~\ref{eq:maggausslaw}) needs to be taken care of because due to machine rounding error and other errors due to discretization, there will be evolution of the divergence. That is to say, although:
-\begin{equation}
-	\frac{\partial\nabla\cdot\textbf{B}}{\partial t} = -\nabla\cdot\nabla\times\textbf{E} = 0
-\end{equation}
-
-The reality is, due to errors:
-\begin{equation}
-	\frac{\partial\nabla\cdot\textbf{B}}{\partial t} = \epsilon_{errors}
-\end{equation}
-
-There are many methods to resolving this. A popular method is Yee grids, sometimes referred to as staggered grids. Placing the magnetic fields to the cell edges of the electric fields. By doing this, evolving the magnetic fields reduces errors to machine rounding errors since Stokes' theorem is imposed on the problem.
-
-\begin{equation}\label{eq:stokesyee}
-	\iint_S\frac{\partial\textbf{B}}{\partial t}\cdot d\textbf{A} = {\oint}_{edges} \textbf{E}\cdot d\textbf{l}
-\end{equation}
-
-This is not the method used for CoMFi. Staggering the grid makes using a finite-volume-method difficult especially when trying to find cell centers from one quantity to the next. Instead I employ the Generalized Lagrange Multiplier method introduced by~\citet{glm}.
-
-\subsection{Generalized Lagrange Multiplier}
-
-The Generalized Lagrange Multiplier (GLM) method adds another unknown to the system of equations to be solved. This has the drawback of using more memory. Its implementation is simple, however, which means adding it to an existing code is easy. The GLM $\Phi$ tries to minimize the monopoles created due to errors in the simulation. It does this by first creating some stress to the induction equation if there is some monopole.
-
-\begin{equation}
-	\frac{\partial\textbf{B}}{\partial t} = - \nabla\times\textbf{E} + \nabla \Phi
-\end{equation}
-
-And filter the monopoles into the GLM using this method of evolution:
-\begin{equation}
-	\mathcal{D}(\Phi) + \nabla\cdot\textbf{B} = 0
-\end{equation}
-
-$\mathcal{D}$ is a differential operator and I can choose the GLM to evolve in any way I want. A hyperbolic evolution and/or a parabolic evolution may be used. Due to the non-linear and parabolic nature of our equations I opt to use both:
-
-\begin{equation}
-	\matchal{D}(\Phi) = \frac{1}{c^2_h}\frac{\partial\Phi}{\partial t} + \frac{1}{c^2_p}\Phi
-\end{equation}
-
-Here $c_h$ and $c_p$ are the hyperbolic and parabolic speeds of the divergence errors. That means the divergence errors will propagate at a speed of $c_h$ and dissipate at rate of $c_p$. The new equation that must be solved is:
-
-\begin{equation}\label{eq:glm}
-	\frac{\partial\Phi}{\partial t} + c^2_h \nabla\cdot\textbf{B} = - \frac{c^2_h}{c^2_p} \Phi
-\end{equation}
-
-The hyperbolic speed, $c_h$, can be chosen to be similar the wave speeds in the magnetic field (i.e.\ the fast-mode speed). We have more freedom to chose the ratio of dissipation to propagation, $\alpha = c_h / c^2_p$, also known as the damping parameter. Through testing 0.5 was find to be a good parameter~\citep[p. 5899-5911]{glm2}.
-
-We can separate Equation~\ref{eq:glm} into two parts two solve. We can solve the right hand side exactly, and use the conservative scheme to solve the second term on the left hand side. First solve the left hand side and setting the right hand side equal to zero. Then minimize it with the exact solution:
-
-\begin{equation}
-	\Phi(t+\Delta t) = \Phi(t) e^{-c_h\alpha\Delta t}
-\end{equation}
-
-The efficacy of this method is keeping the normalized divergence errors to lower than the normalized grid-spacing. This is useful so that the monopoles are not evident when drawing the magnetic field lines nor does it have a strong effect on the results.
+Computational fluid dynamics is a well studied field in computer science, numerics and engineering. Many of its principles can be applied to MHD due to the fluid nature of its equations. We will be focusing on only the ones implemented in the code my for this dissertation, the Collisional Multi-Fluid ion (CoMFi) code~\citep{alshidi2019} was made for the chromosphere case~\citep{alshidi2019chromo} which will be explored in more detail in the upcoming chapter (Chapter~\ref{chap:chromosphere}). The code is an ever-evolving code that uses Graphical Processing Units (GPUs) instead of the common CPUs typically seen for MHD codes. This is to implement MHD that makes use of the frontiers of computer technology. GPUs were made for graphical operations in video games. This means they are specifically designed to be very fast at matrix rotations, translations and other linear algebra. In this chapter I will explore proper general purpose GPU programming techniques for solving differential equations and the schemes used alongside it. CoMFi is written in C++ using ViennaCL~\citep{viennacl} for GPU linear algebra template programming and Armadillo~\citep{arma} for setting up the matrices on the CPU\@.
 
 \section{Time Integration}\label{sec:timeintegration}
 
@@ -624,8 +481,8 @@ There is also a third option, semi-implicit schemes. This integrates some variab
 
 \subsection{Stability}\label{sec:stability}
 
-In order for schemes to be stable, errors must not grow over time. We can make sure errors are not growing by employing the Von Neumann analysis. Let's use a simple explicit forward difference scheme on the wave equation for example.
-
+In order for schemes to be stable, errors must not grow over time. We can make sure errors are not growing by employing the Von Neumann analysis~\citep{vonneumann1950}. Let's use a simple explicit forward difference scheme on the wave equation for example.
+ 
 \begin{equation}
 	\frac{\partial u}{\partial t} = -v\frac{\partial u}{\partial x}
 \end{equation}
@@ -728,6 +585,188 @@ Now doing the Fourier analysis,
 \end{equation}
 
 Since the amplification factor is always less than or equal to 1 this implicit central difference scheme is {\it unconditionally stable}.
+
+
+\section{Schemes}\label{sec:schemes}
+
+CoMFi uses the conservative MHD equations therefore conservative schemes are of interest. This makes use of the conservative variables unknowns as opposed to the primitive variables ($n v$ as opposed to $v$). This way I can use a finite-volume-method and conserve these quantities to the machine rounding error. Conservative schemes are also known to do well at capturing shocks and the chromosphere is a region where I expect such shocks to exist.
+
+\begin{equation}\label{eq:geneuler}
+	\frac{\partial \textbf{u}}{\partial t} + \nabla \cdot \textbf{F(u)} = 0
+\end{equation}
+
+The above equation is a general Euler equation demonstrating a conservation law problem. The quantity to be conserved is $\textbf{u}$ and is a function the flux $\textbf{F}$. We will be considering the linear case for simplicity however MHD has demonstrably non-linear terms as the flux (e.g. Equation~\ref{eq:imomentum}) but it can easily follow from this linear case. The point is to show the total volume is conserved:
+
+\begin{equation}\label{eq:geneulerint}
+	\frac{d\textbf{u}}{dt} + \frac{1}{V} \oint \textbf{F} \cdot \textbf{n} dS
+\end{equation}
+
+In codes designed to solve differential equations numerically I must decide on the discretization. Since I am using a finite-volume-method I am discretizing the domain by cells with density quantities in them. The code is discretized in cells existing in Cartesian coordinates (rectangular cells) so I am tasked to find the values of the variables at the cell faces in order to conserve the volume.
+
+We would also like a total-variation-diminishing (TVD) scheme~\citep{harten1997}, this is because spatial derivatives are approximated on a computer. If I take a Taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ I see that there are many higher order terms missing. Taking the Fourier analysis of these terms show that any high-frequency errors may compound (sometimes referred to as spurious oscillations). This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
+
+\begin{equation}\label{eq:tvd}
+	\frac{d(TV)}{dt} = \frac{d}{dt} \int \lvert \frac{\partial u}{\partial x} \rvert dx \leq 1
+\end{equation}
+
+Therefore, for the purpose of our code, I will use the Total-Variation-Diminishing Monotonic Upwind Scheme for Conservation Laws (TVD-MUSCL).
+
+\subsection{Flux Limiters}\label{sec:fluxlimiters}
+
+To conserve the cell's quantities I must be able to approximate the quantities on the cell edges. At the same time I must preserve monotonicity to avoid the oscillations. This can be achieved through flux limiters. The utility of the flux limiters is to turn the scheme into a first-order upwind scheme in sharp discontinuities and a high-resolution scheme when the solution is smooth.
+
+\begin{equation}\label{eq:fluxlimiter}
+	u_{j+1/2} = u_j + \frac{1}{2} \phi(r_j) (u_{j+1} - u_j)
+\end{equation}
+\begin{equation}
+	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j}
+\end{equation}
+
+Subscript $j$ is the discretized cell location with quantity $u$. The ratio of successive gradients $r$ determines how strongly the flux limiter acts to find the extrapolated cell edge variable. The flux limiter $\phi$ includes the cells around edge more readily the smoother the solution is ($r>0$), or sharp it is ($r<0$) in which case the flux limiter is zero ($\phi=0$). These are the properties flux limiters must abide in order to turn the scheme upwind in sharp gradients or high-resolution in smoother gradients. The above equation is a linear reconstruction of a cell edge. Other reconstructions exist but are more diffusive and avoids the shock-capturing goal of the code.
+
+We have some freedom in choosing how to set the flux limiter. Many flux limiters have been made and studied in the past. The simplest flux-limiter is the minmod.
+
+\begin{equation}\label{eq:minmod}
+	\phi_{minmod}(r) = \max(0, \min(1, r)), \lim_{r \to \infty} \phi(r) = 1
+\end{equation}
+
+Implementing these on a computer however is not a trivial task. Many initial conditions require the entirety of the domain be the same number for instance. In that case I get an $r = \frac{0}{0}$ and this causes a computer to return NaN (not a number). Setting to $r=0$ is appropriate but requires extra coding. A work around is to add a small number $\epsilon$ to the denominator known as the machine epsilon to avoid these cases.
+
+The CoMFi code provides several flux limiters. The pre-made flux limiters tend to be symmetric:
+
+\begin{equation}
+	\frac{\phi(r)}{r} = \phi(\frac{1}{r})
+\end{equation}
+
+This is to ensure that it is consistent in negative and positive fluxes.
+
+The provided flux limiters are:
+
+\begin{equation}
+	\phi_{ospre} (r) = 1.5 \frac{(r^2 + r)}{r^2 + r + 1}
+\end{equation}
+
+This is the Ospre~\citep{Waterson2007} limiter, the default limiter in the code.
+
+\begin{equation}
+	\phi_{van Albada} (r) = \frac{r^2 + r}{r^2 + 1}
+\end{equation}
+
+By~\citet{vanalbada1982}.
+
+\begin{equation}
+	\phi_{van Leer} (r) = \frac{r + \lvert r \rvert}{1 + \lvert r \rvert}
+\end{equation}
+
+By~\citet{vanleer1974}
+
+These were chosen because of ViennaCL's limitation of not having element-wise min and max functions. ViennaCL does have the ability to compile custom kernels and examples of min-mod in that case does exist.
+
+\begin{figure}[h!]\label{fig:sweby}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sweby.png}
+	\caption{A Sweby diagram of the current limiters in the CoMFi code. The shaded region is the required region for the limiter to be in in order to be second-order TVD\@.}
+\end{figure}
+
+Only second-order TVD limiters were chosen because when the scheme is at its high-resolution it is a second-order scheme.
+
+
+\begin{equation}
+	r_j = \frac{u_j - u_{j-1}}{u_{j+1} - u_j + \epsilon}
+\end{equation}
+
+This machine epsilon should have no effect on the result so long as the variables have been normalized appropriately (see Section~\ref{sec:normalization}). This means the valuable results are within an order of magnitude so the machine epsilon of a 64bit floating point number of $2^{-−52} \sim 2.22 \times 10^{-16}$ would be negligible. If two adjacent cells have the same value, as is common with initial values, then dividing by zero is usefully avoided.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.75\textwidth]{images/spuriousoscillations.png} 
+	\caption{Spurious oscillations that may form in the advection equation due to discretization errors. An explanation of this can be found in Section~\ref{sec:stability}. Imagen taken from [http://farside.ph.utexas.edu/teaching/329/lectures/node93.html].}\label{fig:spuriousoscillations}
+\end{figure}
+
+
+\subsection{TVD-MUSCL}\label{sec:tvd-muscl}
+
+The TVD-MUSCL scheme~\citep{vanleer1979} reconstructs `left' ($L$) and `right' ($R$) states of the cell edge variables. 
+
+\begin{equation}
+	u^L_{j-1/2} = u_{j-1} + \frac{1}{2} \phi(r_{j-1}) (u_j - u_{j-1})
+\end{equation}
+\begin{equation}
+	u^L_{j+1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_j - u_{j-1})
+\end{equation}
+\begin{equation}
+	u^R_{j-1/2} = u_{j} + \frac{1}{2} \phi(r_{j}) (u_{j+1} - u_{j})
+\end{equation}
+\begin{equation}
+	u^R_{j+1/2} = u_{j+1} + \frac{1}{2} \phi(r_{j+1}) (u_{j+1} - u_{j})
+\end{equation}
+
+With the left and right extrapolated variables I may construct a flux.
+
+\begin{equation}
+	F^*_{j-1/2} = \frac{1}{2} ([F(u^R_{j-1/2})+F(u^L_{j-1/2})] - \lambda_{j-1/2}[u^R_{j-1/2}-u^L_{j-1/2}])
+\end{equation}
+\begin{equation}
+	F^*_{j+1/2} = \frac{1}{2} ([F(u^r_{j+1/2})+F(u^l_{j+1/2})] - \lambda_{j+1/2}[u^r_{j+1/2}-u^l_{j+1/2}])
+\end{equation}
+
+Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical terms means the largest wave speeds of the system. Typically for the ion plasma it is the fast-mode speed and for the neutrals it is the sound speed. It's important to note in conservative MHD this is only the wave speed ($c_{fast}$) and not the same as the fastest speed of information propagation ($v+c_{fast}$). The diffusive terms proportional to $\lambda$ are meant to avoid the oscillations and if they are larger than they need to be the solution will be more diffusive.
+
+
+\section{Maintaining a Divergence Free Field}\label{sec:divergencefree}
+
+The Gauss's law for magnetic fields (Equation~\ref{eq:maggausslaw}) needs to be taken care of because due to machine rounding error and other errors due to discretization, there will be evolution of the divergence. That is to say, although:
+\begin{equation}
+	\frac{\partial\nabla\cdot\textbf{B}}{\partial t} = -\nabla\cdot\nabla\times\textbf{E} = 0
+\end{equation}
+
+The reality is, due to errors:
+\begin{equation}
+	\frac{\partial\nabla\cdot\textbf{B}}{\partial t} = \epsilon_{errors}
+\end{equation}
+
+There are many methods to resolving this. A popular method is Yee grids, sometimes referred to as staggered grids. Placing the magnetic fields to the cell edges of the electric fields. By doing this, evolving the magnetic fields reduces errors to machine rounding errors since Stokes' theorem is imposed on the problem.
+
+\begin{equation}\label{eq:stokesyee}
+	\iint_S\frac{\partial\textbf{B}}{\partial t}\cdot d\textbf{A} = {\oint}_{edges} \textbf{E}\cdot d\textbf{l}
+\end{equation}
+
+This is not the method used for CoMFi. Staggering the grid makes using a finite-volume-method difficult especially when trying to find cell centers from one quantity to the next. Instead I employ the Generalized Lagrange Multiplier method introduced by~\citet{glm}.
+
+\subsection{Generalized Lagrange Multiplier}
+
+The Generalized Lagrange Multiplier (GLM) method adds another unknown to the system of equations to be solved. This has the drawback of using more memory. Its implementation is simple, however, which means adding it to an existing code is easy. The GLM $\Phi$ tries to minimize the monopoles created due to errors in the simulation. It does this by first creating some stress to the induction equation if there is some monopole.
+
+\begin{equation}
+	\frac{\partial\textbf{B}}{\partial t} = - \nabla\times\textbf{E} + \nabla \Phi
+\end{equation}
+
+And filter the monopoles into the GLM using this method of evolution:
+\begin{equation}
+	\mathcal{D}(\Phi) + \nabla\cdot\textbf{B} = 0
+\end{equation}
+
+$\mathcal{D}$ is a differential operator and I can choose the GLM to evolve in any way I want. A hyperbolic evolution and/or a parabolic evolution may be used. Due to the non-linear and parabolic nature of our equations I opt to use both:
+
+\begin{equation}
+	\matchal{D}(\Phi) = \frac{1}{c^2_h}\frac{\partial\Phi}{\partial t} + \frac{1}{c^2_p}\Phi
+\end{equation}
+
+Here $c_h$ and $c_p$ are the hyperbolic and parabolic speeds of the divergence errors. That means the divergence errors will propagate at a speed of $c_h$ and dissipate at rate of $c_p$. The new equation that must be solved is:
+
+\begin{equation}\label{eq:glm}
+	\frac{\partial\Phi}{\partial t} + c^2_h \nabla\cdot\textbf{B} = - \frac{c^2_h}{c^2_p} \Phi
+\end{equation}
+
+The hyperbolic speed, $c_h$, can be chosen to be similar the wave speeds in the magnetic field (i.e.\ the fast-mode speed). We have more freedom to chose the ratio of dissipation to propagation, $\alpha = c_h / c^2_p$, also known as the damping parameter. Through testing 0.5 was find to be a good parameter~\citep[p. 5899-5911]{glm2}.
+
+We can separate Equation~\ref{eq:glm} into two parts two solve. We can solve the right hand side exactly, and use the conservative scheme to solve the second term on the left hand side. First solve the left hand side and setting the right hand side equal to zero. Then minimize it with the exact solution:
+
+\begin{equation}
+	\Phi(t+\Delta t) = \Phi(t) e^{-c_h\alpha\Delta t}
+\end{equation}
+
+The efficacy of this method is keeping the normalized divergence errors to lower than the normalized grid-spacing. This is useful so that the monopoles are not evident when drawing the magnetic field lines nor does it have a strong effect on the results.
 
 \section{Architecture}\label{sec:architecture}
 
@@ -1179,45 +1218,5 @@ It is my hope that the CoMFi code can continue to provide good physics in the fu
 \bibliography{phd-dissertation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix
-\chapter{Flux Limiters}\label{app:fluxlimiters}
-
-The CoMFi code provides several flux limiters. The pre-made flux limiters tend to be symmetric:
-
-\begin{equation}
-	\frac{\phi(r)}{r} = \phi(\frac{1}{r})
-\end{equation}
-
-This is to ensure that it is consistent in negative and positive fluxes.
-
-The provided flux limiters are:
-
-\begin{equation}
-	\phi_{ospre} (r) = 1.5 \frac{(r^2 + r)}{r^2 + r + 1}
-\end{equation}
-
-This is the Ospre~\citep{Waterson2007} limiter, the default limiter in the code.
-
-\begin{equation}
-	\phi_{van Albada} (r) = \frac{r^2 + r}{r^2 + 1}
-\end{equation}
-
-By~\citet{vanalbada1982}.
-
-\begin{equation}
-	\phi_{van Leer} (r) = \frac{r + \lvert r \rvert}{1 + \lvert r \rvert}
-\end{equation}
-
-By~\citet{vanleer1974}
-
-These were chosen because of ViennaCL's limitation of not having element-wise min and max functions. ViennaCL does have the ability to compile custom kernels and examples of min-mod in that case does exist.
-
-\begin{figure}[h!]\label{fig:sweby}
-	\centering
-	\includegraphics[width=1.0\linewidth]{images/sweby.png}
-	\caption{A Sweby diagram of the current limiters in the CoMFi code. The shaded region is the required region for the limiter to be in in order to be second-order TVD\@.}
-\end{figure}
-
-Only second-order TVD limiters were chosen because when the scheme is at its high-resolution it is a second-order scheme.
-
+%\appendix
 \end{document}
