@@ -161,7 +161,7 @@ The first order moment will give us the momentum equations:
 
 Where $\textbf{P}_s$ is the kinetic pressure tensor and can be simplified to the ideal gas law $P_s\textbf{I} = n_s k_B T_s \textbf{I}$ if applicable. The source terms due to the zeroth order also exists here as well as frictional terms that may appear in multi-fluid cases. It is apparent that this equation is fluid-like, a form of the Navier-Stokes equation and hence the naming of these equations as hydrodynamic.
 
-To close the system equations I need one more for the pressure shown previously. So integrating for the second moment gives:
+To close the system equations I need one more for the pressure shown previously. So integrating for the second moment gives: 
 
 \begin{equation}\label{eq:energyequation}
 	\frac{\partial E_s}{\partial t} + \nabla \cdot (\textbf{v}_s E_s) + \nabla \cdot \textbf{q}_s = {(\frac{\delta E_s}{\delta t})}_{source}
@@ -589,7 +589,7 @@ Since the amplification factor is always less than or equal to 1 this implicit c
 
 \section{Schemes}\label{sec:schemes}
 
-CoMFi uses the conservative MHD equations therefore conservative schemes are of interest. This makes use of the conservative variables unknowns as opposed to the primitive variables ($n v$ as opposed to $v$). This way I can use a finite-volume-method and conserve these quantities to the machine rounding error. Conservative schemes are also known to do well at capturing shocks and the chromosphere is a region where I expect such shocks to exist.
+CoMFi uses the conservative MHD equations therefore conservative schemes are of interest. This makes use of the conservative variables unknowns as opposed to the primitive variables ($n v$ as opposed to $v$). This way I can use a finite volume method~\citep{leveque2002} and conserve these quantities to the machine rounding error. Conservative schemes are also known to do well at capturing shocks and the chromosphere is a region where I expect such shocks to exist.
 
 \begin{equation}\label{eq:geneuler}
 	\frac{\partial \textbf{u}}{\partial t} + \nabla \cdot \textbf{F(u)} = 0
@@ -601,7 +601,7 @@ The above equation is a general Euler equation demonstrating a conservation law 
 	\frac{d\textbf{u}}{dt} + \frac{1}{V} \oint \textbf{F} \cdot \textbf{n} dS
 \end{equation}
 
-In codes designed to solve differential equations numerically I must decide on the discretization. Since I am using a finite-volume-method I am discretizing the domain by cells with density quantities in them. The code is discretized in cells existing in Cartesian coordinates (rectangular cells) so I am tasked to find the values of the variables at the cell faces in order to conserve the volume.
+In codes designed to solve differential equations numerically I must decide on the discretization. Since I am using a finite volume method I am discretizing the domain by cells with density quantities in them. The code is discretized in cells existing in Cartesian coordinates (rectangular cells) so I am tasked to find the values of the variables at the cell faces in order to conserve the volume.
 
 We would also like a total-variation-diminishing (TVD) scheme~\citep{harten1997}, this is because spatial derivatives are approximated on a computer. If I take a Taylor series of a derivative from one cell to another and compare with an approximate derivative like $\frac{u(x+\Delta x)-u(x-\Delta x)}{2\Delta x}$ I see that there are many higher order terms missing. Taking the Fourier analysis of these terms show that any high-frequency errors may compound (sometimes referred to as spurious oscillations). This can be fixed by schemes that ensure the total variation $TV$ is diminishing.
 
@@ -731,7 +731,7 @@ There are many methods to resolving this. A popular method is Yee grids, sometim
 	\iint_S\frac{\partial\textbf{B}}{\partial t}\cdot d\textbf{A} = {\oint}_{edges} \textbf{E}\cdot d\textbf{l}
 \end{equation}
 
-This is not the method used for CoMFi. Staggering the grid makes using a finite-volume-method difficult especially when trying to find cell centers from one quantity to the next. Instead I employ the Generalized Lagrange Multiplier method introduced by~\citet{glm}.
+This is not the method used for CoMFi. Staggering the grid makes using a finite volume method difficult especially when trying to find cell centers from one quantity to the next. Instead I employ the Generalized Lagrange Multiplier method introduced by~\citet{glm}. 
 
 \subsection{Generalized Lagrange Multiplier}
 
@@ -1202,15 +1202,21 @@ Finally, this work serves as a step towards a better understanding of the solar 
 
 \chapter{Conclusion}\label{chap:conclusion}
 
-MHD collissional modeling, chromospheric modeling, scientific computing, and introducing the CoMFi code were the focus of this dissertation. Typically in the world of physics, the uptake of new ideas in science is not without inertia. This is understandable as I spend our time focusing on the physics above all else. If I take Moore's Law as a metaphor, I should understand that eventually computers will be able to do whatever I please it to and relying on legacy codes will be a thing of the past. An example of this is the Python programming language. A couple decades ago I could not prototype the kind of software I am able to nowadays by the invention of this programming language. Analogously, decades from now I should be able to solve differential equations by taking new computer science inventions and hopefully with less resistance.
+MHD collisional modeling, chromospheric modeling, scientific computing, and introducing the CoMFi code were the focus of this dissertation. Typically in the world of physics, the uptake of new ideas in science is not without inertia. This is understandable as I spend our time focusing on the physics above all else. If I take Moore's Law as a metaphor, I should understand that eventually computers will be able to do whatever I please it to and relying on legacy codes will be a thing of the past. An example of this is the Python programming language. A couple decades ago I could not prototype the kind of software I am able to nowadays by the invention of this programming language. Analogously, decades from now I should be able to solve differential equations by taking new computer science inventions and hopefully with less resistance.
 
 We present a self-consistent, two-fluid MHD model to study the chromosphere. The model includes ion-neutral interaction, which allows us to investigate the role of frictional heating in the dynamics of the chromosphere.  The very high collision rates in the partially ionized chromosphere stabilizes the code so that no numerical viscosity is needed.  
 
 The model obtains preliminary results which require further investigation. Our simulation presents that, between network and internetwork regions, a jet could potentially be driven purely by thermal processes, especially the frictional heating, and not by magnetic reconnection. Thus, it is crucial to include the neutrals in any attempt to model the lower chromosphere.
 
-The discrepancy between observational speeds and speeds in the simulation could be explained by the need to include the effects of photo chemical reactions in the chromosphere and the radiative losses. Further refinement of the model with photo-chemical effects, radiation and new observations from the upcoming {\it Parker Solar Probe\/} mission will lead to an improved model of the chromosphere.  
+The discrepancy between observational speeds and speeds in the simulation could be explained by the need to include the effects of photo chemical reactions in the chromosphere and the radiative losses. Further refinement of the model with photo-chemical effects, radiation and new observations from the upcoming {\it Parker Solar Probe\/} mission or the Daniel K. Inouye Solar Telescope (DKIST)~\citep{dkist} will lead to an improved model of the chromosphere.  
 
 It is my hope that the CoMFi code can continue to provide good physics in the future and hopefully adapted to suit the needs of the user. GPU clusters are an attractive new frontier in scientific computing and its thousands of cores per unit is exactly suited to solve our differential equations. As GPUs become cheaper our codes must be sure to utilize them.
+
+\section{Future Work}\label{sec:futurework}
+
+Extending the CoMFi code further to be used on GPU clusters is a high priority. Many studies can be made if higher resolutions are resolved. Typically memory becomes an issue in GPUs and it can only compute as much as it has. Chromosphere physics are very similar to ionosphere physics in that they are both multi-fluid. This means adding a fluid generator into the code can help with multi-fluid cases which increases the utility of the code.
+
+Different chromosphere events would be interesting to simulate. Although the focus of the previous study was the jet formed due to frictional heating, the code is capable of simulating magnetic reconnection events in the chromosphere. A follow-up approach for the jet that formed due to frictional heating in the previous study would be to increases the resolution and only simulate the lower chromosphere and be sure to include force-free initial conditions (except with magnetic pressure) to study in more detail why the jet is forming. In addition, a parametrized study can be made to see how much magnetic energy is required to convert into the jet by changing the magnetic field gradients.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \nocite{*}
