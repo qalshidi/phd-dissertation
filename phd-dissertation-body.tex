@@ -103,9 +103,9 @@ Since the chromosphere is a relatively understudied part of the chromosphere but
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Collisional Plasmas}\label{chap:plasma}
+\chapter{Methodology}\label{chap:methodology}
 
-Although plasmas are classically defined as charged gasses, they can coexist with neutral plasma based on the temperature and pressure conditions surrounding them. This means I have two gas mediums, one with the ability to feel Lorentz forces and another that acts like a non-charged fluid. This will generate friction between the fluids when they are moving at different velocities. Due to collision rates being proportional to fluid density and temperature, there can exist a limit in which collision rates are larger than ionization/recombination rates of ions and therefore the fluid becomes collisional. In the reverse case a single-fluid is an apt description as the existence of two-fluids matters largely on the chemistry rather than the collisions. We will be focusing on hydrogen plasmas for our chromosphere case in Chapter~\ref{chap:chromosphere} and in that case two-fluids will be investigated.
+Although plasmas are classically defined as charged gasses, they can coexist with neutral plasma based on the temperature and pressure conditions surrounding them. This means I have two gas mediums, one with the ability to feel Lorentz forces and another that acts like a non-charged fluid. This will generate friction between the fluids when they are moving at different velocities. Due to collision rates being proportional to fluid density and temperature, there can exist a limit in which collision rates are larger than ionization/recombination rates of ions and therefore the fluid becomes collisional. In the reverse case a single-fluid is an apt description as the existence of two-fluids matters largely on the chemistry rather than the collisions. We will be focusing on hydrogen plasmas for our chromosphere case in Section~\ref{sec:chromosphere} and in that case two-fluids will be investigated.
 
 \section{Magnetohydrodynamics}\label{sec:mhd}
 
@@ -234,7 +234,7 @@ $S$ and $L$ are source and loss terms respectively due to chemistry processes li
 
 \subsection{Temperature Equation}
 
-We wish to study the thermal evolution of a plasma in Chapter~\ref{chap:chromosphere}. For this I must transform the energy equation (Equation~\ref{eq:energyequation}) to a form that evolves thermal pressure. We can do this by taking the dot product of the momentum equation and subtracting it from the energy equation. This leaves the energy equation with the thermal energy equation:
+We wish to study the thermal evolution of a plasma in Section~\ref{sec:chromosphere}. For this I must transform the energy equation (Equation~\ref{eq:energyequation}) to a form that evolves thermal pressure. We can do this by taking the dot product of the momentum equation and subtracting it from the energy equation. This leaves the energy equation with the thermal energy equation: 
 
 \begin{equation}\label{eq:pressureequation}
 	\frac{\partial }{\partial t}\frac{P_s}{\gamma_s - 1} +\nabla\cdot(\frac{P_s}{\gamma_s -1}\textbf{v}_s) + (1 - \frac{P_s}{\gamma_s - 1}) \nabla\cdot\textbf{v}_s = {(\frac{\delta E_s}{\delta t})}_{source} - \textbf{v}_s \cdot(\frac{\delta m_s n_s\textbf{v}_s}{\delta t})
@@ -341,7 +341,7 @@ Finally, following the ideal gas law $P_s = n_s k_B T_s$ and the monoatomic rati
 Where $\textbf{q}$ is the heat flux and $Q$ are other heating and cooling terms such as radiative losses.
 
 
-\section{Maxwell's Equations}\label{sec:maxwell}
+\subsection{Maxwell's Equations}\label{sec:maxwell}
 
 Since a plasma is a gas the reacts strongly to electro-magnetic fields. Maxwell's equations must be enforced in order to have a plasma consistent with reality. The Maxwell equations will also help us with the time evolution of the fields, as the fields are interconnected. The Maxwell's equations are:
 
@@ -417,7 +417,7 @@ And in a two-fluid approach I may define current along with the same assumptions
 
 The collisional terms may also be ignored under careful consideration of how small $\frac{\nu}{\omega^2_p}$ may be.
 
-In Chapter~\ref{chap:chromosphere} I will simplify the above equation further to suit our needs. Typically in simulations you only want to include the terms that matter the most. With careful consideration I can come up with a GOL that is most appropriate for our application.
+In Section~\ref{sec:chromosphere} I will simplify the above equation further to suit our needs. Typically in simulations you only want to include the terms that matter the most. With careful consideration I can come up with a GOL that is most appropriate for our application.
 
 \subsection{Induction Equation}
 
@@ -457,11 +457,11 @@ Since it is associated with the Hall term in the induction equation.
 
 In the coming chapters I will be using a simplified form of the GOL---dropping the terms that are less significant.
 
-\chapter{Implementation}\label{chap:implementation}
+\section{Implementation}\label{sec:implementation}
 
-Computational fluid dynamics is a well studied field in computer science, numerics and engineering. Many of its principles can be applied to MHD due to the fluid nature of its equations. We will be focusing on only the ones implemented in the code my for this dissertation, the Collisional Multi-Fluid ion (CoMFi) code~\citep{alshidi2019} was made for the chromosphere case~\citep{alshidi2019chromo} which will be explored in more detail in the upcoming chapter (Chapter~\ref{chap:chromosphere}). The code is an ever-evolving code that uses Graphical Processing Units (GPUs) instead of the common CPUs typically seen for MHD codes. This is to implement MHD that makes use of the frontiers of computer technology. GPUs were made for graphical operations in video games. This means they are specifically designed to be very fast at matrix rotations, translations and other linear algebra. In this chapter I will explore proper general purpose GPU programming techniques for solving differential equations and the schemes used alongside it. CoMFi is written in C++ using ViennaCL~\citep{viennacl} for GPU linear algebra template programming and Armadillo~\citep{arma} for setting up the matrices on the CPU\@.
+Computational fluid dynamics is a well studied field in computer science, numerics and engineering. Many of its principles can be applied to MHD due to the fluid nature of its equations. We will be focusing on only the ones implemented in the code my for this dissertation, the Collisional Multi-Fluid ion (CoMFi) code~\citep{alshidi2019} was made for the chromosphere case~\citep{alshidi2019chromo} which will be explored in more detail in the upcoming chapter (Section~\ref{sec:chromosphere}). The code is an ever-evolving code that uses Graphical Processing Units (GPUs) instead of the common CPUs typically seen for MHD codes. This is to implement MHD that makes use of the frontiers of computer technology. GPUs were made for graphical operations in video games. This means they are specifically designed to be very fast at matrix rotations, translations and other linear algebra. In this chapter I will explore proper general purpose GPU programming techniques for solving differential equations and the schemes used alongside it. CoMFi is written in C++ using ViennaCL~\citep{viennacl} for GPU linear algebra template programming and Armadillo~\citep{arma} for setting up the matrices on the CPU\@.
 
-\section{Time Integration}\label{sec:timeintegration}
+\subsection{Time Integration}\label{sec:timeintegration}
 
 Time integration is important to the time stepping nature of simulations. We can have both implicit time stepping and explicit time stepping. Explicit time stepping for the Euler equation takes the form:
 
@@ -477,7 +477,7 @@ In implicit time steps
 \end{equation}
 This introduces a linear equation that must be solved, $Au^{n+1} = u^n$, and the solution is to invert the matrix A, $u^{n+1} = A^{-1} u^n$. This gets more complicated in non-linear systems. In this case I am not limited by that characteristic speed.
 
-There is also a third option, semi-implicit schemes. This integrates some variables implicitly and others explicitly. This is helpful when you do not want to be limited by certain characteristic speeds. For the chromosphere example in Chapter~\ref{chap:chromosphere} a characteristic I try to overcome is the collision times since it is orders of magnitude larger than the Alf\'ven and sound times in the chromosphere.
+There is also a third option, semi-implicit schemes. This integrates some variables implicitly and others explicitly. This is helpful when you do not want to be limited by certain characteristic speeds. For the chromosphere example in Section~\ref{sec:chromosphere} a characteristic I try to overcome is the collision times since it is orders of magnitude larger than the Alf\'ven and sound times in the chromosphere.
 
 \subsection{Stability}\label{sec:stability}
 
@@ -587,7 +587,7 @@ Now doing the Fourier analysis,
 Since the amplification factor is always less than or equal to 1 this implicit central difference scheme is {\it unconditionally stable}.
 
 
-\section{Schemes}\label{sec:schemes}
+\sectionsection{Schemes}\label{sec:schemes}
 
 CoMFi uses the conservative MHD equations therefore conservative schemes are of interest. This makes use of the conservative variables unknowns as opposed to the primitive variables ($n v$ as opposed to $v$). This way I can use a finite volume method~\citep{leveque2002} and conserve these quantities to the machine rounding error. Conservative schemes are also known to do well at capturing shocks and the chromosphere is a region where I expect such shocks to exist.
 
@@ -713,7 +713,7 @@ With the left and right extrapolated variables I may construct a flux.
 Here $F u = \lambda u$ are the eigenvalues of the variables. This in physical terms means the largest wave speeds of the system. Typically for the ion plasma it is the fast-mode speed and for the neutrals it is the sound speed. It's important to note in conservative MHD this is only the wave speed ($c_{fast}$) and not the same as the fastest speed of information propagation ($v+c_{fast}$). The diffusive terms proportional to $\lambda$ are meant to avoid the oscillations and if they are larger than they need to be the solution will be more diffusive.
 
 
-\section{Maintaining a Divergence Free Field}\label{sec:divergencefree}
+\subsection{Maintaining a Divergence Free Field}\label{sec:divergencefree}
 
 The Gauss's law for magnetic fields (Equation~\ref{eq:maggausslaw}) needs to be taken care of because due to machine rounding error and other errors due to discretization, there will be evolution of the divergence. That is to say, although:
 \begin{equation}
@@ -768,7 +768,7 @@ We can separate Equation~\ref{eq:glm} into two parts two solve. We can solve the
 
 The efficacy of this method is keeping the normalized divergence errors to lower than the normalized grid-spacing. This is useful so that the monopoles are not evident when drawing the magnetic field lines nor does it have a strong effect on the results.
 
-\section{Architecture}\label{sec:architecture}
+\subsection{Architecture}\label{sec:architecture}
 
 It is important in scientific computing not to reinvent the wheel. There are many libraries, particularly C++ libraries, that use template programming to make it easier to write linear algebra in code. It is always easier to add an entire vector with one + sign than looping through each element of the two vectors and adding each. For this reason I can avoid low-level programming like Fortran for CPUs or OpenCL and CUDA for GPUs because the Basic Linear Algebra Subroutines (BLAS) have already been written and abstracted by someone else. C++ is a language that is all about abstraction and speed. There is a pervasive myth that if you want to do scientific computing you must use Fortran or CUDA but this is not true and is usually reinforced by scientists' lack of understanding of computer science and/or bad code.
 
@@ -830,13 +830,13 @@ This can be easily resized into a matrix of the form:
 
 This has the benefits of making good use of GPU programming by using the parallelism found in matrix operations. This also means you can share boundary conditions by taking or providing rows for this matrix in chunks. You can do operations on specific unknowns by taking the appropriate column.
 
-\section{Normalization}\label{sec:normalization}
+\subsection{Normalization}\label{sec:normalization}
 
 The unknowns in the simulations must be normalized. This is typical good practice in numerics when we're dealing with computers due to how computers deal with floating point number. Since computers deal with discrete numbers the floating point number line is discrete and also less regular than the real number line. There are more floating point numbers between -1 and 1 than there are between 10 and 11 for example. For this purpose, it is important to find a way in which the common numbers I will be dealing with be normalized to 1. We can do this by having, usually, the largest numbers found in the simulation domain be the normalizing constants.
 
 \subsection{Constants}\label{sec:normconstants}
 
-The normalization constants were chosen for the chromospheric case I study in Chapter~\ref{chap:chromosphere}. For a more in-depth discussion on why these were chosen see Section~\ref{sec:simulationdomain}.
+The normalization constants were chosen for the chromospheric case I study in Section~\ref{sec:chromosphere}. For a more in-depth discussion on why these were chosen see Section~\ref{sec:simulationdomain}.
 
 \begin{table}[h]\label{tab:normalization}
 \centering
@@ -859,7 +859,7 @@ The normalization constants were chosen for the chromospheric case I study in Ch
 \end{tabular}
 \end{table}
 
-In bold are the free parameters you may choose for the CoMFi code. The constants must be chosen carefully so that the largest numbers of interest are normalized to 1. The reason for choosing the quantities above is discussed in Chapter~\ref{chap:chromosphere}.
+In bold are the free parameters you may choose for the CoMFi code. The constants must be chosen carefully so that the largest numbers of interest are normalized to 1. The reason for choosing the quantities above is discussed in Section~\ref{sec:chromosphere}.
 
 \subsection{Normalized Equations}\label{sec:normequations}
 
@@ -968,7 +968,7 @@ Figure~\ref{fig:shocktube} shows the tube after time $t = 0.1$ in arbitrary unit
 \end{figure}
 
 The left and right boundary conditions in this case are set at $V_{\perp} = 0$ for both ions and neutrals. Constant and arbitrary for all other values. Three different orders of magnitude of the collision rate was used for two different cases. The first with a neutral initial value the same as the ions $V_{\perp} = U_{\perp}$ and the other where $U=0$. The results in Figure~\ref{fig:soler} show the results at $z=0$ and the Alfv\'en wave can be seen clearly damped in the cases. Note how at $\nu_{ni}=1$ the medium is moving in unison but still being damped. It is also important to note the equations used to solve this are fundamentally different than the ones in~\citet{Soler2013}. They solve for the primitive variables while CoMFi solves the conservative form. Still the graphs look similar (Figure~\ref{fig:soleretal2013}) which helps with the case of the validation of the code.
-\section{Visualization}\label{sec:visualization} 
+\subsection{Visualization}\label{sec:visualization} 
 
 CoMFi comes with its own visualization suite written in Python using Matplotlib~\citep{Hunter2007}. The data is saved in the HDF5 file format~\citep{hdf5} which is compatible with many other visualization software, however the bundled \code{plot-scripts} folder contains the file \code{comfi.py} when imported gives tools to make plots and even animations.
 
@@ -1008,7 +1008,7 @@ CoMFi uses the HDF5 file format to store the data. The data hierarchy is shown i
 
 In folder, \code{plot-scripts}, the python scripts required to make several plots are shown as examples. As well as examples required to make animations into \code{mp4} file format. This is done using Matplotlib and h5py for reading the HDF5 files. The Python header to import is \code{plot-scripts/comfi.py} and the functions are well documented using the PEP8 standard.
 
-\chapter{Chromosphere Dynamics}\label{chap:chromosphere} 
+\section{Chromosphere Dynamics}\label{sec:chromosphere} 
 
 The base of the solar atmosphere (right above the photosphere), referred to as the chromosphere, is highly dynamic and is strongly influenced by magnetic field activities \citep{Hasan08}. It is partially ionized, with as much as a thousand times more neutral Hydrogen than ions \citep{Alissandrakis2018}. \citet{Song2011} and \citet{Leake2014} discussed in detail the effects of ion-neutral coupling in  the chromosphere by considering neutrals and collisions into the momentum and Maxwell equations. A local-scale configuration commonly used in chromosphere models are so-called supergranules, convection cells of 30 Mm in the horizontal directions. Supergranules are separated by strong magnetic field regions, referred to as networks. It is believed that the network regions correspond to strong magnetic field at the photosphere altitude. Because the thermal pressure decreases with height while the total magnetic flux is conserved, the magnetic field tends to expand in higher altitudes to form a canopy or `wine glass' shaped magnetic geometry so that total pressure, the  magnetic pressure, $p_B$, plus thermal pressure, $p_T$, i.e., $p_T+p_B$, is balanced at each height \citep{gabriel1976}. This geometry is reflected in a significant altitudinal change in the plasma beta, which is the ratio of the thermal to magnetic pressures, $\beta=p_T/p_B$. The chromosphere has much lower temperature than that of the hot corona. The average temperature of the Chromosphere is around 6000 K while the coronal temperature is over million degrees \citep{AvrettLoeser2008}. This dramatic change in the temperature, taking place in a very narrow region of a few hundred kilometers referred to as the transition region, known as the coronal heating problem and it is a long-standing problem in solar physics.
 
@@ -1018,7 +1018,7 @@ There is strong observational evidence for the ubiquity of Alfv\'en waves in the
 
 Recent simulations and models of the chromosphere have adopted a single-fluid approach~\citep{Kuzma2017,Ni2016,BradyArber2016,Gudiksen2011}. In order to account for neutrals' effect on the plasma and electric field an `ambipolar diffusion' term is added to the Generalized Ohm's Law to account for collisions~\citep{Martinez-Sykora2012,Martinez-Sykora2017}. This is useful to study the highly magnetized, low $\beta$, environment of the upper chromosphere. A two-fluid approach takes into account separate fluid motions of plasma and neutrals especially in highly collisional environments like the low solar atmosphere in regions of high magnetic gradients. \citet{Soler2013} studied Alfv\'en wave propagation in partially ionized plasma while taking a generalized approach with free parameters with the lower solar atmosphere case as an example. \citet{Maneva2017} and \citet{Wojcik2018} studied acoustic wave propogation using a collisional two-fluid approach as well. Three-fluid simulations, with electrons being the third fluid, were made to study reconnection events in the chromosphere~\citep{Leake2013}. In these highly localized small regions electron motion is seperate from ion and neutral motion and its effects cannot be neglected. The previously mentioned work uses the {\it Bifrost\/} \citep{Gudiksen2011} code which employs a very large artificial viscosity for stability. By self-consistently solving plasma, neutral fluids, and Maxwell's equations, \citet{Tu2013} have shown that due to Joule dissipation Alfv\'en waves can provide strong enough chromospheric heating and that the heating rate is consistent with the theoretical model of \citet{Song2011}.
 
-\section{Governing Equations}\label{sec:governingeq}
+\subsection{Governing Equations}\label{sec:governingeq}
 
 In the model presented here, a two-fluid, collisional approach is used to account for the friction between ions and neutrals. The first fluid, the ion fluid, is similar to the traditional, single-fluid plasma, and assumes charge quasi-neutrality. With the Maxwell's equations, this fluid is used to calculate self-consistently the evolution of the plasma motion, magnetic fields and currents in the system. The second, neutral fluid, accounts for the neutral particles in the system. The two fluids interact by collisions. The friction between ions and neutrals affects the neutral fluid motion so that the neutrals experience the electromagnetic effects. 
 
@@ -1079,7 +1079,7 @@ where $\ln \Lambda$ is the Coulomb logarithm taken as 10 for simplicity and $n$ 
 
 Comparing this with the two-fluid equations seen in Section~\ref{sec:2fluidmhd} we see that we've taken the more extreme case of $m_e \sim 0$. This is for the first-order approximation that electrons contribute less to heating than hydrogen ions and neutrals. The CoMFi code is capable of reverting back to the approximation, $\frac{m_e}{m_i} \sim 0$, for cases where the current density terms matter like in mid-chromosphere reconnection.
 
-\section{Simulation Domain}\label{sec:simulationdomain}
+\subsection{Simulation Domain}\label{sec:simulationdomain}
 
 In the horizontal dimension, I simulate a supergranule similar to that described in \citet{Song2017}. Because of symmetry, our simulation domain contains half of a supergranule, from the center of a network with strong field to the center of internetwork at the photospheric boundary. If I further assume that the neighboring supergranules have the same polarity as the one in the simulation domain, there is no reconnection between the supergranules of interest.  In this case  the normal component of the field, $B_x$, is zero at the left and right boundaries. The right and left boundaries act as mirrors to reflect any normal component of the field. Similarly, the normal component of the velocity is also set to zero at the right and left boundaries, i.e.\ there is no horizontal flow from one supergranule to another at the chromospheric altitude although inter-supergranule flow is possible in the corona height and in or below the photosphere. 
 
@@ -1100,11 +1100,11 @@ A requirement in some MHD codes with zero magnetic field divergence constraints 
 
 At the top boundary which represents the transition region and the corona above it, the model uses Neumann conditions to allow free-flow of the plasma through it (i.e. $\frac{\partial \textbf{u}}{\partial z}\vline_{z=2100km} = 0$).
 
-In the simulations and results shown in this paper the domain is 15 Mm horizontally (half the size of the magnetic internetwork) and 2.1 Mm vertically (typical thickness of the chromosphere). It is a uniform Cartesian grid of 256$\times$128 where $\Delta x = 58.6$ km and $\Delta z = 16.4$ km. This is the largest resolution chosen for speed and memory considering the usage of a dedicated scientific computing GPU (see Chapter~\ref{chap:implementation}). This is larger than the length scale of the collisionally reduced Alfv\'en wavelength ($\frac{V_A}{\nu_{in}}$) which means for this simulation the plasma and neutrals are coupled. Since this is a 2.5D simulation all spatial derivatives in the perpendicular direction are taken as zero ($\frac{\partial}{\partial \perp} = 0$).
+In the simulations and results shown in this paper the domain is 15 Mm horizontally (half the size of the magnetic internetwork) and 2.1 Mm vertically (typical thickness of the chromosphere). It is a uniform Cartesian grid of 256$\times$128 where $\Delta x = 58.6$ km and $\Delta z = 16.4$ km. This is the largest resolution chosen for speed and memory considering the usage of a dedicated scientific computing GPU (see Section~\ref{sec:implementation}). This is larger than the length scale of the collisionally reduced Alfv\'en wavelength ($\frac{V_A}{\nu_{in}}$) which means for this simulation the plasma and neutrals are coupled. Since this is a 2.5D simulation all spatial derivatives in the perpendicular direction are taken as zero ($\frac{\partial}{\partial \perp} = 0$).
 
 All momentum components are set initially as zero.
 
-\section{Results}\label{sec:results}
+\chapter{Results}\label{chap:results} 
 
 Figure~\ref{fig:granulegeometry} shows a snapshot on the chromospheric solution after $348~ms$. It shows that our simulation produces magnetic field topology that is characterized by canopy or `wine glass' shape \citep{Rutten2007}, with a strong field of about $1~kG$ at the stem on the left, and a weaker field of about $50~G$ at the near the upper boundary of the simulation domain, near the transition region.  This topology is obtained fairly quickly, in around $\sim$350ms, because of the magnetic pressure imbalance imposed in the initial conditions. This is not a relaxed system as the canopy holds for a few seconds before an eruption starts forming. 
 
@@ -1178,7 +1178,7 @@ Figures~\ref{fig:shockwavefront1d},~\ref{fig:spiculefield1d},~\ref{fig:spiculefr
     \caption{Blue line is ion number density and black dashed line is vertical ion velocity at t=26.83s and vertical line x=0.6Mm. Ion number density is in units of $10^{11}$ cm$^{-3}$. The jet speed is supersonic.}\label{fig:spiculespeed1d}
 \end{figure}
 
-\section{Discussion}\label{sec:discussion}
+\chapter{Discussion}\label{chap:discussion} 
 
 A magnetic canopy forms due to the magnetic and thermal pressure imbalance of the strong field regions from the photosphere and the weak field but high temperature regions scaling up to the transition region. This is consistent with a two-fluid analytic model that was presented in \citet{Song2017}. It shows that the model can provide numerical solutions for chromospheric conditions. However, the magnetic canopy does not relax or reach a steady-state due to the nature of the collisional model and not in the timescales of the current simulation. The super granule canopy may not last because the photospheric power flux, generated at the lower boundary, continuously adds energy into the system. Small scale processes or highly dynamic events like jets override the canopy magnetic field because of large plasma speeds. Our results show that the jet has immediate effects on the magnetic field due to induction and not vice versa.
 
